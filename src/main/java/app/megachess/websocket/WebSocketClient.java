@@ -78,11 +78,7 @@ public class WebSocketClient  {
         this.userSession.getAsyncRemote().sendText(message);
     }
 
-    /**
-     * Message handler.
-     *
-     * @author Jiji_Sasidharan
-     */
+
     public static interface MessageHandler {
 
         public void handleMessage(String message);

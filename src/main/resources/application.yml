@@ -1,0 +1,10 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    session:
+      cookie:
+        http-only: true
+      tracking-modes:
+      - cookie

@@ -24,16 +24,19 @@ public class MegaChessApplication {
             // add listener
             clientEndPoint.addMessageHandler(new WebSocketClient.MessageHandler() {
                 public void handleMessage(String message) {
-                    System.out.println(message);
+                    
+                    if (message.contains("2")) {
+                    	System.out.println(message);
+					}
                 }
             });
 
             // send message to websocket
-            clientEndPoint.sendMessage("{caca:'caca'}");
-            clientEndPoint.sendMessage("{caca:'2'}");
-            clientEndPoint.sendMessage("{caca:'3'}");
-            clientEndPoint.sendMessage("{caca:'4'}");
-            clientEndPoint.sendMessage("{caca:'5'}");
+            clientEndPoint.sendMessage("{asd:'asd'}");
+            clientEndPoint.sendMessage("{asd:'2'}");
+            clientEndPoint.sendMessage("{asd:'3'}");
+            clientEndPoint.sendMessage("{asd:'222'}");
+            clientEndPoint.sendMessage("{asd:'5'}");
       
 
             // wait 5 seconds for messages from websocket
