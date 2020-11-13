@@ -80,7 +80,6 @@ public class WebSocketClient  {
 
 
     public static interface MessageHandler {
-
         public void handleMessage(String message);
     }
 }
