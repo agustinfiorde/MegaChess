@@ -287,7 +287,10 @@ public class ChessUtil {
 		return values;
 	}
 
-	public static void showBoard(String[][] board) {
+	public static void showBoard(String rowBoard) {
+		
+		String board[][]=getBoard(rowBoard);
+		
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				System.out.print(board[i][j]);

@@ -5,10 +5,8 @@ import app.megachess.websocket.models.Message;
 
 public class Intelligence {
 
-	private Intelligence() {
+	private Intelligence() {}
 		
-	}
-	
 	public static void evaluate(Message msj) {
 		
 		DataMessage msjData= msj.getData();
@@ -31,10 +29,19 @@ public class Intelligence {
 			if (msjData.getActual_turn().equals("white")) {
 				//avanzar
 			} else {
-				//evaluar primer avance y no encarar por el mismo lado
+				//evaluar primer avance y no encarar por el mismo lado pensar que hacer en el caso de que perdio el turno o avanzo un solo paso
+				
 				//metodo ya listo para evaluar el primer movimiento del blanco
 			}
 		}
+		
+	}
+	
+	public static void evaluateStart() {
+		
+	}
+	
+	public static void evaluateCourse() {
 		
 	}
 	

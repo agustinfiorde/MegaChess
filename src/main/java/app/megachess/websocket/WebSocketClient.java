@@ -1,5 +1,6 @@
 package app.megachess.websocket;
 
+import java.io.IOException;
 import java.net.URI;
 
 import javax.websocket.ClientEndpoint;
@@ -8,37 +9,37 @@ import javax.websocket.ContainerProvider;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.SendHandler;
+import javax.websocket.SendResult;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
 @ClientEndpoint
-public class WebSocketClient  {
+public class WebSocketClient {
 
-    private Session userSession = null;
-    private MessageHandler messageHandler;
+	private Session userSession = null;
+	private MessageHandler messageHandler;
 
-    public WebSocketClient(URI endpointURI) {
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            container.connectToServer(this, endpointURI);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public WebSocketClient(URI endpointURI) {
+		try {
+			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+			container.connectToServer(this, endpointURI);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
+	@OnOpen
+	public void onOpen(Session userSession) {
+		System.out.println("opening websocket");
+		this.userSession = userSession;
+	}
 
-    @OnOpen
-    public void onOpen(Session userSession) {
-        System.out.println("opening websocket");
-        this.userSession = userSession;
-    }
-
-    @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
-        System.out.println("closing websocket");
-        this.userSession = null;
-    }
-
+	@OnClose
+	public void onClose(Session userSession, CloseReason reason) {
+		System.out.println("closing websocket");
+		this.userSession = null;
+	}
 
     @OnMessage
     public void onMessage(String message) {
@@ -48,17 +49,24 @@ public class WebSocketClient  {
     }
 
 
-    public void addMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
-    }
+	public void addMessageHandler(MessageHandler msgHandler) {
+		this.messageHandler = msgHandler;
+	}
 
+	public void sendMessage(String message) {
+		try {
+			this.userSession.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+//	public void sendMessage(String message) {
+//		this.userSession.getAsyncRemote().sendText(message);
+//	}
 
-    public void sendMessage(String message) {
-        this.userSession.getAsyncRemote().sendText(message);
-    }
-
-
-    public static interface MessageHandler {
-        public void handleMessage(String message);
-    }
+	public static interface MessageHandler {
+		public void handleMessage(String message);
+	}
 }
