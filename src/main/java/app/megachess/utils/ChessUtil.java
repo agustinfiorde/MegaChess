@@ -5,9 +5,6 @@ import java.util.List;
 
 public class ChessUtil {
 
-	private ChessUtil() {
-	}
-
 	public static boolean isWhite(String character) {
 		return Character.isUpperCase(character.charAt(0));
 	}

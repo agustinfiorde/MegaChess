@@ -3,15 +3,13 @@ package app.megachess.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import app.megachess.enums.Action;
 import app.megachess.websocket.models.DataMessage;
 import app.megachess.websocket.models.Message;
 
 public class Util {
 
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-	private Util() {
-	}
 
 	public static String objectToJSON(Message obj) {
 		return GSON.toJson(obj, Message.class);
@@ -24,7 +22,7 @@ public class Util {
 	public static String getConnectedUsers() {
 		Message msj = new Message();
 		DataMessage dataMsj = new DataMessage();
-		msj.setAction("get_connected_users");
+		msj.setAction(Action.GET_CONNECTED_USERS.getString());
 		msj.setData(dataMsj);
 		return objectToJSON(msj);
 	}
@@ -34,7 +32,7 @@ public class Util {
 		DataMessage dataMsj = new DataMessage();
 		dataMsj.setUsername(oponent);
 		dataMsj.setMessage("Queres que juguemos una partida?");
-		msj.setAction("challenge");
+		msj.setAction(Action.CHALLENGE.getString());
 		msj.setData(dataMsj);
 		return objectToJSON(msj);
 	}
@@ -42,10 +40,17 @@ public class Util {
 	public static String acceptChallenge(String board_id) {
 		Message msj = new Message();
 		DataMessage dataMsj = new DataMessage();
-		msj.setAction("accept_challenge");
+		msj.setAction(Action.ACCEPT_CHALLENGE.getString());
 		dataMsj.setBoard_id(board_id);
 		msj.setData(dataMsj);
 		return objectToJSON(msj);
+	}
+
+	public static String gameover(Message req) {
+
+		String message = objectToJSON(req);
+
+		return message;
 	}
 
 	public static String move(Message req) {
@@ -55,7 +60,7 @@ public class Util {
 		dataMsj.setBoard_id(req.getData().getBoard_id());
 		dataMsj.setTurn_token(req.getData().getTurn_token());
 		/*
-		 *TODO   from from to to
+		 * TODO from from to to
 		 */
 		dataMsj.setFrom_row(12);
 		dataMsj.setFrom_col(1);

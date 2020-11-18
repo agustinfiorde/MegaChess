@@ -12,7 +12,7 @@ public class DataMessage {
 	private String username;
 	private String actual_turn;
 	private String board;
-	private String move_left;
+	private Integer move_left;
 
 	private String opponent_username;
 
