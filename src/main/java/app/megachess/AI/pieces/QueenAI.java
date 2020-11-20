@@ -1,10 +1,30 @@
 package app.megachess.AI.pieces;
 
+import app.megachess.enums.AllDirection;
+
 public class QueenAI extends Piece {
 
-	public QueenAI(String piece, int[] position) {
-		super(piece, position, position, piece);
-		// TODO Auto-generated constructor stub
+	private AllDirection direction;
+
+	public QueenAI(String piece, int[] position, String board, AllDirection direction) {
+		super(piece, position, board, false);
+		this.direction = direction;
+	}
+
+	@Override
+	public boolean canMove() {
+
+		evaluateTrajectory(direction);
+
+		return true;
+	}
+
+	@Override
+	public boolean canEat() {
+
+		evaluateTrajectory(direction);
+
+		return true;
 	}
 
 }

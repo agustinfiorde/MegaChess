@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import app.megachess.entities.DataGame;
 import app.megachess.entities.Game;
 import app.megachess.enums.Event;
-import app.megachess.repositories.DataGameRepository;
-import app.megachess.repositories.GameRepository;
 import app.megachess.websocket.models.DataMessage;
 import app.megachess.websocket.models.Message;
 

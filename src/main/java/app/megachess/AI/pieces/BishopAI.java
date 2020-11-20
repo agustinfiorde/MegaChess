@@ -1,22 +1,30 @@
 package app.megachess.AI.pieces;
 
+import app.megachess.enums.AllDirection;
+
 public class BishopAI extends Piece {
 
-	public BishopAI(String piece, int[] position) {
-		super(piece, position, position, piece);
-		// TODO Auto-generated constructor stub
+	private AllDirection direction;
+
+	public BishopAI(String piece, int[] position, String board, AllDirection direction) {
+		super(piece, position, board, false);
+		this.direction = direction;
 	}
 
 	@Override
 	public boolean canMove() {
-		// TODO Auto-generated method stub
-		return false;
+
+		evaluateTrajectory(direction);
+
+		return true;
 	}
 
 	@Override
-	public boolean isMyTeam() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean canEat() {
+
+		evaluateTrajectory(direction);
+
+		return true;
 	}
 
 }

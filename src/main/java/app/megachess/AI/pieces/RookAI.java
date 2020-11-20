@@ -1,10 +1,29 @@
 package app.megachess.AI.pieces;
 
-public class RookAI extends Piece {
+import app.megachess.enums.AllDirection;
 
-	public RookAI(String piece, int[] position) {
-		super(piece, position, position, piece);
-		// TODO Auto-generated constructor stub
+public class RookAI extends Piece {
+	
+	private AllDirection direction;
+
+	public RookAI(String piece, int[] position, String board, AllDirection direction) {
+		super(piece, position, board, false);
+		this.direction = direction;
 	}
 
+	@Override
+	public boolean canMove() {
+
+		evaluateTrajectory(direction);
+
+		return true;
+	}
+
+	@Override
+	public boolean canEat() {
+
+		evaluateTrajectory(direction);
+
+		return true;
+	}
 }

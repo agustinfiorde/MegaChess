@@ -1,21 +1,22 @@
 package app.megachess.AI.pieces;
 
+import app.megachess.enums.AllDirection;
+
 public class HorseAI extends Piece {
 
-	public HorseAI(String piece, int[] position) {
-		super(piece, position, position, piece);
-		// TODO Auto-generated constructor stub
+	public HorseAI(String piece, int[] position, String board) {
+		super(piece, position, board, false);
 	}
 
 	@Override
 	public boolean canMove() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	@Override
-	public boolean isMyTeam() {
-		// TODO Auto-generated method stub
+	public boolean canEat() {
+
 		return false;
 	}
 
