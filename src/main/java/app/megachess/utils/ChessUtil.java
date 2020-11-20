@@ -284,10 +284,32 @@ public class ChessUtil {
 		return values;
 	}
 
+	public static boolean isInsideBoard(int row, int col) {
+		return (row >= 0 && row <= 15 && col >= 0 && col <= 15) ? true : false;
+	}
+
+	public static boolean isEmpty(int row, int col, String[][] board) {
+		return (board[row][col].equals(" ") || board[row][col].isEmpty()) ? true : false;
+	}
+
+	public static boolean isMyTeam(String piece, String myColor) {
+		if (myColor.equals("white")) {
+			return isWhite(piece);
+		} else {
+			return isBlack(piece);
+		}
+	}
+
+	public static boolean isMyEnemy(String piece, String myColor) {
+		if (myColor.equals("white")) {
+			return isBlack(piece);
+		} else {
+			return isWhite(piece);
+		}
+	}
+
 	public static void showBoard(String rowBoard) {
-		
-		String board[][]=getBoard(rowBoard);
-		
+		String board[][] = getBoard(rowBoard);
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				System.out.print(board[i][j]);

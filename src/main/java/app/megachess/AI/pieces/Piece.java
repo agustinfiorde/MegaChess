@@ -16,29 +16,31 @@ public abstract class Piece implements PieceAction {
 	protected int toRow;
 	protected int toCol;
 
-	protected String board;
-	protected boolean isPosible;
+	protected boolean toEat;
+	protected boolean toMove;
 
-	public Piece(String piece, int[] position, int[] to, String board) {
-		this.board = board;
-		this.isPosible = false;
-		setColor(piece);
-		setPositionAndTo(position, to);
+	protected String[][] board;
+
+	public Piece(String piece, int[] position, String board, boolean toEat) {
+		this.board = ChessUtil.getBoard(board);
+		this.color = ChessUtil.isWhite(piece) ? "white" : "black";
+		this.toEat = toEat;
+		this.toMove = !this.toEat;
+		setPosition(position);
 		setMovementToEatAndType(piece);
 	}
 
-	private void setColor(String piece) {
-		this.color = ChessUtil.isWhite(piece) ? "white" : "black";
-	}
-
-	private void setPositionAndTo(int[] position, int[] to) {
+	protected void setPosition(int[] position) {
 		this.fromRow = position[0];
 		this.fromCol = position[1];
-		this.toRow = to[0];
-		this.toCol = to[1];
 	}
 
-	private void setMovementToEatAndType(String piece) {
+	protected void setTo(int toRow, int toCol) {
+		this.toRow = toRow;
+		this.toCol = toCol;
+	}
+
+	protected void setMovementToEatAndType(String piece) {
 		switch (piece.toLowerCase()) {
 		case "p":
 			movementToEat = MovementToEat.FRONT_DIAGONAL;
