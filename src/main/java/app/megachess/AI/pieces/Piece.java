@@ -30,6 +30,16 @@ public abstract class Piece implements PieceAction {
 		setMovementToEatAndType(piece);
 	}
 
+	public Piece(String piece, int[] position, int[] to, String board) {
+		this.board = ChessUtil.getBoard(board);
+		this.color = ChessUtil.isWhite(piece) ? "white" : "black";
+		this.toEat = false;
+		this.toMove = !this.toEat;
+		setTo(to[0], to[1]);
+		setPosition(position);
+		setMovementToEatAndType(piece);
+	}
+
 	protected void setPosition(int[] position) {
 		this.fromRow = position[0];
 		this.fromCol = position[1];

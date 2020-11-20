@@ -6,6 +6,11 @@ public class PawnAI extends Piece {
 
 	public PawnAI(String piece, int[] position, String board, boolean toEat) {
 		super(piece, position, board, toEat);
+		if (toEat) {
+			canEat();
+		} else {
+			canMove();
+		}
 	}
 
 	@Override
