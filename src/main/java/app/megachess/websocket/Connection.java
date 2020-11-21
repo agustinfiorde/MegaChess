@@ -71,6 +71,7 @@ public class Connection {
 
 					// Turno
 					if (msj.contains("your_turn")) {
+
 						ChessUtil.showBoard(message.getData().getBoard());
 						String res = Intelligence.evaluate(message);
 						clientEndPoint.sendMessage(res);

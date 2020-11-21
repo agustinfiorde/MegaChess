@@ -26,98 +26,174 @@ public class KingAI extends Piece {
 		return false;
 	}
 
-	@Override
-	public boolean canEat() {
-		if (color.equals("white")) {
-			if (fromRow != 15) {
-				// evalua abajo izq
-				if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol - 1], color)) {
-					setTo(fromRow + 1, fromCol - 1);
-					return true;
-				}
-				// evalua abajo
-				if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol], color)) {
-					setTo(fromRow + 1, fromCol);
-					return true;
-				}
-				// evalua abajo der
-				if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol + 1], color)) {
-					setTo(fromRow + 1, fromCol + 1);
-					return true;
-				}
-			}
+	public boolean evaluateBack(int back, int limitBack) {
+		// evalua atras
 
-			// evalua izq
-			if (ChessUtil.isMyEnemy(board[fromRow][fromCol - 1], color)) {
-				setTo(fromRow, fromCol - 1);
-				return true;
-			}
-			// evalua arriba izq
-			if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol - 1], color)) {
-				setTo(fromRow - 1, fromCol - 1);
-				return true;
-			}
-			// evalua arriba
-			if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol], color)) {
-				setTo(fromRow - 1, fromCol);
-				return true;
-			}
-			// evalua arriba der
-			if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol + 1], color)) {
-				setTo(fromRow - 1, fromCol + 1);
-				return true;
-			}
-			// evalua der
-			if (ChessUtil.isMyEnemy(board[fromRow][fromCol + 1], color)) {
-				setTo(fromRow, fromCol + 1);
-				return true;
+		if (color.equals("white")) {
+			if (back <= limitBack) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol], color)) {
+					setTo(back, fromCol);
+					return true;
+				}
 			}
 		} else {
+			if (back >= limitBack) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol], color)) {
+					setTo(back, fromCol);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-			if (fromRow != 0) {
-				// evalua atras izq
-				if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol - 1], color)) {
-					setTo(fromRow - 1, fromCol - 1);
-					return true;
-				}
-				// evalua atras
-				if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol], color)) {
-					setTo(fromRow - 1, fromCol);
-					return true;
-				}
-				// evalua atras der
-				if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol + 1], color)) {
-					setTo(fromRow - 1, fromCol + 1);
+	public boolean evaluateBackLeft(int back, int limitBack) {
+		// evalua abajo izquierda
+		if (color.equals("white")) {
+			if (back <= limitBack && fromCol - 1 >= 0) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol - 1], color)) {
+					setTo(back, fromCol - 1);
 					return true;
 				}
 			}
+		} else {
+			if (back >= limitBack && fromCol - 1 >= 0) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol - 1], color)) {
+					setTo(back, fromCol - 1);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-			// evalua izq
-			if (ChessUtil.isMyEnemy(board[fromRow][fromCol - 1], color)) {
-				setTo(fromRow, fromCol - 1);
-				return true;
+	public boolean evaluateBackRight(int back, int limitBack) {
+		// evalua abajo a la derecha
+		if (color.equals("white")) {
+			if (back <= limitBack && fromCol + 1 <= 15) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol + 1], color)) {
+					setTo(back, fromCol + 1);
+					return true;
+				}
 			}
-			// evalua adelante izq
-			if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol - 1], color)) {
-				setTo(fromRow + 1, fromCol - 1);
-				return true;
+		} else {
+			if (back >= limitBack && fromCol + 1 <= 15) {
+				if (ChessUtil.isMyEnemy(board[back][fromCol + 1], color)) {
+					setTo(back, fromCol + 1);
+					return true;
+				}
 			}
-			// evalua adelante
-			if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol], color)) {
-				setTo(fromRow + 1, fromCol);
-				return true;
-			}
-			// evalua adelante der
-			if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol + 1], color)) {
-				setTo(fromRow + 1, fromCol + 1);
-				return true;
-			}
-			// evalua der
+		}
+		return false;
+	}
+
+	public boolean evaluateRight() {
+		// evalua derecha
+		if (fromCol + 1 <= 15) {
 			if (ChessUtil.isMyEnemy(board[fromRow][fromCol + 1], color)) {
 				setTo(fromRow, fromCol + 1);
 				return true;
 			}
 		}
+		return false;
+	}
+
+	public boolean evaluateLeft() {
+		// evalua izquierda
+		if (fromCol - 1 >= 0) {
+			if (ChessUtil.isMyEnemy(board[fromRow][fromCol - 1], color)) {
+				setTo(fromRow, fromCol - 1);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean evaluateFront(int front, int limitFront) {
+		// evalua adelante
+		if (front <= limitFront) {
+			if (ChessUtil.isMyEnemy(board[front][fromCol], color)) {
+				setTo(front, fromCol);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean evaluateFrontLeft(int front, int limitFront) {
+		// evalua adelante izquierda
+		if (front <= limitFront && fromCol - 1 >= 0) {
+			if (ChessUtil.isMyEnemy(board[front][fromCol - 1], color)) {
+				setTo(front, fromCol);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean evaluateFrontRight(int front, int limitFront) {
+		// evalua adelante derecha
+		if (front <= limitFront && fromCol + 1 <= 15) {
+			if (ChessUtil.isMyEnemy(board[front][fromCol + 1], color)) {
+				setTo(front, fromCol);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canEat() {
+
+		int front;
+		int back;
+		int limitFront;
+		int limitBack;
+
+		if (color.equals("white")) {
+			limitBack = 15;
+			limitFront = 0;
+			back = fromRow + 1;
+			front = fromRow - 1;
+		} else {
+			limitBack = 0;
+			limitFront = 15;
+			back = fromRow - 1;
+			front = fromRow + 1;
+		}
+
+		if (evaluateBack(back, limitBack)) {
+			return true;
+		}
+
+		if (evaluateBackLeft(back, limitBack)) {
+			return true;
+		}
+
+		if (evaluateBackRight(back, limitBack)) {
+			return true;
+		}
+
+		if (evaluateLeft()) {
+			return true;
+		}
+
+		if (evaluateRight()) {
+			return true;
+		}
+
+		if (evaluateFront(front, limitFront)) {
+			return true;
+		}
+
+		if (evaluateFrontLeft(front, limitFront)) {
+			return true;
+		}
+
+		if (evaluateFrontRight(front, limitFront)) {
+			return true;
+		}
+
 		return false;
 	}
 

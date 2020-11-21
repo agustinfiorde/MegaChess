@@ -152,6 +152,24 @@ public class ChessUtil {
 		return res;
 	}
 
+	public static List<Response> getPiecesByColor(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		piece = color.equals("white") ? piece.toUpperCase() : piece.toLowerCase();
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
+	}
+
 	public static Response botPossitionAssassin(String[][] board) {
 		Response res = new Response();
 
