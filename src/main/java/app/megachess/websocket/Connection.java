@@ -60,7 +60,7 @@ public class Connection {
 						users_list.forEach((e) -> System.out.print(e + " . "));
 						System.out.println("");
 						System.out.println("--------------------------------------------");
-						clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
+//						clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
 					}
 
 					// Solicitud de desafio

@@ -25,18 +25,7 @@ public abstract class Piece implements PieceAction {
 		this.board = board;
 		this.color = color;
 		setPosition(position);
-//		setMovementToEatAndType(piece);
 	}
-
-//	public Piece(String piece, int[] position, int[] to, String board) {
-//		this.board = ChessUtil.getBoard(board);
-//		this.color = ChessUtil.isWhite(piece) ? "white" : "black";
-//		this.toEat = false;
-//		this.toMove = !this.toEat;
-//		setTo(to[0], to[1]);
-//		setPosition(position);
-//		setMovementToEatAndType(piece);
-//	}
 
 	protected void setPosition(int[] position) {
 		this.fromRow = position[0];
@@ -48,43 +37,31 @@ public abstract class Piece implements PieceAction {
 		this.toCol = toCol;
 	}
 
-//	protected void setMovementToEatAndType(String piece) {
-//		switch (piece.toLowerCase()) {
-//		case "p":
-//			movementToEat = MovementToEat.FRONT_DIAGONAL;
-//			movementType = MovementType.FRONT;
-//			break;
-//		case "r":
-//			movementToEat = MovementToEat.SIDE_FRONT;
-//			movementType = MovementType.SIDE_FRONT;
-//			break;
-//		case "h":
-//			movementToEat = MovementToEat.HORSE;
-//			movementType = MovementType.HORSE;
-//			break;
-//		case "b":
-//			movementToEat = MovementToEat.DIAGONAL;
-//			movementType = MovementType.DIAGONAL;
-//			break;
-//		case "q":
-//			movementToEat = MovementToEat.ALL;
-//			movementType = MovementType.ALL;
-//			break;
-//		case "k":
-//			movementToEat = MovementToEat.ALL;
-//			movementType = MovementType.ALL;
-//			break;
-//		default:
-//			break;
-//		}
-//	}
+	protected boolean toLeft() {
+		for (int i = fromCol; i >= 0; i--) {
+			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected boolean toRight() {
+		for (int i = fromCol; i < 16; i++) {
+			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	protected void evaluateTrajectory(AllDirection target) {
 
 		if (target.equals(AllDirection.TO_TOP)) {
 			for (int i = fromRow; i >= 0; i--) {
-				if (ChessUtil.isMyEnemy(board[i][fromCol], color) || i == 0) {
+				if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 					setTo(i, fromCol);
+					break;
 				}
 			}
 		}
@@ -93,6 +70,7 @@ public abstract class Piece implements PieceAction {
 			for (int i = fromRow; i < 16; i++) {
 				if (ChessUtil.isMyEnemy(board[i][fromCol], color) || i == 15) {
 					setTo(i, fromCol);
+					break;
 				}
 			}
 		}
@@ -101,6 +79,7 @@ public abstract class Piece implements PieceAction {
 			for (int i = fromCol; i >= 0; i--) {
 				if (ChessUtil.isMyEnemy(board[fromRow][i], color) || i == 0) {
 					setTo(fromRow, i);
+					break;
 				}
 			}
 		}
@@ -109,6 +88,7 @@ public abstract class Piece implements PieceAction {
 			for (int i = fromCol; i < 16; i++) {
 				if (ChessUtil.isMyEnemy(board[fromRow][i], color) || i == 15) {
 					setTo(fromRow, i);
+					break;
 				}
 			}
 		}
@@ -124,6 +104,7 @@ public abstract class Piece implements PieceAction {
 
 					if (ChessUtil.isMyEnemy(board[i][j], color) || end) {
 						setTo(i, j);
+						break;
 					}
 				}
 			}
@@ -137,6 +118,7 @@ public abstract class Piece implements PieceAction {
 
 					if (ChessUtil.isMyEnemy(board[i][j], color) || end) {
 						setTo(i, j);
+						break;
 					}
 				}
 			}
@@ -150,6 +132,7 @@ public abstract class Piece implements PieceAction {
 
 					if (ChessUtil.isMyEnemy(board[i][j], color) || end) {
 						setTo(i, j);
+						break;
 					}
 				}
 			}
@@ -163,6 +146,7 @@ public abstract class Piece implements PieceAction {
 
 					if (ChessUtil.isMyEnemy(board[i][j], color) || end) {
 						setTo(i, j);
+						break;
 					}
 				}
 			}

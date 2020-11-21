@@ -15,9 +15,9 @@ public class ChessUtil {
 		return Character.isLowerCase(character.charAt(0));
 	}
 
-	public static boolean rowIsClear(String[][] board, int row) {
+	public static boolean rowIsClear(String[][] board, int row, String color) {
 		for (int i = 0; i < 16; i++) {
-			if (!board[row][i].equals(" ")) {
+			if (!board[row][i].equals(" ") && !isMyTeam(board[row][i], color)) {
 				return false;
 			}
 		}
@@ -311,6 +311,11 @@ public class ChessUtil {
 		}
 	}
 
+	public static boolean isPawnEnemy(String piece, String myColor) {
+		String enemyParameter = myColor.equals("white") ? "p" : "P";
+		return enemyParameter.equals(piece) ? true : false;
+	}
+
 	public static String[][] getBoard(String arg) {
 		String board[][] = new String[16][16];
 		int n = 0;
@@ -331,5 +336,8 @@ public class ChessUtil {
 			}
 			System.out.println("");
 		}
+		System.out.println("                                    ");
+		System.out.println("                                    ");
+		System.out.println("                                    ");
 	}
 }

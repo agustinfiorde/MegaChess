@@ -47,22 +47,21 @@ public class Intelligence {
 				}
 			}
 
-//			// ver si hay alguien en tercera linea
-//			if (ChessUtil.isEnemyInThirdLine(board, color)) {
-//				res = ??;
-//			}
-
-//			// ver si hay alguien en cuarta linea
-//			if (ChessUtil.isEnemyInBotLine(board, color)) {
-//				return "";
-//			}
+			//ver si las torres pueden comer
+			
+			//ver si los caballos pueden comer
+			
+			//ver si los alfiles pueden comer
+			
+			//ver si las reinas de base pueden comer
 
 			// hay reina presente??
 			QueenAI queen;
 			if (color.equals("white")) {
 				res = ChessUtil.topPossitionAssassin(board);
 				if (res.isExist()) {
-					queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
+					queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color,
+							true);
 					fromCol = queen.getFromCol();
 					toCol = queen.getToCol();
 					fromRow = queen.getFromRow();
@@ -72,7 +71,8 @@ public class Intelligence {
 			} else {
 				res = ChessUtil.botPossitionAssassin(board);
 				if (res.isExist()) {
-					queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
+					queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color,
+							true);
 					fromCol = queen.getFromCol();
 					toCol = queen.getToCol();
 					fromRow = queen.getFromRow();
