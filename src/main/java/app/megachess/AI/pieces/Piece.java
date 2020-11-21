@@ -1,13 +1,12 @@
 package app.megachess.AI.pieces;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import app.megachess.enums.AllDirection;
 import app.megachess.enums.MovementToEat;
 import app.megachess.enums.MovementType;
 import app.megachess.utils.ChessUtil;
+import lombok.Data;
 
+@Data
 public abstract class Piece implements PieceAction {
 
 	protected String color;
@@ -20,18 +19,13 @@ public abstract class Piece implements PieceAction {
 	protected int toRow;
 	protected int toCol;
 
-	protected boolean toEat;
-	protected boolean toMove;
-
 	protected String[][] board;
 
-	public Piece(String piece, int[] position, String board, boolean toEat) {
-		this.board = ChessUtil.getBoard(board);
-		this.color = ChessUtil.isWhite(piece) ? "white" : "black";
-		this.toEat = toEat;
-		this.toMove = !this.toEat;
+	public Piece(String piece, int[] position, String[][] board, String color) {
+		this.board = board;
+		this.color = color;
 		setPosition(position);
-		setMovementToEatAndType(piece);
+//		setMovementToEatAndType(piece);
 	}
 
 //	public Piece(String piece, int[] position, int[] to, String board) {
@@ -54,36 +48,36 @@ public abstract class Piece implements PieceAction {
 		this.toCol = toCol;
 	}
 
-	protected void setMovementToEatAndType(String piece) {
-		switch (piece.toLowerCase()) {
-		case "p":
-			movementToEat = MovementToEat.FRONT_DIAGONAL;
-			movementType = MovementType.FRONT;
-			break;
-		case "r":
-			movementToEat = MovementToEat.SIDE_FRONT;
-			movementType = MovementType.SIDE_FRONT;
-			break;
-		case "h":
-			movementToEat = MovementToEat.HORSE;
-			movementType = MovementType.HORSE;
-			break;
-		case "b":
-			movementToEat = MovementToEat.DIAGONAL;
-			movementType = MovementType.DIAGONAL;
-			break;
-		case "q":
-			movementToEat = MovementToEat.ALL;
-			movementType = MovementType.ALL;
-			break;
-		case "k":
-			movementToEat = MovementToEat.ALL;
-			movementType = MovementType.ALL;
-			break;
-		default:
-			break;
-		}
-	}
+//	protected void setMovementToEatAndType(String piece) {
+//		switch (piece.toLowerCase()) {
+//		case "p":
+//			movementToEat = MovementToEat.FRONT_DIAGONAL;
+//			movementType = MovementType.FRONT;
+//			break;
+//		case "r":
+//			movementToEat = MovementToEat.SIDE_FRONT;
+//			movementType = MovementType.SIDE_FRONT;
+//			break;
+//		case "h":
+//			movementToEat = MovementToEat.HORSE;
+//			movementType = MovementType.HORSE;
+//			break;
+//		case "b":
+//			movementToEat = MovementToEat.DIAGONAL;
+//			movementType = MovementType.DIAGONAL;
+//			break;
+//		case "q":
+//			movementToEat = MovementToEat.ALL;
+//			movementType = MovementType.ALL;
+//			break;
+//		case "k":
+//			movementToEat = MovementToEat.ALL;
+//			movementType = MovementType.ALL;
+//			break;
+//		default:
+//			break;
+//		}
+//	}
 
 	protected void evaluateTrajectory(AllDirection target) {
 

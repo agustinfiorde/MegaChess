@@ -4,13 +4,8 @@ import app.megachess.utils.ChessUtil;
 
 public class PawnAI extends Piece {
 
-	public PawnAI(String piece, int[] position, String board, boolean toEat) {
-		super(piece, position, board, toEat);
-		if (toEat) {
-			canEat();
-		} else {
-			canMove();
-		}
+	public PawnAI(String piece, int[] position, String[][] board, String color) {
+		super(piece, position, board, color);
 	}
 
 	@Override
@@ -18,36 +13,40 @@ public class PawnAI extends Piece {
 		if (color.equals("white")) {
 			if (fromRow == 12 || fromRow == 13) {
 				if (fromRow == 12) {
-					if (ChessUtil.isEmpty(11, fromCol, board) && ChessUtil.isEmpty(10, fromCol, board)) {
+					if (ChessUtil.isEmptyByPosition(board, 11, fromCol)
+							&& ChessUtil.isEmptyByPosition(board, 10, fromCol)) {
 						setTo(fromRow - 2, fromCol);
 						return true;
 					}
 				} else {
-					if (ChessUtil.isEmpty(12, fromCol, board) && ChessUtil.isEmpty(11, fromCol, board)) {
+					if (ChessUtil.isEmptyByPosition(board, 12, fromCol)
+							&& ChessUtil.isEmptyByPosition(board, 11, fromCol)) {
 						setTo(fromRow - 2, fromCol);
 						return true;
 					}
 				}
 			}
-			if (ChessUtil.isEmpty(fromRow - 1, fromCol, board)) {
+			if (ChessUtil.isEmptyByPosition(board, fromRow - 1, fromCol)) {
 				setTo(fromRow - 1, fromCol);
 				return true;
 			}
 		} else {
 			if (fromRow == 2 || fromRow == 3) {
 				if (fromRow == 3) {
-					if (ChessUtil.isEmpty(4, fromCol, board) && ChessUtil.isEmpty(5, fromCol, board)) {
+					if (ChessUtil.isEmptyByPosition(board, 4, fromCol)
+							&& ChessUtil.isEmptyByPosition(board, 5, fromCol)) {
 						setTo(fromRow + 2, fromCol);
 						return true;
 					}
 				} else {
-					if (ChessUtil.isEmpty(3, fromCol, board) && ChessUtil.isEmpty(4, fromCol, board)) {
+					if (ChessUtil.isEmptyByPosition(board, 3, fromCol)
+							&& ChessUtil.isEmptyByPosition(board, 4, fromCol)) {
 						setTo(fromRow + 2, fromCol);
 						return true;
 					}
 				}
 			}
-			if (ChessUtil.isEmpty(fromRow + 1, fromCol, board)) {
+			if (ChessUtil.isEmptyByPosition(board, fromRow + 1, fromCol)) {
 				setTo(fromRow + 1, fromCol);
 				return true;
 			}

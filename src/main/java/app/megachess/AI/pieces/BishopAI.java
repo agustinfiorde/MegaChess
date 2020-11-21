@@ -6,9 +6,9 @@ public class BishopAI extends Piece {
 
 	private AllDirection direction;
 
-	public BishopAI(String piece, int[] position, String board, AllDirection direction) {
-		super(piece, position, board, false);
-		this.direction = direction;
+	public BishopAI(String piece, int[] position, String[][] board, String color) {
+		super(piece, position, board, color);
+
 	}
 
 	@Override

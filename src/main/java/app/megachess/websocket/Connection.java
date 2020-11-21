@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import app.megachess.AI.Intelligence;
 import app.megachess.services.GameDataService;
 import app.megachess.utils.ChessUtil;
 import app.megachess.utils.Util;
@@ -42,7 +43,6 @@ public class Connection {
 
 	public void start() {
 		try {
-
 			clientEndPoint = new WebSocketClient(new URI(url));
 
 			clientEndPoint.addMessageHandler(new WebSocketClient.MessageHandler() {
@@ -55,9 +55,7 @@ public class Connection {
 
 						// List<String> users_list = message.getData().getUsers_list().stream().filter(e
 						// -> !e.equals(username)).collect(Collectors.toList());
-						// DOWN Incluirme, UP Excluirme
 						List<String> users_list = message.getData().getUsers_list();
-
 						System.out.println("--------------------------------------------");
 						users_list.forEach((e) -> System.out.print(e + " . "));
 						System.out.println("");
@@ -71,27 +69,21 @@ public class Connection {
 						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
 					}
 
-					// Primer Turno
-					if (msj.contains("your_turn") && message.getData().getMove_left() == 199) {
+					// Turno
+					if (msj.contains("your_turn")) {
 						ChessUtil.showBoard(message.getData().getBoard());
-						String res = Util.move(message);
-						clientEndPoint.sendMessage(res);
-					}
-
-					// Turno normal
-					if (msj.contains("your_turn") && message.getData().getMove_left() != 199) {
-						ChessUtil.showBoard(message.getData().getBoard());
-						String res = Util.move(message);
+						String res = Intelligence.evaluate(message);
 						clientEndPoint.sendMessage(res);
 					}
 
 					// Game over
 					if (msj.contains("gameover")) {
-						gdService.saveGame(message);
+//						gdService.saveGame(message);
 						System.out.println(Util.gameover(message));
 					}
 				}
 			});
+
 			Thread.sleep(5000);
 		} catch (InterruptedException ex) {
 			System.err.println("InterruptedException exception: " + ex.getMessage());

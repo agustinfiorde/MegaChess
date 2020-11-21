@@ -1,11 +1,9 @@
 package app.megachess.AI.pieces;
 
-import app.megachess.enums.AllDirection;
-
 public class HorseAI extends Piece {
 
-	public HorseAI(String piece, int[] position, String board) {
-		super(piece, position, board, false);
+	public HorseAI(String piece, int[] position, String[][] board, String color) {
+		super(piece, position, board, color);
 	}
 
 	@Override

@@ -53,19 +53,18 @@ public class Util {
 		return message;
 	}
 
-	public static String move(Message req) {
+	public static String move(Message req, int fromRow, int fromCol, int toRow, int toCol) {
 		Message msj = new Message();
 		DataMessage dataMsj = new DataMessage();
 		msj.setAction("move");
 		dataMsj.setBoard_id(req.getData().getBoard_id());
 		dataMsj.setTurn_token(req.getData().getTurn_token());
-		/*
-		 * TODO from from to to
-		 */
-		dataMsj.setFrom_row(12);
-		dataMsj.setFrom_col(1);
-		dataMsj.setTo_row(10);
-		dataMsj.setTo_col(1);
+		
+		dataMsj.setFrom_row(fromRow);
+		dataMsj.setFrom_col(fromCol);
+		dataMsj.setTo_row(toRow);
+		dataMsj.setTo_col(toCol);
+		
 		msj.setData(dataMsj);
 		return objectToJSON(msj);
 	}

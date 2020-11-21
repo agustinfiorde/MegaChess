@@ -4,24 +4,21 @@ import app.megachess.utils.ChessUtil;
 
 public class KingAI extends Piece {
 
-	public KingAI(String piece, int[] position, String board, boolean toEat) {
-		super(piece, position, board, toEat);
-		if (toEat) {
-			canEat();
-		} else {
-			canMove();
-		}
+	public KingAI(String piece, int[] position, String[][] board, String color) {
+		super(piece, position, board, color);
 	}
 
 	@Override
 	public boolean canMove() {
 		if (color.equals("white")) {
-			if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol], color) || ChessUtil.isEmpty(fromRow + 1, fromCol, board)) {
+			if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol], color)
+					|| ChessUtil.isEmptyByPosition(board, fromRow - 1, fromCol)) {
 				setTo(fromRow + 1, fromCol);
 				return true;
 			}
 		} else {
-			if (ChessUtil.isMyEnemy(board[fromRow - 1][fromCol], color) || ChessUtil.isEmpty(fromRow - 1, fromCol, board)) {
+			if (ChessUtil.isMyEnemy(board[fromRow + 1][fromCol], color)
+					|| ChessUtil.isEmptyByPosition(board, fromRow + 1, fromCol)) {
 				setTo(fromRow - 1, fromCol);
 				return true;
 			}
