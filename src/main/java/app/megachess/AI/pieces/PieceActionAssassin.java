@@ -2,10 +2,8 @@ package app.megachess.AI.pieces;
 
 public interface PieceActionAssassin {
 
-	boolean canBeEated();
+	boolean murder();
 
-	void assassinMission();
-
-	boolean evaluateQuadrants(int row, int col);
+	boolean hunt();
 
 }

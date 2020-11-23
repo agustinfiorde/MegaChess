@@ -17,7 +17,7 @@ public class ChessUtil {
 
 	public static boolean rowIsClear(String[][] board, int row, String color) {
 		for (int i = 0; i < 16; i++) {
-			if (!board[row][i].equals(" ") && !isMyTeam(board[row][i], color)) {
+			if (isMyEnemy(board[row][i], color)) {
 				return false;
 			}
 		}
@@ -42,7 +42,6 @@ public class ChessUtil {
 		String piece;
 
 		if (color.equals("white")) {
-			// white
 			startRow = 9;
 			endRow = 13;
 			piece = "P";
@@ -59,7 +58,6 @@ public class ChessUtil {
 				}
 			}
 		} else {
-			// black
 			startRow = 6;
 			endRow = 2;
 			piece = "p";
@@ -135,12 +133,12 @@ public class ChessUtil {
 		return res;
 	}
 
-	public static Response topPossitionAssassin(String[][] board) {
+	public static Response topPossitionAssassin(String[][] board, String piece) {
 		Response res = new Response();
 
-		for (int i = 0; i < 16 - 2; i++) {
+		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals("Q")) {
+				if (board[i][j].equals(piece)) {
 					res.setExist(true);
 					res.setFromRow(i);
 					res.setFromCol(j);
@@ -170,12 +168,47 @@ public class ChessUtil {
 		return responses;
 	}
 
-	public static Response botPossitionAssassin(String[][] board) {
-		Response res = new Response();
-
-		for (int i = 2; i < 16; i++) {
+	public static List<Response> getDefenderPiecesBot(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		
+		for (int i = 8; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals("q")) {
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
+	}
+
+	public static List<Response> getDefenderPiecesTop(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
+	}
+
+	public static Response botPossitionAssassin(String[][] board, String piece) {
+		Response res = new Response();
+		for (int i = 15; i >= 0; i--) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
 					res.setExist(true);
 					res.setFromRow(i);
 					res.setFromCol(j);
@@ -188,9 +221,7 @@ public class ChessUtil {
 	}
 
 	public static boolean isEnemyInTheCenter(String[][] board, String color) {
-
 		int row = color.equals("white") ? 8 : 7;
-
 		if (color.equals("white")) {
 			for (int j = 0; j < 16; j++) {
 				if (isBlack(board[row][j])) {

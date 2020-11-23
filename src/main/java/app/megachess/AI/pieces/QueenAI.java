@@ -2,84 +2,102 @@ package app.megachess.AI.pieces;
 
 import app.megachess.enums.AllDirection;
 import app.megachess.utils.ChessUtil;
+import app.megachess.websocket.models.Response;
 
 public class QueenAI extends Piece implements PieceActionAssassin {
 
-	// puede ser asesino o defensor central
-	private boolean assassin;
-	private AllDirection direction;
-
-	public QueenAI(String piece, int[] position, String board[][], String color, boolean assassin) {
+	public QueenAI(String piece, int[] position, String board[][], String color) {
 		super(piece, position, board, color);
-		this.assassin = assassin;
-		canBeEated();
 	}
 
-	// las reinas no lo utilizan
 	@Override
-	public boolean canMove() {
-		evaluateTrajectory(direction);
-		return true;
+	public boolean canProceed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	// las reinas no lo utilizan
 	@Override
-	public boolean canEat() {
-		evaluateTrajectory(direction);
-		return true;
+	public boolean canDefend() {
+		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
+				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
 	}
 
-	// evalua si la reina esta en peligro y la hace actuar
-	public boolean canBeEated() {
+	public void assassinMissionLastLine(int botLine, AllDirection toTop) {
+		if (!ChessUtil.rowIsClear(board, botLine, color)) {
 
-//		if (color.equals("white")) {
-//			frontRow = fromRow - 1;
-//		} else {
-//			frontRow = fromRow + 1;
-//		}
+			// Last Line
+			if (fromRow == botLine) {
 
-		int frontRow = color.equals("white") ? fromRow - 1 : fromRow + 1;
+				if (toRight()) {
+					evaluateTrajectory(AllDirection.RIGHT);
+				} else if (toLeft()) {
+					evaluateTrajectory(AllDirection.LEFT);
+				} else if (ChessUtil.rowIsClear(board, botLine, color)) {
+					evaluateBot();
+				}
+			} else {
+				evaluateTrajectory(toTop);
+			}
+		}
+	}
 
-		if (assassin) {
-			if (evaluateQuadrants(frontRow, fromCol - 1)) {
-				setTo(frontRow, fromCol - 1);
-				return true;
+	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop) {
+		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
+
+			// Third Line
+			if (fromRow == thirdLine) {
+				if (toRight()) {
+					evaluateTrajectory(AllDirection.RIGHT);
+				} else if (toLeft()) {
+					evaluateTrajectory(AllDirection.LEFT);
+				} else if (ChessUtil.rowIsClear(board, thirdLine, color)) {
+					evaluateBot();
+				}
+			} else {
+				evaluateBot();
 			}
-			if (evaluateQuadrants(frontRow, fromCol + 1)) {
-				setTo(frontRow, fromCol + 1);
-				return true;
+		}
+	}
+
+	public void assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, AllDirection toTop) {
+		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
+				&& ChessUtil.rowIsClear(board, botLine, color)) {
+			// Second Line
+
+			if (fromRow == secondLine) {
+				if (toRight()) {
+					evaluateTrajectory(AllDirection.RIGHT);
+				} else if (toLeft()) {
+					evaluateTrajectory(AllDirection.LEFT);
+				} else if (ChessUtil.rowIsClear(board, secondLine, color)) {
+					evaluateBot();
+				}
+			} else {
+				evaluateBot();
 			}
-			assassinMission();
-			if (getToCol() == null) {
-				return false;
+		}
+	}
+
+	public void assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
+			AllDirection toBot) {
+		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
+				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
+			// First Line
+
+			if (fromRow == frontLine) {
+				if (toRight()) {
+					evaluateTrajectory(AllDirection.RIGHT);
+				} else if (toLeft()) {
+					evaluateTrajectory(AllDirection.LEFT);
+				}
 			}
-			return true;
 		} else {
-			// futuro modulo para defensa central
-			evaluateTrajectory(AllDirection.LEFT);
-			evaluateTrajectory(AllDirection.RIGHT);
-			moveLikeDefender();
-			return true;
+			hunt();
 		}
 	}
 
-	// sub metodo para analizar los cuadrantes donde la reina puede ser comida, por
-	// ahora solo funciona contra los peones
-	public boolean evaluateQuadrants(int row, int col) {
-		if (row == -1 || row == 0 || row == 1 || row == 16 || row == 14 || (fromCol == 0 && fromCol > col)
-				|| (fromCol == 15 && fromCol < col)) {
-			return false;
-		}
-		if (ChessUtil.isPawnEnemy(board[row][col], color)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	// establece la mision de la reina asesina en base a su posicion y objetivos
-	// cumplidos
-	public void assassinMission() {
+	@Override
+	public boolean murder() {
 
 		int botLine;
 		int thirdLine;
@@ -105,106 +123,48 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		}
 
 		assassinMissionLastLine(botLine, toTop);
-		System.out.println(toCol + "  " + toRow);
-		assassinMissionThirdLine(thirdLine, botLine, toTop, toBot);
-		System.out.println(toCol + "  " + toRow);
-		assassinMissionSecondLine(secondLine, botLine, thirdLine, toTop, toBot);
-		System.out.println(toCol + "  " + toRow);
+		assassinMissionThirdLine(thirdLine, botLine, toTop);
+		assassinMissionSecondLine(secondLine, thirdLine, botLine, toTop);
 		assassinMissionFirstLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot);
-		System.out.println(toCol + "  " + toRow);
+
+		if (getToCol() != null && getToRow() != null) {
+			return true;
+		}
+		return false;
+
 	}
 
-	public void assassinMissionLastLine(int botLine, AllDirection toTop) {
-		if (!ChessUtil.rowIsClear(board, botLine, color)) {
-			// Last Line
-			if (fromRow == botLine) {
-				if (toRight()) {
+	@Override
+	public boolean hunt() {
+		Response target = targetToHunt();
+		if (target != null) {
+
+			if (target.getFromCol() != fromCol) {
+				if (target.getFromCol() > fromCol) {
 					evaluateTrajectory(AllDirection.RIGHT);
-				} else if (toLeft()) {
+				} else {
 					evaluateTrajectory(AllDirection.LEFT);
 				}
 			} else {
-				evaluateTrajectory(toTop);
+				setToCol(fromCol);
 			}
-		}
-	}
 
-	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop, AllDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-			// Third Line
-
-			if (fromRow == thirdLine) {
-				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
-				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
+			if (target.getFromRow() != fromRow) {
+				if (target.getFromRow() > fromRow) {
+					evaluateTrajectory(AllDirection.TO_BOT);
 				} else {
-					evaluateTrajectory(toTop);
+					evaluateTrajectory(AllDirection.TO_TOP);
 				}
 			} else {
-				if (fromRow == 0 || fromRow == 15) {
-					evaluateTrajectory(toBot);
-				} else {
-					evaluateTrajectory(toTop);
-				}
+				setToRow(fromRow);
 			}
 		}
-	}
 
-	public void assassinMissionSecondLine(int secondLine, int botLine, int thirdLine, AllDirection toTop,
-			AllDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
-				&& ChessUtil.rowIsClear(board, botLine, color)) {
-			// Second Line
-
-			if (fromRow == secondLine) {
-				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
-				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
-				} else {
-					evaluateTrajectory(toTop);
-				}
-			} else {
-				if (fromRow == 0 || fromRow == 15) {
-					evaluateTrajectory(toBot);
-				} else {
-					evaluateTrajectory(toTop);
-				}
-			}
-		}
-	}
-
-	public void assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
-				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-			// First Line
-
-			if (fromRow == frontLine) {
-				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
-				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
-				}
-			} else {
-				if (fromRow == 0 || fromRow == 15) {
-					evaluateTrajectory(toBot);
-				} else {
-					evaluateTrajectory(toTop);
-				}
-			}
-		}
-	}
-
-	// Metodo para el modulo de defensoras centrales moviendolas en caso de que
-	// esten en peligro
-	// por ahora no aplica
-	public void moveLikeDefender() {
-		if (fromCol != 15) {
-			setTo(fromRow, 15);
+		if (getToCol() != null && getToRow() != null) {
+			return true;
 		} else {
-			setTo(fromRow, 0);
+			return false;
 		}
 	}
+
 }

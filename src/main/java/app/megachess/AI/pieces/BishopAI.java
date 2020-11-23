@@ -1,10 +1,6 @@
 package app.megachess.AI.pieces;
 
-import app.megachess.enums.AllDirection;
-
 public class BishopAI extends Piece {
-
-	private AllDirection direction;
 
 	public BishopAI(String piece, int[] position, String[][] board, String color) {
 		super(piece, position, board, color);
@@ -12,19 +8,14 @@ public class BishopAI extends Piece {
 	}
 
 	@Override
-	public boolean canMove() {
-
-		evaluateTrajectory(direction);
-
-		return true;
+	public boolean canDefend() {
+		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
+				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
 	}
 
 	@Override
-	public boolean canEat() {
-
-		evaluateTrajectory(direction);
-
-		return true;
+	public boolean canProceed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
-
 }
