@@ -24,10 +24,7 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 
 	public void assassinMissionLastLine(int botLine, AllDirection toTop) {
 		if (!ChessUtil.rowIsClear(board, botLine, color)) {
-
-			// Last Line
 			if (fromRow == botLine) {
-
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
@@ -41,39 +38,44 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		}
 	}
 
-	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop) {
+	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop, AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-
-			// Third Line
 			if (fromRow == thirdLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, thirdLine, color)) {
-					evaluateBot();
+					evaluateTrajectory(toBot);
 				}
 			} else {
-				evaluateBot();
+				if (fromRow < thirdLine) {
+					evaluateTrajectory(AllDirection.TO_BOT);
+				} else {
+					evaluateTrajectory(AllDirection.TO_TOP);
+				}
 			}
 		}
 	}
 
-	public void assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, AllDirection toTop) {
+	public void assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, AllDirection toTop,
+			AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
 				&& ChessUtil.rowIsClear(board, botLine, color)) {
-			// Second Line
-
 			if (fromRow == secondLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, secondLine, color)) {
-					evaluateBot();
+					evaluateTrajectory(toBot);
 				}
 			} else {
-				evaluateBot();
+				if (fromRow < secondLine) {
+					evaluateTrajectory(AllDirection.TO_BOT);
+				} else {
+					evaluateTrajectory(AllDirection.TO_TOP);
+				}
 			}
 		}
 	}
@@ -82,17 +84,15 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 			AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
 				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-			// First Line
-
 			if (fromRow == frontLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				}
+			} else {
+				setTo(frontLine, fromCol);
 			}
-		} else {
-			hunt();
 		}
 	}
 
@@ -123,8 +123,8 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		}
 
 		assassinMissionLastLine(botLine, toTop);
-		assassinMissionThirdLine(thirdLine, botLine, toTop);
-		assassinMissionSecondLine(secondLine, thirdLine, botLine, toTop);
+		assassinMissionThirdLine(thirdLine, botLine, toTop, toBot);
+		assassinMissionSecondLine(secondLine, thirdLine, botLine, toTop, toBot);
 		assassinMissionFirstLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot);
 
 		if (getToCol() != null && getToRow() != null) {

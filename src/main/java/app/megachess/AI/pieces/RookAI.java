@@ -22,46 +22,6 @@ public class RookAI extends Piece implements PieceActionAssassin {
 	}
 
 	@Override
-	public boolean murder() {
-		int back;
-		int botLine;
-		int thirdLine;
-		int secondLine;
-		int frontLine;
-		AllDirection toTop;
-		AllDirection toBot;
-
-		if (color.equals("white")) {
-			back = fromRow < 15 ? fromRow + 1 : 0;
-			botLine = 0;
-			thirdLine = 1;
-			secondLine = 2;
-			frontLine = 3;
-			toTop = AllDirection.TO_TOP;
-			toBot = AllDirection.TO_BOT;
-		} else {
-			back = fromRow > 0 ? fromRow - 1 : 0;
-			botLine = 15;
-			thirdLine = 14;
-			secondLine = 13;
-			frontLine = 12;
-			toTop = AllDirection.TO_BOT;
-			toBot = AllDirection.TO_TOP;
-		}
-
-		assassinMissionLastLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot, back);
-		assassinMissionThirdLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot, back);
-		assassinMissionSecondLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot, back);
-		assassinMissionFirstLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot, back);
-
-		if (getToCol() != null && getToRow() != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
 	public boolean hunt() {
 		Response target = targetToHunt();
 		if (target != null) {
@@ -94,18 +54,15 @@ public class RookAI extends Piece implements PieceActionAssassin {
 		}
 	}
 
-	public void assassinMissionLastLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot, int back) {
+	public void assassinMissionLastLine(int botLine, AllDirection toTop) {
 		if (!ChessUtil.rowIsClear(board, botLine, color)) {
-
-			// Last Line
 			if (fromRow == botLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, botLine, color)) {
-					setTo(back, toCol);
+					evaluateBot();
 				}
 			} else {
 				evaluateTrajectory(toTop);
@@ -113,61 +70,100 @@ public class RookAI extends Piece implements PieceActionAssassin {
 		}
 	}
 
-	public void assassinMissionThirdLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot, int back) {
+	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop, AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-
-			// Third Line
 			if (fromRow == thirdLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, thirdLine, color)) {
-					setTo(back, toCol);
+					evaluateTrajectory(toBot);
 				}
 			} else {
-				evaluateTrajectory(toTop);
+				if (fromRow < thirdLine) {
+					evaluateTrajectory(AllDirection.TO_BOT);
+				} else {
+					evaluateTrajectory(AllDirection.TO_TOP);
+				}
 			}
 		}
 	}
 
-	public void assassinMissionSecondLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot, int back) {
+	public void assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, AllDirection toTop,
+			AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
 				&& ChessUtil.rowIsClear(board, botLine, color)) {
-			// Second Line
-
 			if (fromRow == secondLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, secondLine, color)) {
-					setTo(back, toCol);
+					evaluateTrajectory(toBot);
 				}
 			} else {
-				evaluateTrajectory(toTop);
+				if (fromRow < secondLine) {
+					evaluateTrajectory(AllDirection.TO_BOT);
+				} else {
+					evaluateTrajectory(AllDirection.TO_TOP);
+				}
 			}
 		}
 	}
 
 	public void assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot, int back) {
+			AllDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
 				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
-			// First Line
-
 			if (fromRow == frontLine) {
 				if (toRight()) {
 					evaluateTrajectory(AllDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(AllDirection.LEFT);
-				} else {
-					hunt();
 				}
+			} else {
+				setTo(frontLine, fromCol);
 			}
 		}
+	}
+
+	@Override
+	public boolean murder() {
+
+		int botLine;
+		int thirdLine;
+		int secondLine;
+		int frontLine;
+		AllDirection toTop;
+		AllDirection toBot;
+
+		if (color.equals("white")) {
+			botLine = 0;
+			thirdLine = 1;
+			secondLine = 2;
+			frontLine = 3;
+			toTop = AllDirection.TO_TOP;
+			toBot = AllDirection.TO_BOT;
+		} else {
+			botLine = 15;
+			thirdLine = 14;
+			secondLine = 13;
+			frontLine = 12;
+			toTop = AllDirection.TO_BOT;
+			toBot = AllDirection.TO_TOP;
+		}
+
+		assassinMissionLastLine(botLine, toTop);
+		assassinMissionThirdLine(thirdLine, botLine, toTop, toBot);
+		assassinMissionSecondLine(secondLine, thirdLine, botLine, toTop, toBot);
+		assassinMissionFirstLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot);
+
+		if (getToCol() != null && getToRow() != null) {
+			return true;
+		}
+		return false;
+
 	}
 
 }

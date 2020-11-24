@@ -33,11 +33,12 @@ public class WebSocketClient {
 		this.userSession = userSession;
 	}
 
-	@OnClose
-	public void onClose(Session userSession, CloseReason reason) {
-		System.out.println("closing websocket");
-		this.userSession = null;
-	}
+//	@OnClose
+//	public void onClose(Session userSession, CloseReason reason) {
+//		System.out.println("closing websocket");
+//		this.userSession = null;
+//	}
+	
 
     @OnMessage
     public void onMessage(String message) {

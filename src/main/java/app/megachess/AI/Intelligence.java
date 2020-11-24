@@ -19,6 +19,8 @@ public class Intelligence {
 
 	public static final int startMoves = 199;
 
+	private static List<Response> responses;
+
 	private static int fromRow = 0;
 	private static int fromCol = 0;
 	private static int toRow = 0;
@@ -35,29 +37,29 @@ public class Intelligence {
 			return evaluateFirstMove(msj, msjData, board);
 		}
 
-//		// defensa de peones
-//		answer = pawnDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// defensa de peones
+		answer = pawnDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
-//		// defensa de torres
-//		answer = rookDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// defensa de torres
+		answer = rookDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
-//		// defensa de caballos
-//		answer = horseDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// defensa de caballos
+		answer = horseDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
-//		// defensa de alfiles
-//		answer = bishopDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// defensa de alfiles
+		answer = bishopDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
 		// defensa con reinas
 		answer = queenDefense(msj, board, color);
@@ -65,11 +67,11 @@ public class Intelligence {
 			return answer;
 		}
 
-//		// defensa con reyes
-//		answer = kingDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// defensa con reyes
+		answer = kingDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
 		// reina asesina
 		answer = queenAction(msj, board, color);
@@ -77,11 +79,11 @@ public class Intelligence {
 			return answer;
 		}
 
-//		// torre asesinas
-//		answer = rookAction(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// torre asesinas
+		answer = rookAction(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
 		// mover peones
 		answer = pawnAction(msj, board, color);
@@ -99,8 +101,6 @@ public class Intelligence {
 	}
 
 	public static String queenDefense(Message msj, String[][] board, String color) {
-
-		List<Response> responses;
 
 		if (color.equals("white")) {
 			responses = ChessUtil.getDefenderPiecesBot(board, "Q", color);
@@ -124,7 +124,7 @@ public class Intelligence {
 
 	public static String horseDefense(Message msj, String[][] board, String color) {
 
-		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
+		responses = ChessUtil.getPiecesByColor(board, "k", color);
 
 		HorseAI horse;
 		for (Response r : responses) {
@@ -141,8 +141,6 @@ public class Intelligence {
 	}
 
 	public static String rookDefense(Message msj, String[][] board, String color) {
-
-		List<Response> responses;
 
 		if (color.equals("white")) {
 			responses = ChessUtil.getDefenderPiecesBot(board, "R", color);
@@ -165,7 +163,7 @@ public class Intelligence {
 	}
 
 	public static String kingDefense(Message msj, String[][] board, String color) {
-		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
+		responses = ChessUtil.getPiecesByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
 			king = new KingAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -181,7 +179,7 @@ public class Intelligence {
 	}
 
 	public static String bishopDefense(Message msj, String[][] board, String color) {
-		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
+		responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
 			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -198,7 +196,7 @@ public class Intelligence {
 
 	public static String pawnDefense(Message msj, String[][] board, String color) {
 
-		List<Response> responses = ChessUtil.pawnsActives(board, color);
+		responses = ChessUtil.pawnsActives(board, color);
 
 		PawnAI pawn;
 		for (Response r : responses) {
@@ -232,8 +230,13 @@ public class Intelligence {
 				toCol = queen.getToCol();
 				fromRow = queen.getFromRow();
 				toRow = queen.getToRow();
-				System.out.println(Util.move(msj, fromRow, fromCol, toRow, toCol));
-				System.out.println("hola");
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
+			if (queen.hunt()) {
+				fromCol = queen.getFromCol();
+				toCol = queen.getToCol();
+				fromRow = queen.getFromRow();
+				toRow = queen.getToRow();
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
 		}
@@ -260,13 +263,20 @@ public class Intelligence {
 				toRow = rook.getToRow();
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
+			if (rook.hunt()) {
+				fromCol = rook.getFromCol();
+				toCol = rook.getToCol();
+				fromRow = rook.getFromRow();
+				toRow = rook.getToRow();
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
 		}
 		return null;
 	}
 
 	public static String pawnAction(Message msj, String[][] board, String color) {
 
-		List<Response> responses = ChessUtil.pawnsActives(board, color);
+		responses = ChessUtil.pawnsActives(board, color);
 
 		PawnAI pawn;
 		for (Response r : responses) {

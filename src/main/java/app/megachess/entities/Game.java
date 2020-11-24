@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -15,7 +14,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import app.megachess.enums.Profile;
 import lombok.Data;
 
 /*
@@ -38,13 +36,8 @@ public class Game implements Serializable {
 
 	private String opponentUsername;
 
-	@OneToMany
+	@OneToMany(cascade=CascadeType.REMOVE)
 	private List<DataGame> datas;
-
-	@Enumerated(EnumType.STRING)
-	private Profile myProfile;
-	@Enumerated(EnumType.STRING)
-	private Profile oponentProfile;
 
 	private String myScore;
 	private String yourScore;

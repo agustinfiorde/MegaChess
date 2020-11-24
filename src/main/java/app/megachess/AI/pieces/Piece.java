@@ -101,12 +101,11 @@ public abstract class Piece implements PieceAction {
 	private void evaluateTrajectoryToTop(AllDirection target) {
 		if (target.equals(AllDirection.TO_TOP)) {
 			for (int i = (fromRow - 1); i >= 0; i--) {
-				this.toCol = null;
-				this.toRow = null;
 				if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
+					toCol = null;
+					toRow = null;
 					break;
 				}
-
 				if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 					setTo(i, fromCol);
 					break;
@@ -120,9 +119,9 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.TO_BOT)) {
 			for (int i = (fromRow + 1); i < 16; i++) {
 
-				this.toCol = null;
-				this.toRow = null;
 				if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
+					toCol = null;
+					toRow = null;
 					break;
 				}
 				if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
@@ -138,9 +137,9 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.LEFT)) {
 			for (int i = (fromCol - 1); i >= 0; i--) {
 
-				this.toCol = null;
-				this.toRow = null;
 				if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+					toCol = null;
+					toRow = null;
 					break;
 				}
 				if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
@@ -156,9 +155,9 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.RIGHT)) {
 			for (int i = (fromCol + 1); i < 16; i++) {
 
-				this.toCol = null;
-				this.toRow = null;
 				if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+					toCol = null;
+					toRow = null;
 					break;
 				}
 				if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
@@ -176,9 +175,9 @@ public abstract class Piece implements PieceAction {
 			fors: for (int i = fromRow - 1; i >= 0; i--) {
 				for (int j = fromCol - 1; j >= 0; j--) {
 
-					this.toCol = null;
-					this.toRow = null;
 					if (ChessUtil.isMyTeam(board[i][j], color)) {
+						toCol = null;
+						toRow = null;
 						break fors;
 					}
 					if (ChessUtil.isMyEnemy(board[i][j], color)) {
@@ -195,9 +194,6 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.TO_TOP_RIGHT)) {
 			fors: for (int i = fromRow - 1; i >= 0; i--) {
 				for (int j = fromCol + 1; j < 16; j++) {
-
-					this.toCol = null;
-					this.toRow = null;
 					if (ChessUtil.isMyTeam(board[i][j], color)) {
 						toCol = null;
 						toRow = null;
@@ -218,9 +214,6 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.TO_BOT_LEFT)) {
 			fors: for (int i = fromRow + 1; i < 16; i++) {
 				for (int j = fromCol - 1; j >= 0; j--) {
-
-					this.toCol = null;
-					this.toRow = null;
 					if (ChessUtil.isMyTeam(board[i][j], color)) {
 						toCol = null;
 						toRow = null;
@@ -240,7 +233,6 @@ public abstract class Piece implements PieceAction {
 		if (target.equals(AllDirection.TO_BOT_RIGHT)) {
 			fors: for (int i = fromRow + 1; i < 16; i++) {
 				for (int j = fromCol + 1; j < 16; j++) {
-
 					if (ChessUtil.isMyTeam(board[i][j], color)) {
 						toCol = null;
 						toRow = null;
@@ -257,7 +249,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateTop() {
-		if (back > 15 || back < 0) {
+		if (front > 15 || front < 0 || back > 15 || back < 0) {
 			return false;
 		} else {
 			if (evaluateQuadrants(front, fromCol)) {
@@ -270,7 +262,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateBot() {
-		if (back > 15 || back < 0) {
+		if (front > 15 || front < 0 || back > 15 || back < 0) {
 			return false;
 		} else {
 			if (evaluateQuadrants(back, fromCol)) {
@@ -309,7 +301,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateTopLeft() {
-		if (back > 15 || back < 0 || left < 0) {
+		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
 			return false;
 		} else {
 			if (evaluateQuadrants(front, left)) {
@@ -322,7 +314,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateBotLeft() {
-		if (back > 15 || back < 0 || left < 0) {
+		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
 			return false;
 		} else {
 			if (evaluateQuadrants(back, left)) {
@@ -335,7 +327,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateTopRight() {
-		if (back > 15 || back < 0 || right > 15) {
+		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
 			return false;
 		} else {
 			if (evaluateQuadrants(front, right)) {
@@ -348,7 +340,7 @@ public abstract class Piece implements PieceAction {
 	}
 
 	protected boolean evaluateBotRight() {
-		if (back > 15 || back < 0 || right > 15) {
+		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
 			return false;
 		} else {
 			if (evaluateQuadrants(back, right)) {

@@ -27,8 +27,10 @@ public class HorseAI extends Piece {
 				y = fromRow + i;
 				x = fromCol + j;
 				if (y >= 0 && y <= 15 && x >= 0 && x <= 15) {
-					setTo(y, x);
-					return true;
+					if (evaluateQuadrants(y, x)) {
+						setTo(y, x);
+						return true;
+					}
 				}
 			}
 		}

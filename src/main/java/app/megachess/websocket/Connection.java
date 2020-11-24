@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,7 +66,6 @@ public class Connection {
 
 					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
-						System.out.println("Te esta desafiando ->" + message.getData().getUsername());
 						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
 					}
 
@@ -73,14 +73,19 @@ public class Connection {
 					if (msj.contains("your_turn")) {
 
 						ChessUtil.showBoard(message.getData().getBoard());
+						try {
+							TimeUnit.MILLISECONDS.sleep(200);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						String res = Intelligence.evaluate(message);
+						
 						clientEndPoint.sendMessage(res);
 					}
 
 					// Game over
 					if (msj.contains("gameover")) {
 //						gdService.saveGame(message);
-						System.out.println(Util.gameover(message));
 					}
 				}
 			});
