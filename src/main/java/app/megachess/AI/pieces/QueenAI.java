@@ -1,8 +1,8 @@
 package app.megachess.AI.pieces;
 
 import app.megachess.enums.AllDirection;
+import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
-import app.megachess.websocket.models.Response;
 
 public class QueenAI extends Piece implements PieceActionAssassin {
 

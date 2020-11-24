@@ -1,8 +1,8 @@
 package app.megachess.AI.pieces;
 
 import app.megachess.enums.AllDirection;
+import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
-import app.megachess.websocket.models.Response;
 import lombok.Data;
 
 @Data
@@ -24,10 +24,10 @@ public abstract class Piece implements PieceAction {
 	protected String[][] board;
 
 	public Piece(String piece, int[] position, String[][] board, String color) {
+		
 		this.board = board;
 		this.color = color;
 		setPosition(position);
-
 		this.right = this.fromCol + 1;
 		this.left = this.fromCol - 1;
 		if (color.equals("white")) {

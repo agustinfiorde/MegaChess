@@ -9,11 +9,11 @@ import app.megachess.AI.pieces.KingAI;
 import app.megachess.AI.pieces.PawnAI;
 import app.megachess.AI.pieces.QueenAI;
 import app.megachess.AI.pieces.RookAI;
+import app.megachess.models.DataMessage;
+import app.megachess.models.Message;
+import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
 import app.megachess.utils.Util;
-import app.megachess.websocket.models.DataMessage;
-import app.megachess.websocket.models.Message;
-import app.megachess.websocket.models.Response;
 
 public class Intelligence {
 
@@ -105,9 +105,8 @@ public class Intelligence {
 		if (color.equals("white")) {
 			responses = ChessUtil.getDefenderPiecesBot(board, "Q", color);
 		} else {
-			responses = ChessUtil.getDefenderPiecesBot(board, "q", color);
+			responses = ChessUtil.getDefenderPiecesTop(board, "q", color);
 		}
-
 		QueenAI queen;
 		for (Response r : responses) {
 			queen = new QueenAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -125,7 +124,6 @@ public class Intelligence {
 	public static String horseDefense(Message msj, String[][] board, String color) {
 
 		responses = ChessUtil.getPiecesByColor(board, "k", color);
-
 		HorseAI horse;
 		for (Response r : responses) {
 			horse = new HorseAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -147,7 +145,6 @@ public class Intelligence {
 		} else {
 			responses = ChessUtil.getDefenderPiecesBot(board, "r", color);
 		}
-
 		RookAI rook;
 		for (Response r : responses) {
 			rook = new RookAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -163,6 +160,7 @@ public class Intelligence {
 	}
 
 	public static String kingDefense(Message msj, String[][] board, String color) {
+
 		responses = ChessUtil.getPiecesByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
@@ -179,6 +177,7 @@ public class Intelligence {
 	}
 
 	public static String bishopDefense(Message msj, String[][] board, String color) {
+
 		responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
@@ -197,7 +196,6 @@ public class Intelligence {
 	public static String pawnDefense(Message msj, String[][] board, String color) {
 
 		responses = ChessUtil.pawnsActives(board, color);
-
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -213,16 +211,15 @@ public class Intelligence {
 	}
 
 	public static String queenAction(Message msj, String[][] board, String color) {
+
 		QueenAI queen;
 		Response res;
 		res = null;
-
 		if (color.equals("white")) {
 			res = ChessUtil.topPossitionAssassin(board, "Q");
 		} else {
 			res = ChessUtil.botPossitionAssassin(board, "q");
 		}
-
 		if (res.isExist()) {
 			queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
 			if (queen.murder()) {
@@ -244,16 +241,15 @@ public class Intelligence {
 	}
 
 	public static String rookAction(Message msj, String[][] board, String color) {
+
 		RookAI rook;
 		Response res;
 		res = null;
-
 		if (color.equals("white")) {
 			res = ChessUtil.topPossitionAssassin(board, "R");
 		} else {
 			res = ChessUtil.botPossitionAssassin(board, "r");
 		}
-
 		if (res.isExist()) {
 			rook = new RookAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
 			if (rook.murder()) {
@@ -277,7 +273,6 @@ public class Intelligence {
 	public static String pawnAction(Message msj, String[][] board, String color) {
 
 		responses = ChessUtil.pawnsActives(board, color);
-
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -293,6 +288,7 @@ public class Intelligence {
 	}
 
 	public static String kingProceed(Message msj, String[][] board, String color) {
+
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
@@ -309,6 +305,7 @@ public class Intelligence {
 	}
 
 	public static String evaluateFirstMove(Message msj, DataMessage msjData, String[][] board) {
+
 		if (msjData.getActual_turn().equals("white")) {
 			fromCol = new Random().nextBoolean() ? 2 : 13;
 			toCol = fromCol;

@@ -1,4 +1,4 @@
-package app.megachess.websocket.models;
+package app.megachess.models;
 
 import java.util.List;
 

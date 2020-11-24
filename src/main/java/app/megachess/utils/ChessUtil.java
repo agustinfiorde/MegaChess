@@ -3,7 +3,7 @@ package app.megachess.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.megachess.websocket.models.Response;
+import app.megachess.models.Response;
 
 public class ChessUtil {
 
@@ -24,13 +24,13 @@ public class ChessUtil {
 		return true;
 	}
 
-	public static String getPieceByPosition(String[][] board, int row, int col) {
-
-		if (!board[row][col].equals(" ")) {
-			return board[row][col];
-		}
-		return " ";
-	}
+//	public static String getPieceByPosition(String[][] board, int row, int col) {
+//
+//		if (!board[row][col].equals(" ")) {
+//			return board[row][col];
+//		}
+//		return " ";
+//	}
 
 	public static List<Response> pawnsActives(String[][] board, String color) {
 
@@ -77,48 +77,47 @@ public class ChessUtil {
 		return responses;
 	}
 
-	public static Response somePawnIsActive(String[][] board, String color) {
-
-		Response res = new Response();
-		// black
-		int startRow = 6;
-		int endRow = 2;
-		String piece = "p";
-		// white
-		if (color.equals("white")) {
-			startRow = 9;
-			endRow = 13;
-			piece = "P";
-			for (int i = startRow; i <= endRow; i++) {
-				for (int j = 0; j < 16; j++) {
-					if (board[i][j].equals(piece) && board[i - 1][j].equals(" ")) {
-						res.setExist(true);
-						res.setFromRow(i);
-						res.setFromCol(j);
-						res.setPiece(piece);
-						return res;
-					}
-				}
-			}
-		} else {
-			for (int i = startRow; i >= endRow; i--) {
-				for (int j = 0; j < 16; j++) {
-					if (board[i][j].equals(piece) && board[i + 1][j].equals(" ")) {
-						res.setExist(true);
-						res.setFromRow(i);
-						res.setFromCol(j);
-						res.setPiece(piece);
-						return res;
-					}
-				}
-			}
-		}
-		res.setExist(false);
-		return res;
-	}
+//	public static Response somePawnIsActive(String[][] board, String color) {
+//
+//		Response res = new Response();
+//		// black
+//		int startRow = 6;
+//		int endRow = 2;
+//		String piece = "p";
+//		// white
+//		if (color.equals("white")) {
+//			startRow = 9;
+//			endRow = 13;
+//			piece = "P";
+//			for (int i = startRow; i <= endRow; i++) {
+//				for (int j = 0; j < 16; j++) {
+//					if (board[i][j].equals(piece) && board[i - 1][j].equals(" ")) {
+//						res.setExist(true);
+//						res.setFromRow(i);
+//						res.setFromCol(j);
+//						res.setPiece(piece);
+//						return res;
+//					}
+//				}
+//			}
+//		} else {
+//			for (int i = startRow; i >= endRow; i--) {
+//				for (int j = 0; j < 16; j++) {
+//					if (board[i][j].equals(piece) && board[i + 1][j].equals(" ")) {
+//						res.setExist(true);
+//						res.setFromRow(i);
+//						res.setFromCol(j);
+//						res.setPiece(piece);
+//						return res;
+//					}
+//				}
+//			}
+//		}
+//		res.setExist(false);
+//		return res;
+//	}
 
 	public static Response whitePawnFirstMove(String[][] board) {
-
 		Response res = new Response();
 		for (int i = 0; i < 16; i++) {
 			if (board[11][i].equals("P")) {
@@ -127,23 +126,6 @@ public class ChessUtil {
 				res.setFromCol(i);
 				res.setPiece("P");
 				return res;
-			}
-		}
-		res.setExist(false);
-		return res;
-	}
-
-	public static Response topPossitionAssassin(String[][] board, String piece) {
-		Response res = new Response();
-
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					return res;
-				}
 			}
 		}
 		res.setExist(false);
@@ -168,40 +150,21 @@ public class ChessUtil {
 		return responses;
 	}
 
-	public static List<Response> getDefenderPiecesBot(String[][] board, String piece, String color) {
-		List<Response> responses = new ArrayList<>();
-		Response res;
-		
-		for (int i = 8; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res = new Response();
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					responses.add(res);
-				}
-			}
-		}
-		return responses;
-	}
+	public static Response topPossitionAssassin(String[][] board, String piece) {
+		Response res = new Response();
 
-	public static List<Response> getDefenderPiecesTop(String[][] board, String piece, String color) {
-		List<Response> responses = new ArrayList<>();
-		Response res;
-		
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				if (board[i][j].equals(piece)) {
-					res = new Response();
 					res.setExist(true);
 					res.setFromRow(i);
 					res.setFromCol(j);
-					responses.add(res);
+					return res;
 				}
 			}
 		}
-		return responses;
+		res.setExist(false);
+		return res;
 	}
 
 	public static Response botPossitionAssassin(String[][] board, String piece) {
@@ -220,129 +183,165 @@ public class ChessUtil {
 		return res;
 	}
 
-	public static boolean isEnemyInTheCenter(String[][] board, String color) {
-		int row = color.equals("white") ? 8 : 7;
-		if (color.equals("white")) {
-			for (int j = 0; j < 16; j++) {
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-				if (isWhite(board[row][j])) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	public static List<Response> getDefenderPiecesBot(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
 
-	public static boolean isEnemyInFosa(String[][] board, String color) {
-
-		int row = (color.toLowerCase()).equals("white") ? 11 : 4;
-
-		if ((color.toLowerCase()).equals("white")) {
+		for (int i = 8; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-				if (isWhite(board[row][j])) {
-					return true;
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
 				}
 			}
 		}
-		return false;
+		return responses;
 	}
 
-	public static boolean isEnemyInFrontLine(String[][] board, String color) {
+	public static List<Response> getDefenderPiecesTop(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
 
-		int row = (color.toLowerCase()).equals("white") ? 12 : 3;
-
-		if ((color.toLowerCase()).equals("white")) {
+		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 16; j++) {
-
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-
-				if (isWhite(board[row][j])) {
-					return true;
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
 				}
 			}
 		}
-		return false;
+		return responses;
 	}
 
-	public static boolean isEnemyInSecondLine(String[][] board, String color) {
+//	public static boolean isEnemyInTheCenter(String[][] board, String color) {
+//		int row = color.equals("white") ? 8 : 7;
+//		if (color.equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-		int row = (color.toLowerCase()).equals("white") ? 13 : 2;
+//	public static boolean isEnemyInFosa(String[][] board, String color) {
+//
+//		int row = (color.toLowerCase()).equals("white") ? 11 : 4;
+//
+//		if ((color.toLowerCase()).equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-		if ((color.toLowerCase()).equals("white")) {
-			for (int j = 0; j < 16; j++) {
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-				if (isWhite(board[row][j])) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//	public static boolean isEnemyInFrontLine(String[][] board, String color) {
+//
+//		int row = (color.toLowerCase()).equals("white") ? 12 : 3;
+//
+//		if ((color.toLowerCase()).equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-	public static boolean isEnemyInThirdLine(String[][] board, String color) {
+//	public static boolean isEnemyInSecondLine(String[][] board, String color) {
+//
+//		int row = (color.toLowerCase()).equals("white") ? 13 : 2;
+//
+//		if ((color.toLowerCase()).equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-		int row = (color.toLowerCase()).equals("white") ? 14 : 1;
+//	public static boolean isEnemyInThirdLine(String[][] board, String color) {
+//
+//		int row = (color.toLowerCase()).equals("white") ? 14 : 1;
+//
+//		if ((color.toLowerCase()).equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-		if ((color.toLowerCase()).equals("white")) {
-			for (int j = 0; j < 16; j++) {
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-				if (isWhite(board[row][j])) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//	public static boolean isEnemyInBotLine(String[][] board, String color) {
+//
+//		int row = (color.toLowerCase()).equals("white") ? 15 : 0;
+//
+//		if ((color.toLowerCase()).equals("white")) {
+//			for (int j = 0; j < 16; j++) {
+//				if (isBlack(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		} else {
+//			for (int j = 0; j < 16; j++) {
+//				if (isWhite(board[row][j])) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-	public static boolean isEnemyInBotLine(String[][] board, String color) {
-
-		int row = (color.toLowerCase()).equals("white") ? 15 : 0;
-
-		if ((color.toLowerCase()).equals("white")) {
-			for (int j = 0; j < 16; j++) {
-				if (isBlack(board[row][j])) {
-					return true;
-				}
-			}
-		} else {
-			for (int j = 0; j < 16; j++) {
-				if (isWhite(board[row][j])) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public static boolean isEmptyByPosition(String[][] board, int row, int col) {
-		return (board[row][col].equals(" ") || board[row][col].isEmpty()) ? true : false;
-	}
+//	public static boolean isEmptyByPosition(String[][] board, int row, int col) {
+//		return (board[row][col].equals(" ") || board[row][col].isEmpty()) ? true : false;
+//	}
 
 	public static boolean isMyTeam(String piece, String myColor) {
 		if (myColor.equals("white")) {
@@ -360,10 +359,10 @@ public class ChessUtil {
 		}
 	}
 
-	public static boolean isPawnEnemy(String piece, String myColor) {
-		String enemyParameter = myColor.equals("white") ? "p" : "P";
-		return enemyParameter.equals(piece) ? true : false;
-	}
+//	public static boolean isPawnEnemy(String piece, String myColor) {
+//		String enemyParameter = myColor.equals("white") ? "p" : "P";
+//		return enemyParameter.equals(piece) ? true : false;
+//	}
 
 	public static String[][] getBoard(String arg) {
 		String board[][] = new String[16][16];

@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import app.megachess.enums.Action;
-import app.megachess.websocket.models.DataMessage;
-import app.megachess.websocket.models.Message;
+import app.megachess.models.DataMessage;
+import app.megachess.models.Message;
 
 public class Util {
 

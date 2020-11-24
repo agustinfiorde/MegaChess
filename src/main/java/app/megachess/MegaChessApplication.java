@@ -10,19 +10,9 @@ import app.megachess.websocket.Connection;
 @EnableAutoConfiguration
 public class MegaChessApplication {
 
-
-	/**
-	 * Before running create a database in mysql and set the application.yml
-	 * @param args
-	 */
 	public static void main(String[] args) {
-
 		SpringApplication.run(MegaChessApplication.class, args);
 		new Connection();
 	}
-
-
-
 	
-
 }
