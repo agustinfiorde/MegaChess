@@ -1,12 +1,9 @@
 package app.megachess.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,9 +14,8 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class DataGame implements Serializable {
-
-	private static final long serialVersionUID = 6522896498689132123L;
+@Table(name="datasgames")
+public class DataGame {
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -28,8 +24,6 @@ public class DataGame implements Serializable {
 
 	private String boardId;
 
-	@Lob
-	@Column(name = "board", length = 288)
 	private String board;
 
 }

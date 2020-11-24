@@ -61,7 +61,7 @@ public class Connection {
 						users_list.forEach((e) -> System.out.print(e + " . "));
 						System.out.println("");
 						System.out.println("--------------------------------------------");
-//						clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
+						// clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
 					}
 
 					// Solicitud de desafio
@@ -71,21 +71,21 @@ public class Connection {
 
 					// Turno
 					if (msj.contains("your_turn")) {
-
-						ChessUtil.showBoard(message.getData().getBoard());
 						try {
+							gdService.saveGame(message);
+							ChessUtil.showBoard(message.getData().getBoard());
 							TimeUnit.MILLISECONDS.sleep(200);
-						} catch (InterruptedException e) {
+							String res = Intelligence.evaluate(message);
+							clientEndPoint.sendMessage(res);
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						String res = Intelligence.evaluate(message);
-						
-						clientEndPoint.sendMessage(res);
+
 					}
 
 					// Game over
 					if (msj.contains("gameover")) {
-//						gdService.saveGame(message);
+						gdService.saveGame(message);
 					}
 				}
 			});

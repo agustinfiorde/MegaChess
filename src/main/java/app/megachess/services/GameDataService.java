@@ -16,10 +16,10 @@ import app.megachess.websocket.models.Message;
 @Service
 public class GameDataService {
 
+	private Integer startMoves = 199;
+
 	@Autowired
 	private GameRepository gameRepository;
-
-	private Integer startMoves = 199;
 
 	@Autowired
 	private DataGameRepository dataGameRepository;
@@ -27,23 +27,55 @@ public class GameDataService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
 	public void saveGame(Message msj) {
 		Game g;
-		if (msj.getData().getMove_left() == startMoves || msj.getData().getMove_left() == startMoves - 1) {
+		if (msj.getData().getMove_left() == startMoves) {
 
 			g = new Game();
 			g.setStart(new Date());
 			g.setBoardId(msj.getData().getBoard_id());
-			g.setOpponentUsername(msj.getData().getOpponent_username());
-			g.setMyColor(msj.getData().getActual_turn());
 			gameRepository.save(g);
-		} else if (msj.getEvent().equals(Event.GAMEOVER.getString())) {
+		} else {
+			updateGame(msj);
+		}
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void updateGame(Message msj) {
+		Game g = gameRepository.getByBoardId(msj.getData().getBoard_id());
+
+		if (msj.getEvent().equals(Event.GAMEOVER.getString())) {
+
 			g = new Game();
 			g.setFinish(new Date());
-			// Falta ver la manera de guardar y detectar los pérfiles
-			// g.setOponentProfile(oponentProfile);
-			// g.setMyProfile(myProfile);
-			msj.getData().getBlack_score();
+
+			String fiordeX = "fiordeX";
+			Integer fiordeXScore;
+			String myColor;
+
+			String opponentUsername;
+			Integer opponentScore;
+
+			if (msj.getData().getWhite_username().equals("fiordeX")) {
+				opponentScore = Integer.parseInt(msj.getData().getBlack_score());
+				opponentUsername = msj.getData().getBlack_username();
+				fiordeXScore = Integer.parseInt(msj.getData().getWhite_score());
+				myColor = "white";
+			} else {
+				opponentScore = Integer.parseInt(msj.getData().getWhite_score());
+				opponentUsername = msj.getData().getWhite_username();
+				fiordeXScore = Integer.parseInt(msj.getData().getBlack_score());
+				myColor = "black";
+			}
+
+			if (fiordeXScore > opponentScore) {
+				gameRepository.delete(g);
+			} else {
+				g.setOpponentUsername(opponentUsername);
+				g.setYourScore(opponentScore);
+				g.setMyColor(myColor);
+				g.setMyScore(fiordeXScore);
+				gameRepository.save(g);
+			}
 		} else {
-			g = gameRepository.getByBoardId(msj.getData().getBoard_id());
 			g.getDatas().add(saveDataGame(msj.getData()));
 			gameRepository.save(g);
 		}
