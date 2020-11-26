@@ -6,6 +6,10 @@ public class PawnAI extends Piece {
 		super(piece, position, board, color);
 	}
 
+	/**
+	 * setFrontForFirstPawnMove, setea lo que seria el frente para un peon que esta
+	 * partiendo de las lineas iniciales
+	 */
 	private void setFrontForFirstPawnMove() {
 		if (color.equals("white")) {
 			this.front = fromRow - 2;

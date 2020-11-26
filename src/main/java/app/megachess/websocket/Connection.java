@@ -17,27 +17,45 @@ public class Connection {
 
 	private String url;
 
-//	private List<String> challengedUsers = new ArrayList<>();
+	// private List<String> challengedUsers = new ArrayList<>();
 
+	/*
+	 * constructor quien se encarga de desencadenar la app, seteando la URL y
+	 * dandole inicio a la app
+	 */
 	public Connection() {
 		setURL();
 		start();
 	}
 
+	/**
+	 * Genera la URL en base a los atributos de la clase
+	 */
 	private void setURL() {
 		url = root.concat(tokenFiordeX);
 	}
 
-//	private String selectOpponentToChallenge(List<String> usersList) {
-//
-//		for (String o : usersList) {
-//			if (!challengedUsers.contains(o)) {
-//				return o;
-//			}
-//		}
-//		return username;
-//	}
+	/**
+	 * selectOpponentToChallenge, recibe una lista de los oponentes conectados y los
+	 * va desafiando uno a uno de forma aleatoria. TODO
+	 * 
+	 * @param usersList
+	 * @return
+	 */
+	// private String selectOpponentToChallenge(List<String> usersList) {
+	//
+	// for (String o : usersList) {
+	// if (!challengedUsers.contains(o)) {
+	// return o;
+	// }
+	// }
+	// return username;
+	// }
 
+	/*
+	 * start gestiona los mensajes recibidos por parte del socket, para determinar
+	 * el accionar especifico en base a cada mensaje
+	 */
 	public void start() {
 
 		try {
@@ -49,28 +67,35 @@ public class Connection {
 					Message message = Util.JSONToObject(msj);
 
 					// Lista de participantes
-//					if (msj.contains("users_list")) {
-//
-//						// List<String> users_list = message.getData().getUsers_list().stream().filter(e
-//						// -> !e.equals(username)).collect(Collectors.toList());
-//						List<String> users_list = message.getData().getUsers_list();
-//						System.out.println("--------------------------------------------");
-//						users_list.forEach((e) -> System.out.print(e + " . "));
-//						System.out.println("");
-//						System.out.println("--------------------------------------------");
-//						// clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
-//					}
+					// if (msj.contains("users_list")) {
+					//
+					// // List<String> users_list =
+					// message.getData().getUsers_list().stream().filter(e
+					// // -> !e.equals(username)).collect(Collectors.toList());
+					// List<String> users_list = message.getData().getUsers_list();
+					// System.out.println("--------------------------------------------");
+					// users_list.forEach((e) -> System.out.print(e + " . "));
+					// System.out.println("");
+					// System.out.println("--------------------------------------------");
+					// //
+					// clientEndPoint.sendMessage(Util.challenge(selectOpponentToChallenge(users_list)));
+					// }
 
 					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
-						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
+						try {
+							TimeUnit.MILLISECONDS.sleep(200);
+							clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 
 					// Turno
 					if (msj.contains("your_turn")) {
 						try {
 							ChessUtil.showBoard(message.getData().getBoard());
-							TimeUnit.MILLISECONDS.sleep(50);
+							TimeUnit.MILLISECONDS.sleep(200);
 							String res = Intelligence.evaluate(message);
 							clientEndPoint.sendMessage(res);
 						} catch (Exception e) {

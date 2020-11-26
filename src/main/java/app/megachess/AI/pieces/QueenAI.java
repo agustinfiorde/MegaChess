@@ -1,6 +1,6 @@
 package app.megachess.AI.pieces;
 
-import app.megachess.enums.AllDirection;
+import app.megachess.enums.PieceDirection;
 import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
 
@@ -16,84 +16,149 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		return false;
 	}
 
+//	@Override
+//	public boolean canDefend() {
+//		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
+//				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
+//	}
+
 	@Override
 	public boolean canDefend() {
-		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
-				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
+		for (PieceDirection target : PieceDirection.values()) {
+			if (evaluateTrajectory(target)) {
+				if (evaluateQuadrant(toRow, toCol)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
-	public void assassinMissionLastLine(int botLine, AllDirection toTop) {
+	@Override
+	public boolean assassinMissionLastLine(int botLine, PieceDirection toTop) {
 		if (!ChessUtil.rowIsClear(board, botLine, color)) {
 			if (fromRow == botLine) {
 				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
+					return evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
+					return evaluateTrajectory(PieceDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, botLine, color)) {
-					evaluateBot();
+					setTo(back, fromCol);
+					return true;
 				}
 			} else {
-				evaluateTrajectory(toTop);
+				return evaluateTrajectory(toTop);
 			}
 		}
+		return false;
 	}
 
-	public void assassinMissionThirdLine(int thirdLine, int botLine, AllDirection toTop, AllDirection toBot) {
+	@Override
+	public boolean assassinMissionThirdLine(int thirdLine, int botLine, PieceDirection toTop, PieceDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
 			if (fromRow == thirdLine) {
+
 				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
+					evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
+					evaluateTrajectory(PieceDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, thirdLine, color)) {
-					evaluateTrajectory(toBot);
+					setTo(back, fromCol);
 				}
+
 			} else {
 				if (fromRow < thirdLine) {
-					evaluateTrajectory(AllDirection.TO_BOT);
+					evaluateTrajectory(PieceDirection.TO_BOT);
+
+					if (toRow != null) {
+						if (toRow >= thirdLine) {
+							setTo(thirdLine, toCol);
+						}
+					}
 				} else {
-					evaluateTrajectory(AllDirection.TO_TOP);
+					evaluateTrajectory(PieceDirection.TO_TOP);
+
+					if (toRow != null) {
+						if (toRow <= thirdLine) {
+							setTo(thirdLine, toCol);
+						}
+					}
 				}
 			}
 		}
+		return false;
 	}
 
-	public void assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot) {
+	@Override
+	public boolean assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, PieceDirection toTop,
+			PieceDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
 				&& ChessUtil.rowIsClear(board, botLine, color)) {
 			if (fromRow == secondLine) {
 				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
+					evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
+					evaluateTrajectory(PieceDirection.LEFT);
 				} else if (ChessUtil.rowIsClear(board, secondLine, color)) {
-					evaluateTrajectory(toBot);
+					setTo(back, fromCol);
 				}
 			} else {
 				if (fromRow < secondLine) {
-					evaluateTrajectory(AllDirection.TO_BOT);
+					evaluateTrajectory(PieceDirection.TO_BOT);
+
+					if (toRow != null) {
+						if (toRow >= secondLine) {
+							setTo(secondLine, toCol);
+						}
+					}
 				} else {
-					evaluateTrajectory(AllDirection.TO_TOP);
+					evaluateTrajectory(PieceDirection.TO_TOP);
+
+					if (toRow != null) {
+						if (toRow <= secondLine) {
+							setTo(secondLine, toCol);
+						}
+					}
 				}
 			}
 		}
+		return false;
 	}
 
-	public void assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine, AllDirection toTop,
-			AllDirection toBot) {
+	@Override
+	public boolean assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine,
+			PieceDirection toTop, PieceDirection toBot) {
 		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
 				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
 			if (fromRow == frontLine) {
 				if (toRight()) {
-					evaluateTrajectory(AllDirection.RIGHT);
+					return evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
-					evaluateTrajectory(AllDirection.LEFT);
+					return evaluateTrajectory(PieceDirection.LEFT);
 				}
 			} else {
-				setTo(frontLine, fromCol);
+				if (fromRow < frontLine) {
+					evaluateTrajectory(PieceDirection.TO_BOT);
+
+					if (toRow != null) {
+						if (toRow >= frontLine) {
+							setTo(frontLine, toCol);
+							return true;
+						}
+					}
+				} else {
+					evaluateTrajectory(PieceDirection.TO_TOP);
+
+					if (toRow != null) {
+						if (toRow <= frontLine) {
+							setTo(frontLine, toCol);
+							return true;
+						}
+					}
+				}
 			}
 		}
+		return false;
 	}
 
 	@Override
@@ -103,30 +168,38 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		int thirdLine;
 		int secondLine;
 		int frontLine;
-		AllDirection toTop;
-		AllDirection toBot;
+		PieceDirection toTop;
+		PieceDirection toBot;
 
 		if (color.equals("white")) {
 			botLine = 0;
 			thirdLine = 1;
 			secondLine = 2;
 			frontLine = 3;
-			toTop = AllDirection.TO_TOP;
-			toBot = AllDirection.TO_BOT;
+			toTop = PieceDirection.TO_TOP;
+			toBot = PieceDirection.TO_BOT;
 		} else {
 			botLine = 15;
 			thirdLine = 14;
 			secondLine = 13;
 			frontLine = 12;
-			toTop = AllDirection.TO_BOT;
-			toBot = AllDirection.TO_TOP;
+			toTop = PieceDirection.TO_BOT;
+			toBot = PieceDirection.TO_TOP;
 		}
 
 		assassinMissionLastLine(botLine, toTop);
+		if (getToCol() != null && getToRow() != null) {
+			return true;
+		}
 		assassinMissionThirdLine(thirdLine, botLine, toTop, toBot);
+		if (getToCol() != null && getToRow() != null) {
+			return true;
+		}
 		assassinMissionSecondLine(secondLine, thirdLine, botLine, toTop, toBot);
+		if (getToCol() != null && getToRow() != null) {
+			return true;
+		}
 		assassinMissionFirstLine(frontLine, secondLine, thirdLine, botLine, toTop, toBot);
-
 		if (getToCol() != null && getToRow() != null) {
 			return true;
 		}
@@ -141,9 +214,9 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 
 			if (target.getFromCol() != fromCol) {
 				if (target.getFromCol() > fromCol) {
-					evaluateTrajectory(AllDirection.RIGHT);
+					evaluateTrajectory(PieceDirection.RIGHT);
 				} else {
-					evaluateTrajectory(AllDirection.LEFT);
+					evaluateTrajectory(PieceDirection.LEFT);
 				}
 			} else {
 				setToCol(fromCol);
@@ -151,9 +224,9 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 
 			if (target.getFromRow() != fromRow) {
 				if (target.getFromRow() > fromRow) {
-					evaluateTrajectory(AllDirection.TO_BOT);
+					evaluateTrajectory(PieceDirection.TO_BOT);
 				} else {
-					evaluateTrajectory(AllDirection.TO_TOP);
+					evaluateTrajectory(PieceDirection.TO_TOP);
 				}
 			} else {
 				setToRow(fromRow);

@@ -1,6 +1,6 @@
 package app.megachess.AI.pieces;
 
-import app.megachess.enums.AllDirection;
+import app.megachess.enums.PieceDirection;
 import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
 import lombok.Data;
@@ -24,7 +24,7 @@ public abstract class Piece implements PieceAction {
 	protected String[][] board;
 
 	public Piece(String piece, int[] position, String[][] board, String color) {
-		
+
 		this.board = board;
 		this.color = color;
 		setPosition(position);
@@ -39,16 +39,35 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * setPosition necesita el arreglo con la posicion, [0] es la fila y [1] es la
+	 * columna, lo recorre y setea el fromTo y fromCol
+	 * 
+	 * @param position
+	 */
 	protected void setPosition(int[] position) {
 		this.fromRow = position[0];
 		this.fromCol = position[1];
 	}
 
+	/**
+	 * setTo necesita el toRow y toCol. Setea ambos de forma simultanea
+	 * 
+	 * @param toRow
+	 * @param toCol
+	 */
 	protected void setTo(int toRow, int toCol) {
 		this.toRow = toRow;
 		this.toCol = toCol;
 	}
 
+	/**
+	 * toLeft, es un funcion que recorre la fila donde se encuentre la pieza, en
+	 * busca de un enemigo. Si encuentra enemigo devuelve, true. Es util para saber
+	 * si termino de recorrer un lado y debe irse por el otro
+	 * 
+	 * @return
+	 */
 	protected boolean toLeft() {
 		for (int i = fromCol; i >= 0; i--) {
 			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
@@ -58,6 +77,13 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
+	/**
+	 * toRight, es un funcion que recorre la fila donde se encuentre la pieza, en
+	 * busca de un enemigo. Si encuentra enemigo devuelve, true. Es util para saber
+	 * si termino de recorrer un lado y debe irse por el otro
+	 * 
+	 * @return
+	 */
 	protected boolean toRight() {
 		for (int i = fromCol; i < 16; i++) {
 			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
@@ -67,192 +93,241 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
-	protected void evaluateTrajectory(AllDirection target) {
+	/**
+	 * evaluateTrajectory es un administrador para ver que sub metodo necesita
+	 * llamar segun el parametro
+	 * 
+	 * @param target
+	 */
+	protected boolean evaluateTrajectory(PieceDirection target) {
 		switch (target.toString()) {
 		case "TO_TOP":
-			evaluateTrajectoryToTop(target);
-			break;
+			return evaluateTrajectoryToTop();
 		case "TO_BOT":
-			evaluateTrajectoryToBot(target);
-			break;
+			return evaluateTrajectoryToBot();
 		case "LEFT":
-			evaluateTrajectoryToLeft(target);
-			break;
+			return evaluateTrajectoryToLeft();
 		case "RIGHT":
-			evaluateTrajectoryToRight(target);
-			break;
+			return evaluateTrajectoryToRight();
 		case "TO_TOP_LEFT":
-			evaluateTrajectoryToTopLeft(target);
-			break;
+			return evaluateTrajectoryToTopLeft();
 		case "TO_TOP_RIGHT":
-			evaluateTrajectoryToTopRight(target);
-			break;
+			return evaluateTrajectoryToTopRight();
 		case "TO_BOT_LEFT":
-			evaluateTrajectoryToBotLeft(target);
-			break;
+			return evaluateTrajectoryToBotLeft();
 		case "TO_BOT_RIGHT":
-			evaluateTrajectoryToBotRight(target);
-			break;
+			return evaluateTrajectoryToBotRight();
 		default:
-			break;
+			return false;
 		}
 	}
 
-	private void evaluateTrajectoryToTop(AllDirection target) {
-		if (target.equals(AllDirection.TO_TOP)) {
-			for (int i = (fromRow - 1); i >= 0; i--) {
-				if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
-					toCol = null;
-					toRow = null;
-					break;
-				}
-				if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
-					setTo(i, fromCol);
-					break;
-				}
+	/**
+	 * Evalua la trayectoria hacia la parte superior del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToTop() {
+		for (int i = (fromRow - 1); i >= 0; i--) {
+			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
+				toCol = null;
+				toRow = null;
+				return false;
+			}
+			if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 				setTo(i, fromCol);
+				return true;
 			}
+			setTo(i, fromCol);
 		}
+		return toCol != null && toRow != null ? true : false;
 	}
 
-	private void evaluateTrajectoryToBot(AllDirection target) {
-		if (target.equals(AllDirection.TO_BOT)) {
-			for (int i = (fromRow + 1); i < 16; i++) {
-
-				if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
-					toCol = null;
-					toRow = null;
-					break;
-				}
-				if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
-					setTo(i, fromCol);
-					break;
-				}
+	/**
+	 * Evalua la trayectoria hacia la parte inferior del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToBot() {
+		for (int i = (fromRow + 1); i < 16; i++) {
+			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
+				toCol = null;
+				toRow = null;
+				return false;
+			}
+			if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 				setTo(i, fromCol);
+				return true;
 			}
+			setTo(i, fromCol);
 		}
+		return toCol != null && toRow != null ? true : false;
 	}
 
-	private void evaluateTrajectoryToLeft(AllDirection target) {
-		if (target.equals(AllDirection.LEFT)) {
-			for (int i = (fromCol - 1); i >= 0; i--) {
+	/**
+	 * Evalua la trayectoria hacia la parte izquierda del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToLeft() {
+		for (int i = (fromCol - 1); i >= 0; i--) {
+			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+				toCol = null;
+				toRow = null;
+				return false;
+			}
+			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
+				setTo(fromRow, i);
+				return true;
+			}
+			setTo(fromRow, i);
+		}
+		return toCol != null && toRow != null ? true : false;
+	}
 
-				if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+	/**
+	 * Evalua la trayectoria hacia la parte derecha del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToRight() {
+
+		for (int i = (fromCol + 1); i < 16; i++) {
+
+			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+				toCol = null;
+				toRow = null;
+				return false;
+			}
+			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
+				setTo(fromRow, i);
+				return true;
+			}
+			setTo(fromRow, i);
+		}
+		return toCol != null && toRow != null ? true : false;
+	}
+
+	/**
+	 * Evalua la trayectoria hacia la parte superior-izquierda del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToTopLeft() {
+
+		for (int i = fromRow - 1; i >= 0; i--) {
+			for (int j = fromCol - 1; j >= 0; j--) {
+				if (ChessUtil.isMyTeam(board[i][j], color)) {
 					toCol = null;
 					toRow = null;
-					break;
+					return false;
 				}
-				if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
-					setTo(fromRow, i);
-					break;
+				if (ChessUtil.isMyEnemy(board[i][j], color)) {
+					setTo(i, j);
+					return true;
 				}
-				setTo(fromRow, i);
+				setTo(i, j);
 			}
 		}
+		return toCol != null && toRow != null ? true : false;
 	}
 
-	private void evaluateTrajectoryToRight(AllDirection target) {
-		if (target.equals(AllDirection.RIGHT)) {
-			for (int i = (fromCol + 1); i < 16; i++) {
-
-				if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
+	/**
+	 * Evalua la trayectoria hacia la parte superior-derecha del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToTopRight() {
+		for (int i = fromRow - 1; i >= 0; i--) {
+			for (int j = fromCol + 1; j < 16; j++) {
+				if (ChessUtil.isMyTeam(board[i][j], color)) {
 					toCol = null;
 					toRow = null;
+					return false;
+				}
+				if (ChessUtil.isMyEnemy(board[i][j], color)) {
+					setTo(i, j);
+					return true;
+				}
+				setTo(i, j);
+			}
+		}
+		return toCol != null && toRow != null ? true : false;
+	}
+
+	/**
+	 * Evalua la trayectoria hacia la parte inferior-izquierda del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToBotLeft() {
+		for (int i = fromRow + 1; i < 16; i++) {
+			for (int j = fromCol - 1; j >= 0; j--) {
+				if (ChessUtil.isMyTeam(board[i][j], color)) {
+					toCol = null;
+					toRow = null;
+					return false;
+				}
+				if (ChessUtil.isMyEnemy(board[i][j], color)) {
+					setTo(i, j);
+					return true;
+				}
+				setTo(i, j);
+			}
+		}
+		return toCol != null && toRow != null ? true : false;
+	}
+
+	/**
+	 * Evalua la trayectoria hacia la parte inferior-derecha del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
+	 * 
+	 * @param target
+	 */
+	private boolean evaluateTrajectoryToBotRight() {
+
+		for (int i = fromRow + 1; i < 16; i++) {
+			for (int j = fromCol + 1; j < 16; j++) {
+				if (ChessUtil.isMyTeam(board[i][j], color)) {
+					toCol = null;
+					toRow = null;
+					return false;
+				}
+				if (ChessUtil.isMyEnemy(board[i][j], color)) {
+					setTo(i, j);
 					break;
 				}
-				if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
-					setTo(fromRow, i);
-					break;
-				}
-				setTo(fromRow, i);
+				setTo(i, j);
 			}
 		}
+		return toCol != null && toRow != null ? true : false;
 	}
 
-	private void evaluateTrajectoryToTopLeft(AllDirection target) {
-
-		if (target.equals(AllDirection.TO_TOP_LEFT)) {
-			fors: for (int i = fromRow - 1; i >= 0; i--) {
-				for (int j = fromCol - 1; j >= 0; j--) {
-
-					if (ChessUtil.isMyTeam(board[i][j], color)) {
-						toCol = null;
-						toRow = null;
-						break fors;
-					}
-					if (ChessUtil.isMyEnemy(board[i][j], color)) {
-						setTo(i, j);
-						break fors;
-					}
-					setTo(i, j);
-				}
-			}
-		}
-	}
-
-	private void evaluateTrajectoryToTopRight(AllDirection target) {
-		if (target.equals(AllDirection.TO_TOP_RIGHT)) {
-			fors: for (int i = fromRow - 1; i >= 0; i--) {
-				for (int j = fromCol + 1; j < 16; j++) {
-					if (ChessUtil.isMyTeam(board[i][j], color)) {
-						toCol = null;
-						toRow = null;
-						break fors;
-					}
-					if (ChessUtil.isMyEnemy(board[i][j], color)) {
-						setTo(i, j);
-						break fors;
-					}
-					setTo(i, j);
-				}
-			}
-		}
-	}
-
-	private void evaluateTrajectoryToBotLeft(AllDirection target) {
-
-		if (target.equals(AllDirection.TO_BOT_LEFT)) {
-			fors: for (int i = fromRow + 1; i < 16; i++) {
-				for (int j = fromCol - 1; j >= 0; j--) {
-					if (ChessUtil.isMyTeam(board[i][j], color)) {
-						toCol = null;
-						toRow = null;
-						break fors;
-					}
-					if (ChessUtil.isMyEnemy(board[i][j], color)) {
-						setTo(i, j);
-						break fors;
-					}
-					setTo(i, j);
-				}
-			}
-		}
-	}
-
-	private void evaluateTrajectoryToBotRight(AllDirection target) {
-		if (target.equals(AllDirection.TO_BOT_RIGHT)) {
-			fors: for (int i = fromRow + 1; i < 16; i++) {
-				for (int j = fromCol + 1; j < 16; j++) {
-					if (ChessUtil.isMyTeam(board[i][j], color)) {
-						toCol = null;
-						toRow = null;
-						break fors;
-					}
-					if (ChessUtil.isMyEnemy(board[i][j], color)) {
-						setTo(i, j);
-						break;
-					}
-					setTo(i, j);
-				}
-			}
-		}
-	}
-
+	/**
+	 * evalua el cuadrante superior proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateTop() {
 		if (front > 15 || front < 0 || back > 15 || back < 0) {
 			return false;
 		} else {
-			if (evaluateQuadrants(front, fromCol)) {
+			if (evaluateQuadrant(front, fromCol)) {
 				setTo(front, fromCol);
 				return true;
 			} else {
@@ -261,11 +336,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante inferior proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateBot() {
 		if (front > 15 || front < 0 || back > 15 || back < 0) {
 			return false;
 		} else {
-			if (evaluateQuadrants(back, fromCol)) {
+			if (evaluateQuadrant(back, fromCol)) {
 				setTo(back, fromCol);
 				return true;
 			} else {
@@ -274,11 +354,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante izquierdo proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateLeft() {
 		if (left < 0) {
 			return false;
 		} else {
-			if (evaluateQuadrants(fromRow, left)) {
+			if (evaluateQuadrant(fromRow, left)) {
 				setTo(fromRow, left);
 				return true;
 			} else {
@@ -287,11 +372,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante derecho proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateRight() {
 		if (right > 15) {
 			return false;
 		} else {
-			if (evaluateQuadrants(fromRow, right)) {
+			if (evaluateQuadrant(fromRow, right)) {
 				setTo(fromRow, right);
 				return true;
 			} else {
@@ -300,11 +390,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante superior-izquierdo proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateTopLeft() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
 			return false;
 		} else {
-			if (evaluateQuadrants(front, left)) {
+			if (evaluateQuadrant(front, left)) {
 				setTo(front, left);
 				return true;
 			} else {
@@ -313,11 +408,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante inferior-izquierdo proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateBotLeft() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
 			return false;
 		} else {
-			if (evaluateQuadrants(back, left)) {
+			if (evaluateQuadrant(back, left)) {
 				setTo(back, left);
 				return true;
 			} else {
@@ -326,11 +426,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante superior-derecho proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateTopRight() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
 			return false;
 		} else {
-			if (evaluateQuadrants(front, right)) {
+			if (evaluateQuadrant(front, right)) {
 				setTo(front, right);
 				return true;
 			} else {
@@ -339,11 +444,16 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
+	/**
+	 * evalua el cuadrante inferior-izquierdo proximo a la pieza
+	 * 
+	 * @return
+	 */
 	protected boolean evaluateBotRight() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
 			return false;
 		} else {
-			if (evaluateQuadrants(back, right)) {
+			if (evaluateQuadrant(back, right)) {
 				setTo(back, right);
 				return true;
 			} else {
@@ -352,14 +462,24 @@ public abstract class Piece implements PieceAction {
 		}
 	}
 
-	protected boolean evaluateQuadrants(int row, int col) {
-		if (ChessUtil.isMyEnemy(board[row][col], color)) {
-			return true;
-		} else {
-			return false;
-		}
+	/**
+	 * evalua un cuadrante especifico en el tablero en busca de enemigo
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	protected boolean evaluateQuadrant(int row, int col) {
+		return ChessUtil.isMyEnemy(board[row][col], color) ? true : false;
 	}
 
+	/**
+	 * targetToHunt se encarga de buscar una pieza que no este a la vista de ningun
+	 * defensor o atacante, con el objetivo de que alguna de mis piezas se aproxime
+	 * para comerla
+	 * 
+	 * @return
+	 */
 	protected Response targetToHunt() {
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
