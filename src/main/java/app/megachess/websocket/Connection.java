@@ -83,19 +83,19 @@ public class Connection {
 
 					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
-						try {
-							TimeUnit.MILLISECONDS.sleep(200);
+//						try {
+//							TimeUnit.MILLISECONDS.sleep(200);
 							clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
 					}
 
 					// Turno
 					if (msj.contains("your_turn")) {
 						try {
 							ChessUtil.showBoard(message.getData().getBoard());
-							TimeUnit.MILLISECONDS.sleep(200);
+//							TimeUnit.MILLISECONDS.sleep(10);
 							String res = Intelligence.evaluate(message);
 							clientEndPoint.sendMessage(res);
 						} catch (Exception e) {

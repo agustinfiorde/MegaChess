@@ -2,6 +2,8 @@ package app.megachess.AI.pieces;
 
 public class PawnAI extends Piece {
 
+	private int frontInitial;
+
 	public PawnAI(String piece, int[] position, String[][] board, String color) {
 		super(piece, position, board, color);
 	}
@@ -12,9 +14,11 @@ public class PawnAI extends Piece {
 	 */
 	private void setFrontForFirstPawnMove() {
 		if (color.equals("white")) {
-			this.front = fromRow - 2;
+			this.front = fromRow - 1;
+			this.frontInitial = fromRow - 2;
 		} else {
-			this.front = fromRow + 2;
+			this.front = fromRow + 1;
+			this.frontInitial = fromRow + 2;
 		}
 	}
 
@@ -31,10 +35,10 @@ public class PawnAI extends Piece {
 			firstLineToStart = 3;
 			secondLineToStart = 2;
 		}
-		if ((fromRow == firstLineToStart || fromRow == secondLineToStart)) {
+		if (fromRow == firstLineToStart || fromRow == secondLineToStart) {
 			setFrontForFirstPawnMove();
-			if (board[fromRow + 1][fromCol].equals(" ") && board[fromRow + 2][fromCol].equals(" ")) {
-				setTo(front, fromCol);
+			if (board[frontInitial][fromCol].equals(" ") && board[front][fromCol].equals(" ")) {
+				setTo(frontInitial, fromCol);
 				return true;
 			}
 		}

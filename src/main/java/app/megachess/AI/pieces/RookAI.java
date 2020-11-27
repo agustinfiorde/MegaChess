@@ -72,13 +72,13 @@ public class RookAI extends Piece implements PieceActionAssassin {
 
 	@Override
 	public boolean assassinMissionLastLine(int botLine, PieceDirection toTop) {
-		if (!ChessUtil.rowIsClear(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == botLine) {
 				if (toRight()) {
 					return evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
 					return evaluateTrajectory(PieceDirection.LEFT);
-				} else if (ChessUtil.rowIsClear(board, botLine, color)) {
+				} else if (ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 					setTo(back, fromCol);
 					return true;
 				}
@@ -91,14 +91,14 @@ public class RookAI extends Piece implements PieceActionAssassin {
 
 	@Override
 	public boolean assassinMissionThirdLine(int thirdLine, int botLine, PieceDirection toTop, PieceDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, thirdLine, color) && ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == thirdLine) {
 
 				if (toRight()) {
 					evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(PieceDirection.LEFT);
-				} else if (ChessUtil.rowIsClear(board, thirdLine, color)) {
+				} else if (ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)) {
 					setTo(back, fromCol);
 				}
 
@@ -128,14 +128,14 @@ public class RookAI extends Piece implements PieceActionAssassin {
 	@Override
 	public boolean assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, PieceDirection toTop,
 			PieceDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, secondLine, color) && ChessUtil.rowIsClear(board, thirdLine, color)
-				&& ChessUtil.rowIsClear(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, secondLine, color) && ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == secondLine) {
 				if (toRight()) {
 					evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
 					evaluateTrajectory(PieceDirection.LEFT);
-				} else if (ChessUtil.rowIsClear(board, secondLine, color)) {
+				} else if (ChessUtil.rowIsClearOfEnemies(board, secondLine, color)) {
 					setTo(back, fromCol);
 				}
 			} else {
@@ -164,8 +164,8 @@ public class RookAI extends Piece implements PieceActionAssassin {
 	@Override
 	public boolean assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine,
 			PieceDirection toTop, PieceDirection toBot) {
-		if (!ChessUtil.rowIsClear(board, frontLine, color) && ChessUtil.rowIsClear(board, secondLine, color)
-				&& ChessUtil.rowIsClear(board, thirdLine, color) && ChessUtil.rowIsClear(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, frontLine, color) && ChessUtil.rowIsClearOfEnemies(board, secondLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, thirdLine, color) && ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == frontLine) {
 				if (toRight()) {
 					return evaluateTrajectory(PieceDirection.RIGHT);

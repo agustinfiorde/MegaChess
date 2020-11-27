@@ -2,8 +2,18 @@ package app.megachess.AI.pieces;
 
 public class HorseAI extends Piece {
 
+	private int continuousFront;
+	private int distantFront;
+
 	public HorseAI(String piece, int[] position, String[][] board, String color) {
 		super(piece, position, board, color);
+		if (color.equals("white")) {
+			this.distantFront = fromRow - 2;
+			this.continuousFront = fromRow - 1;
+		} else {
+			this.distantFront = fromRow + 2;
+			this.continuousFront = fromRow + 1;
+		}
 	}
 
 	@Override
@@ -13,7 +23,28 @@ public class HorseAI extends Piece {
 
 	@Override
 	public boolean canProceed() {
-		// TODO Auto-generated method stub
+
+		int front = continuousFront;
+		int x;
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = -2; j < 3; j++) {
+				
+				x = fromCol + j;
+				
+				if (front >= 0 && front <= 15 && x >= 0 && x <= 15
+						&& ((i == 2 && j == -1) || (i == 2 && j == 1) || (i == 1 && j == -2) || (i == 1 && j == 2)
+								|| (i == -1 && j == -2) || (i == -1 && j == 2) || (i == -2 && j == -1)
+								|| (i == -2 && j == 1))) {
+					if (evaluateQuadrant(front, x)) {
+						setTo(front, j);
+						return true;
+					}
+				}
+			}
+			front = distantFront;
+		}
+
 		return false;
 	}
 
@@ -32,14 +63,9 @@ public class HorseAI extends Piece {
 				x = fromCol + j;
 
 				if (y >= 0 && y <= 15 && x >= 0 && x <= 15
-						&& ((i == 2 && j == -1) 
-							|| (i == 2 && j == 1) 
-							|| (i == 1 && j == -2)
-							|| (i == 1 && j == 2) 
-							|| (i == -1 && j == -2) 
-							|| (i == -1 && j == 2)
-							|| (i == -2 && j == -1) 
-							|| (i == -2 && j == 1))) {
+						&& ((i == 2 && j == -1) || (i == 2 && j == 1) || (i == 1 && j == -2) || (i == 1 && j == 2)
+								|| (i == -1 && j == -2) || (i == -1 && j == 2) || (i == -2 && j == -1)
+								|| (i == -2 && j == 1))) {
 					if (evaluateQuadrant(y, x)) {
 						setTo(y, x);
 						return true;

@@ -42,7 +42,7 @@ public class ChessUtil {
 	 * @param color
 	 * @return
 	 */
-	public static boolean rowIsClear(String[][] board, int row, String color) {
+	public static boolean rowIsClearOfEnemies(String[][] board, int row, String color) {
 		for (int i = 0; i < 16; i++) {
 			if (isMyEnemy(board[row][i], color)) {
 				return false;
@@ -69,7 +69,7 @@ public class ChessUtil {
 		String piece;
 		if (color.equals("white")) {
 			startRow = 9;
-			endRow = 13;
+			endRow = 14;
 			piece = "P";
 			for (int i = startRow; i <= endRow; i++) {
 				for (int j = 15; j >= 0; j--) {
@@ -112,7 +112,7 @@ public class ChessUtil {
 	public static Response whitePawnFirstMove(String[][] board) {
 		Response res = new Response();
 		for (int i = 0; i < 16; i++) {
-			if (board[11][i].equals("P")) {
+			if (board[10][i].equals("P")) {
 				res.setExist(true);
 				res.setFromRow(11);
 				res.setFromCol(i);
@@ -215,7 +215,7 @@ public class ChessUtil {
 	public static List<Response> getDefenderPiecesBot(String[][] board, String piece) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
-		for (int i = 8; i < 16; i++) {
+		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				if (board[i][j].equals(piece)) {
 					res = new Response();
@@ -241,7 +241,7 @@ public class ChessUtil {
 	public static List<Response> getDefenderPiecesTop(String[][] board, String piece) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				if (board[i][j].equals(piece)) {
 					res = new Response();
@@ -294,14 +294,53 @@ public class ChessUtil {
 	 * @return
 	 */
 	public static String[][] getBoard(String arg) {
-		String board[][] = new String[16][16];
-		int n = 0;
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				board[i][j] = arg.substring(n++, n);
+		if (arg.length() == 256) {
+			String[][] board = new String[16][16];
+			int n = 0;
+			for (int i = 0; i < 16; i++) {
+				for (int j = 0; j < 16; j++) {
+					board[i][j] = arg.substring(n++, n);
+				}
+			}
+			return board;
+		}
+		return null;
+	}
+
+	public static List<Response> findPawnByBotSector(String[][] board, int fromRow, int fromCol, int toRow, int toCol) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+
+		for (int i = fromRow; i >= toRow; i--) {
+			for (int j = fromCol; j >= toCol; j--) {
+				if (board[i][j].equals("P")) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
 			}
 		}
-		return board;
+		return responses;
+	}
+
+	public static List<Response> findPawnByTopSector(String[][] board, int fromRow, int fromCol, int toRow, int toCol) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+
+		for (int i = fromRow; i <= toRow; i++) {
+			for (int j = fromCol; j <= toCol; j++) {
+				if (board[i][j].equals("p")) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
 	}
 
 	/**
@@ -322,4 +361,5 @@ public class ChessUtil {
 		System.out.println("++++++++++++++++++++++++++++++++++++");
 		System.out.println("                                    ");
 	}
+
 }

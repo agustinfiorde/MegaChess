@@ -17,12 +17,15 @@ import app.megachess.utils.Util;
 
 public class Intelligence {
 
-	public static final int startMoves = 199;
 	private static List<Response> responses;
 	private static int fromRow = 0;
 	private static int fromCol = 0;
 	private static int toRow = 0;
 	private static int toCol = 0;
+
+	private Intelligence() {
+
+	}
 
 	/**
 	 * evaluate, recibe el Message, lo descompone en objetos y variables utiles para
@@ -54,6 +57,8 @@ public class Intelligence {
 	 * -BASICAMENTE LA ESTRATEGIA ES DEFENDER COMO PILAR FUNDAMENTAL, SI NO EXISTE
 	 * AMENAZA MANDAR UNA UNICA PIEZA PARA ATACAR DESDE ATRAS PARA ADELANTE
 	 * 
+	 * TODO
+	 * 
 	 * @param msj
 	 * @return
 	 */
@@ -64,60 +69,71 @@ public class Intelligence {
 		String color = msjData.getActual_turn();
 		String answer = null;
 
-		if (msjData.getMove_left() == startMoves) {
-			return evaluateFirstMove(msj, msjData, board);
-		}
-		
 		// defensa de peones
-		answer = pawnDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = pawnDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// defensa de torres
-		answer = rookDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = rookDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// defensa de caballos
-		answer = horseDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = horseDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// defensa de alfiles
-		answer = bishopDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = bishopDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// defensa con reinas
-		answer = queenDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = queenDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// defensa con reyes
-		answer = kingDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = kingDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// reina asesina
-		answer = queenAction(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = queenAction(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// torre asesinas
-		answer = rookAction(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// mover peones
-		answer = pawnAction(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = rookAction(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
+
+		// VOLVER A COLOCAR MOVER PEONES ACA
+
 		// mover reyes
 //		answer = kingProceed(msj, board, color);
 //		if (answer != null) {
 //			return answer;
 //		}
+		// mover alfiles TODO
+		answer = bishopProceed(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// mover caballos TODO
+//		answer = horseProceed(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
+
+		// mover peones
+		answer = pawnResolver(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+
 		return "";
 	}
 
@@ -386,7 +402,7 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String pawnAction(Message msj, String[][] board, String color) {
-		responses = ChessUtil.pawnsActives(board, color);
+//		responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -398,6 +414,96 @@ public class Intelligence {
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
 		}
+		return null;
+	}
+
+	public static String pawnResolver(Message msj, String[][] board, String color) {
+
+		// sector 1
+		if (color.equals("white")) {
+			fromCol = 15;
+			toCol = 14;
+			fromRow = 13;
+			toRow = 9;
+			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
+		} else {
+			fromCol = 14;
+			toCol = 15;
+			fromRow = 2;
+			toRow = 6;
+			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
+		}
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
+		// sector 2
+		if (color.equals("white")) {
+			fromCol = 1;
+			toCol = 0;
+			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
+		} else {
+			fromCol = 0;
+			toCol = 1;
+			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
+		}
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
+		// sector 3
+		if (color.equals("white")) {
+			fromCol = 7;
+			toCol = 5;
+			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
+		} else {
+			fromCol = 5;
+			toCol = 7;
+			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
+		}
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
+		// sector 4
+		if (color.equals("white")) {
+			fromCol = 10;
+			toCol = 8;
+			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
+		} else {
+			fromCol = 8;
+			toCol = 10;
+			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
+		}
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
+		responses = ChessUtil.pawnsActives(board, color);
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
 		return null;
 	}
 
@@ -421,6 +527,56 @@ public class Intelligence {
 				toCol = king.getToCol();
 				fromRow = king.getFromRow();
 				toRow = king.getToRow();
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * bishopProceed, llama al alfil disponible para empezar a hacerlo avanzar, de
+	 * esta manera podra cazar o hacer puntos por el simple hecho de moverse
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static String bishopProceed(Message msj, String[][] board, String color) {
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
+		BishopAI bishop;
+		for (Response r : responses) {
+			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			if (bishop.canProceed()) {
+				fromCol = bishop.getFromCol();
+				toCol = bishop.getToCol();
+				fromRow = bishop.getFromRow();
+				toRow = bishop.getToRow();
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * horseProceed, llama al caballo disponible para empezar a hacerlo avanzar, de
+	 * esta manera podra cazar o hacer puntos por el simple hecho de moverse
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static String horseProceed(Message msj, String[][] board, String color) {
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "h", color);
+		HorseAI horse;
+		for (Response r : responses) {
+			horse = new HorseAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			if (horse.canProceed()) {
+				fromCol = horse.getFromCol();
+				toCol = horse.getToCol();
+				fromRow = horse.getFromRow();
+				toRow = horse.getToRow();
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
 		}
