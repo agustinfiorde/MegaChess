@@ -8,11 +8,11 @@ public class HorseAI extends Piece {
 	public HorseAI(String piece, int[] position, String[][] board, String color) {
 		super(piece, position, board, color);
 		if (color.equals("white")) {
-			this.distantFront = fromRow - 2;
-			this.continuousFront = fromRow - 1;
+			this.distantFront = -2;
+			this.continuousFront = -1;
 		} else {
-			this.distantFront = fromRow + 2;
-			this.continuousFront = fromRow + 1;
+			this.distantFront = 2;
+			this.continuousFront = 1;
 		}
 	}
 
@@ -21,51 +21,56 @@ public class HorseAI extends Piece {
 		return evaluateLikeHorse();
 	}
 
+	/*
+	 * canProceed, en el caso de los caballos evalua si alguna casillas de las
+	 * frontales esta disponible como para avanzar
+	 */
 	@Override
 	public boolean canProceed() {
 
-		int front = continuousFront;
-		int x;
-		
-		for (int i = 0; i < 2; i++) {
-			for (int j = -2; j < 3; j++) {
-				
-				x = fromCol + j;
-				
-				if (front >= 0 && front <= 15 && x >= 0 && x <= 15
-						&& ((i == 2 && j == -1) || (i == 2 && j == 1) || (i == 1 && j == -2) || (i == 1 && j == 2)
-								|| (i == -1 && j == -2) || (i == -1 && j == 2) || (i == -2 && j == -1)
-								|| (i == -2 && j == 1))) {
-					if (evaluateQuadrant(front, x)) {
-						setTo(front, j);
-						return true;
-					}
+		for (int i = -2; i < 3; i++) {
+
+			if (fromRow + distantFront < 0 || fromRow + distantFront > 15 || fromCol + i < 0 || fromCol + i > 15) {
+				continue;
+			}
+			if ((continuousFront == 1 && i == -2) || (continuousFront == 1 && i == 2) || (distantFront == 2 && i == -2)
+					|| (distantFront == 2 && i == 2) || (continuousFront == -1 && i == -2)
+					|| (continuousFront == -1 && i == 2) || (distantFront == -2 && i == -2)
+					|| (distantFront == -2 && i == 2)) {
+				if (board[distantFront][i].equals(" ")) {
+					setTo(distantFront, i);
+					return true;
+				}
+				if (board[continuousFront][i].equals(" ")) {
+					setTo(continuousFront, i);
+					return true;
 				}
 			}
-			front = distantFront;
 		}
-
 		return false;
 	}
 
 	/**
-	 * evaluateLikeHorse, es una funcion especifica para evaluar las 8 posibles
-	 * casillas que alcanza un caballo para ver si puede comer
-	 * 
+	 * evaluateLikeHorse, evalua las casillas habiles para un caballo y ve si existe
+	 * la posibilidad de comer a una pieza enemiga
+	 *
 	 * @return
 	 */
 	private boolean evaluateLikeHorse() {
 		int x;
 		int y;
+
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
+
 				y = fromRow + i;
 				x = fromCol + j;
 
-				if (y >= 0 && y <= 15 && x >= 0 && x <= 15
-						&& ((i == 2 && j == -1) || (i == 2 && j == 1) || (i == 1 && j == -2) || (i == 1 && j == 2)
-								|| (i == -1 && j == -2) || (i == -1 && j == 2) || (i == -2 && j == -1)
-								|| (i == -2 && j == 1))) {
+				if (fromRow + i < 0 || fromRow + i > 15 || fromCol + j < 0 || fromCol + j > 15) {
+					continue;
+				}
+				if ((i == 1 && j == -2) || (i == 2 && j == -1) || (i == 1 && j == 2) || (i == 2 && j == 1)
+						|| (i == -1 && j == -2) || (i == -2 && j == -1) || (i == -1 && j == 2) || (i == -2 && j == 1)) {
 					if (evaluateQuadrant(y, x)) {
 						setTo(y, x);
 						return true;

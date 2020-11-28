@@ -1,7 +1,6 @@
 package app.megachess.AI;
 
 import java.util.List;
-import java.util.Random;
 
 import app.megachess.AI.pieces.BishopAI;
 import app.megachess.AI.pieces.HorseAI;
@@ -24,7 +23,6 @@ public class Intelligence {
 	private static int toCol = 0;
 
 	private Intelligence() {
-
 	}
 
 	/**
@@ -69,67 +67,73 @@ public class Intelligence {
 		String color = msjData.getActual_turn();
 		String answer = null;
 
-		// defensa de peones
-//		answer = pawnDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// defensa de torres
-//		answer = rookDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// defensa de caballos
-//		answer = horseDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// defensa de alfiles
-//		answer = bishopDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// defensa con reinas
-//		answer = queenDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// defensa con reyes
-//		answer = kingDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// reina asesina
-//		answer = queenAction(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// torre asesinas
-//		answer = rookAction(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		// KINGDANCER
+		answer = pawnActionToKingDancer(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		answer = bishopActionToKingDancer(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
-		// VOLVER A COLOCAR MOVER PEONES ACA
-
-		// mover reyes
-//		answer = kingProceed(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-		// mover alfiles TODO
+		// DEFENSA de peones
+		answer = pawnDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA de torres
+		answer = rookDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA de caballos
+		answer = horseDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA de alfiles
+		answer = bishopDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA con reinas
+		answer = queenDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA con reyes
+		answer = kingDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// MOVER reyes
+		answer = kingProceed(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// MOVER peones
+		answer = pawnResolver(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// reina ASESINA
+		answer = queenAction(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// torre ASESINA
+		answer = rookAction(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
-		// mover caballos TODO
-//		answer = horseProceed(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-
-		// mover peones
-		answer = pawnResolver(msj, board, color);
+		// MOVER caballos TODO
+		answer = horseProceed(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
@@ -275,7 +279,7 @@ public class Intelligence {
 		}
 		BishopAI bishop;
 		for (Response r : responses) {
-			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
 			if (bishop.canDefend()) {
 				fromCol = bishop.getFromCol();
 				toCol = bishop.getToCol();
@@ -402,7 +406,7 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String pawnAction(Message msj, String[][] board, String color) {
-//		responses = ChessUtil.pawnsActives(board, color);
+
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -417,6 +421,15 @@ public class Intelligence {
 		return null;
 	}
 
+	/**
+	 * Metodo de apertura del tablero para evitar estrategia implementada por el
+	 * jugador EnzoC
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param color
+	 * @return
+	 */
 	public static String pawnResolver(Message msj, String[][] board, String color) {
 
 		// sector 1
@@ -508,9 +521,8 @@ public class Intelligence {
 	}
 
 	/**
-	 * kingProceed, llama al rey disponible para empezar a moverlo con un objetivo
-	 * especifico en el mapa, de esta manera podra cazar o hacer puntos por el
-	 * simple hecho de moverse
+	 * kingProceed, llama al rey disponible para empezar a moverlo en el mapa. de
+	 * esta manera podra hacer puntos. Complemento de la estrategia KingDancer
 	 * 
 	 * @param msj
 	 * @param board
@@ -546,7 +558,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
-			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
 			if (bishop.canProceed()) {
 				fromCol = bishop.getFromCol();
 				toCol = bishop.getToCol();
@@ -584,47 +596,74 @@ public class Intelligence {
 	}
 
 	/**
-	 * evalua como debera ser el primer movimiento, si somos blancos encararemos por
-	 * la parte de los caballos externa, es decir cerca de las torres. Ya que
-	 * supongo que pocas personas haran la logica del caballo y por que ninguna
-	 * torre me puede comer en diagonal.
-	 * 
-	 * Si soy negro encaro por el lado opuesto a por donde haya encarado mi oponente
+	 * pawnActionToKingDancer, son los movimientos necesarios que tiene que realizar
+	 * los peones para abrir el tablero a implementar la estrategia de KingDancer
 	 * 
 	 * @param msj
-	 * @param msjData
 	 * @param board
+	 * @param color
 	 * @return
 	 */
-	public static String evaluateFirstMove(Message msj, DataMessage msjData, String[][] board) {
-		if (msjData.getActual_turn().equals("white")) {
-			fromCol = new Random().nextBoolean() ? 2 : 13;
-			toCol = fromCol;
-			fromRow = 12;
-			toRow = 10;
-			return Util.move(msj, fromRow, fromCol, toRow, toCol);
+	public static String pawnActionToKingDancer(Message msj, String[][] board, String color) {
+
+		fromCol = 9;
+		toCol = 9;
+		int targetFirstLine;
+		int fromFirstLine;
+		int targetSecondLine;
+		int fromSecondLine;
+		String piece;
+
+		if (color.equals("white")) {
+			targetFirstLine = 11;
+			fromFirstLine = 12;
+			targetSecondLine = 12;
+			fromSecondLine = 13;
+			piece = "P";
 		} else {
-			Response res = ChessUtil.whitePawnFirstMove(board);
-			if (res.isExist()) {
-				int col = res.getFromCol();
-				if (col >= 1 && col <= 4) {
-					fromCol = 13;
-					toCol = fromCol;
-					fromRow = 3;
-					toRow = 5;
-				} else if (col >= 11 && col <= 14) {
-					fromCol = 2;
-					toCol = fromCol;
-					fromRow = 3;
-					toRow = 5;
-				}
-			} else {
-				fromCol = new Random().nextBoolean() ? 2 : 13;
-				toCol = fromCol;
-				fromRow = 12;
-				toRow = 10;
-			}
-			return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			targetFirstLine = 4;
+			fromFirstLine = 3;
+			targetSecondLine = 3;
+			fromSecondLine = 2;
+			piece = "p";
 		}
+
+		if (board[targetFirstLine][fromCol].equals(" ") && board[fromFirstLine][fromCol].equals(piece)) {
+			return Util.move(msj, fromFirstLine, fromCol, targetFirstLine, fromCol);
+		}
+		if (board[targetSecondLine][fromCol].equals(" ") && board[fromSecondLine][fromCol].equals(piece)) {
+			return Util.move(msj, fromSecondLine, fromCol, targetSecondLine, fromCol);
+		}
+		return null;
 	}
+
+	/**
+	 * bishopActionToKingDancer, es un movimiento que se hace unicamente para
+	 * liberar el espacio necesario para que el Rey implemente la estrategia de
+	 * Dancer.
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static String bishopActionToKingDancer(Message msj, String[][] board, String color) {
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
+		BishopAI bishop;
+		for (Response r : responses) {
+			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, true);
+			if (bishop.canProceed()) {
+				fromCol = bishop.getFromCol();
+				toCol = bishop.getToCol();
+				fromRow = bishop.getFromRow();
+				toRow = bishop.getToRow();
+
+				if (toCol != 10) {
+					return Util.move(msj, fromRow, fromCol, toRow, toCol);
+				}
+			}
+		}
+		return null;
+	}
+
 }

@@ -131,18 +131,17 @@ public abstract class Piece implements PieceAction {
 	 */
 	private boolean evaluateTrajectoryToTop() {
 		for (int i = (fromRow - 1); i >= 0; i--) {
+
 			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
-				toCol = null;
-				toRow = null;
-				return false;
+				break;
 			}
 			if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 				setTo(i, fromCol);
-				return true;
+				break;
 			}
 			setTo(i, fromCol);
 		}
-		return toCol != null && toRow != null ? true : false;
+		return toCol != null || toRow != null ? true : false;
 	}
 
 	/**
@@ -155,17 +154,15 @@ public abstract class Piece implements PieceAction {
 	private boolean evaluateTrajectoryToBot() {
 		for (int i = (fromRow + 1); i < 16; i++) {
 			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
-				toCol = null;
-				toRow = null;
-				return false;
+				break;
 			}
 			if (ChessUtil.isMyEnemy(board[i][fromCol], color)) {
 				setTo(i, fromCol);
-				return true;
+				break;
 			}
 			setTo(i, fromCol);
 		}
-		return toCol != null && toRow != null ? true : false;
+		return toCol != null || toRow != null ? true : false;
 	}
 
 	/**
@@ -178,17 +175,15 @@ public abstract class Piece implements PieceAction {
 	private boolean evaluateTrajectoryToLeft() {
 		for (int i = (fromCol - 1); i >= 0; i--) {
 			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
-				toCol = null;
-				toRow = null;
-				return false;
+				break;
 			}
 			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
 				setTo(fromRow, i);
-				return true;
+				break;
 			}
 			setTo(fromRow, i);
 		}
-		return toCol != null && toRow != null ? true : false;
+		return toCol != null || toRow != null ? true : false;
 	}
 
 	/**
@@ -201,10 +196,7 @@ public abstract class Piece implements PieceAction {
 	private boolean evaluateTrajectoryToRight() {
 
 		for (int i = (fromCol + 1); i < 16; i++) {
-
 			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
-				toCol = null;
-				toRow = null;
 				return false;
 			}
 			if (ChessUtil.isMyEnemy(board[fromRow][i], color)) {
@@ -213,7 +205,7 @@ public abstract class Piece implements PieceAction {
 			}
 			setTo(fromRow, i);
 		}
-		return toCol != null && toRow != null ? true : false;
+		return toCol != null || toRow != null ? true : false;
 	}
 
 	/**
@@ -225,21 +217,23 @@ public abstract class Piece implements PieceAction {
 	 */
 	private boolean evaluateTrajectoryToTopLeft() {
 
-		for (int i = fromRow - 1; i >= 0; i--) {
-			for (int j = fromCol - 1; j >= 0; j--) {
-				if (ChessUtil.isMyTeam(board[i][j], color)) {
-					toCol = null;
-					toRow = null;
-					return false;
-				}
-				if (ChessUtil.isMyEnemy(board[i][j], color)) {
-					setTo(i, j);
-					return true;
-				}
-				setTo(i, j);
+		int i = fromRow;
+		for (int j = (fromCol - 1); j >= 0; j--) {
+
+			i -= 1;
+			if (i < 0) {
+				break;
 			}
+			if (ChessUtil.isMyTeam(board[i][j], color)) {
+				break;
+			}
+			if (ChessUtil.isMyEnemy(board[i][j], color)) {
+				setTo(i, j);
+				break;
+			}
+			setTo(i, j);
 		}
-		return toCol != null && toRow != null ? true : false;
+		return toCol != null || toRow != null ? true : false;
 	}
 
 	/**
@@ -250,19 +244,22 @@ public abstract class Piece implements PieceAction {
 	 * @param target
 	 */
 	private boolean evaluateTrajectoryToTopRight() {
-		for (int i = fromRow - 1; i >= 0; i--) {
-			for (int j = fromCol + 1; j < 16; j++) {
-				if (ChessUtil.isMyTeam(board[i][j], color)) {
-					toCol = null;
-					toRow = null;
-					return false;
-				}
-				if (ChessUtil.isMyEnemy(board[i][j], color)) {
-					setTo(i, j);
-					return true;
-				}
-				setTo(i, j);
+
+		int i = fromRow;
+		for (int j = fromCol + 1; j < 16; j++) {
+
+			i -= 1;
+			if (i < 0) {
+				break;
 			}
+			if (ChessUtil.isMyTeam(board[i][j], color)) {
+				break;
+			}
+			if (ChessUtil.isMyEnemy(board[i][j], color)) {
+				setTo(i, j);
+				break;
+			}
+			setTo(i, j);
 		}
 		return toCol != null && toRow != null ? true : false;
 	}
@@ -275,20 +272,24 @@ public abstract class Piece implements PieceAction {
 	 * @param target
 	 */
 	private boolean evaluateTrajectoryToBotLeft() {
-		for (int i = fromRow + 1; i < 16; i++) {
-			for (int j = fromCol - 1; j >= 0; j--) {
-				if (ChessUtil.isMyTeam(board[i][j], color)) {
-					toCol = null;
-					toRow = null;
-					return false;
-				}
-				if (ChessUtil.isMyEnemy(board[i][j], color)) {
-					setTo(i, j);
-					return true;
-				}
-				setTo(i, j);
+
+		int i = fromRow;
+		for (int j = fromCol - 1; j >= 0; j--) {
+
+			i += 1;
+			if (i > 15) {
+				break;
 			}
+			if (ChessUtil.isMyTeam(board[i][j], color)) {
+				break;
+			}
+			if (ChessUtil.isMyEnemy(board[i][j], color)) {
+				setTo(i, j);
+				break;
+			}
+			setTo(i, j);
 		}
+
 		return toCol != null && toRow != null ? true : false;
 	}
 
@@ -301,19 +302,21 @@ public abstract class Piece implements PieceAction {
 	 */
 	private boolean evaluateTrajectoryToBotRight() {
 
-		for (int i = fromRow + 1; i < 16; i++) {
-			for (int j = fromCol + 1; j < 16; j++) {
-				if (ChessUtil.isMyTeam(board[i][j], color)) {
-					toCol = null;
-					toRow = null;
-					return false;
-				}
-				if (ChessUtil.isMyEnemy(board[i][j], color)) {
-					setTo(i, j);
-					break;
-				}
-				setTo(i, j);
+		int i = fromRow;
+		for (int j = fromCol + 1; j < 16; j++) {
+
+			i += 1;
+			if (i > 15) {
+				return false;
 			}
+			if (ChessUtil.isMyTeam(board[i][j], color)) {
+				return false;
+			}
+			if (ChessUtil.isMyEnemy(board[i][j], color)) {
+				setTo(i, j);
+				break;
+			}
+			setTo(i, j);
 		}
 		return toCol != null && toRow != null ? true : false;
 	}

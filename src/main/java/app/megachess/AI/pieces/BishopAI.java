@@ -6,10 +6,12 @@ public class BishopAI extends Piece {
 
 	private PieceDirection frontLeft;
 	private PieceDirection frontRight;
+	private boolean dancerStrategy;
 
-	public BishopAI(String piece, int[] position, String[][] board, String color) {
+	public BishopAI(String piece, int[] position, String[][] board, String color, boolean dancerStrategy) {
 		super(piece, position, board, color);
 
+		this.dancerStrategy = dancerStrategy;
 		if (color.equals("white")) {
 			this.frontLeft = PieceDirection.TO_TOP_LEFT;
 			this.frontRight = PieceDirection.TO_TOP_RIGHT;
@@ -19,12 +21,6 @@ public class BishopAI extends Piece {
 		}
 
 	}
-
-//	@Override
-//	public boolean canDefend() {
-//		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
-//				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
-//	}
 
 	@Override
 	public boolean canDefend() {
@@ -45,10 +41,14 @@ public class BishopAI extends Piece {
 	@Override
 	public boolean canProceed() {
 
-		PieceDirection[] posibilities = new PieceDirection[] { frontLeft, frontRight };
-		for (PieceDirection target : posibilities) {
-			if (evaluateTrajectory(target)) {
-				return true;
+		if (dancerStrategy) {
+			return evaluateTrajectory(frontLeft);
+		} else {
+			PieceDirection[] posibilities = new PieceDirection[] { frontLeft, frontRight };
+			for (PieceDirection target : posibilities) {
+				if (evaluateTrajectory(target)) {
+					return true;
+				}
 			}
 		}
 		return false;

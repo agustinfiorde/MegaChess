@@ -2,7 +2,6 @@ package app.megachess.websocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 import app.megachess.AI.Intelligence;
 import app.megachess.models.Message;
@@ -83,12 +82,9 @@ public class Connection {
 
 					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
-//						try {
-//							TimeUnit.MILLISECONDS.sleep(200);
-							clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
+
+						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
+
 					}
 
 					// Turno
