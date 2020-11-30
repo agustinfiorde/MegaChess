@@ -129,7 +129,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToTop() {
+	protected boolean evaluateTrajectoryToTop() {
 		for (int i = (fromRow - 1); i >= 0; i--) {
 
 			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
@@ -151,7 +151,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToBot() {
+	protected boolean evaluateTrajectoryToBot() {
 		for (int i = (fromRow + 1); i < 16; i++) {
 			if (ChessUtil.isMyTeam(board[i][fromCol], color)) {
 				break;
@@ -172,7 +172,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToLeft() {
+	protected boolean evaluateTrajectoryToLeft() {
 		for (int i = (fromCol - 1); i >= 0; i--) {
 			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
 				break;
@@ -193,7 +193,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToRight() {
+	protected boolean evaluateTrajectoryToRight() {
 
 		for (int i = (fromCol + 1); i < 16; i++) {
 			if (ChessUtil.isMyTeam(board[fromRow][i], color)) {
@@ -215,7 +215,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToTopLeft() {
+	protected boolean evaluateTrajectoryToTopLeft() {
 
 		int i = fromRow;
 		for (int j = (fromCol - 1); j >= 0; j--) {
@@ -243,7 +243,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToTopRight() {
+	protected boolean evaluateTrajectoryToTopRight() {
 
 		int i = fromRow;
 		for (int j = fromCol + 1; j < 16; j++) {
@@ -271,7 +271,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToBotLeft() {
+	protected boolean evaluateTrajectoryToBotLeft() {
 
 		int i = fromRow;
 		for (int j = fromCol - 1; j >= 0; j--) {
@@ -300,7 +300,7 @@ public abstract class Piece implements PieceAction {
 	 * 
 	 * @param target
 	 */
-	private boolean evaluateTrajectoryToBotRight() {
+	protected boolean evaluateTrajectoryToBotRight() {
 
 		int i = fromRow;
 		for (int j = fromCol + 1; j < 16; j++) {

@@ -33,29 +33,32 @@ public class Intelligence {
 	 * 
 	 * -si estamos ante el primer movimiento:
 	 * 
-	 * Si soy WHITE encaro con los peones por la parte de los caballos externa, ya
-	 * que supongo que pocas personas desarrollaran el movimiento de los caballos.
+	 * El objetivo para empezar es adelantar mis peones de la linea 9, con el fin de
+	 * liberar espacio en el fondo.
 	 * 
-	 * Si soy BLACK, evaluo un camino opuesto a mi adversario con mis peones
+	 * Mi plan de accion es implementar la estrategia de "Rey Bailarin", esta
+	 * consiste en mover el rey, ya que al moverlo me da 100 puntos. Las prioridades
+	 * estarasn explicadas a continuacion
 	 * 
 	 * -en los siguientes turnos mi orden de accion es el siguiente:
 	 * 
 	 * -DEFENDER CON TODAS LAS PIEZAS, ES DECIR EVALUAN SI TIENE AMENAZAS CERCA, EN
-	 * CASO DE SER REAL, COMEN PRIMERO ANTES DE SER COMIDOS
+	 * CASO DE SER REAL, COMEN PRIMERO ANTES DE SER COMIDOS. LOS PEONES SON LA
+	 * PRIMER LINEA DE DEFENZA
+	 * 
+	 * -MOVER EL REY SI ES QUE EN EL PASO ANTERIOR NO SE EVALUO AMENAZA
 	 * 
 	 * -VER SI TENGO DISPONIBLE UNA REINA ASESINA O UNA TORRE ASESINA. TOMAR LA QUE
-	 * PUEDA ASESINAR O YA ESTE EN EL CUADRANTE ENEMIGO Y MANDARLA A MATAR PIEZAS
+	 * PUEDA USAR Y LLEVARLA AL CUADRANTE ENEMIGO Y MANDARLA A MATAR PIEZAS
 	 * 
 	 * -SI NO HAY REINA ASESINA NI TORRE ASESINA, MOVER UN PEON HASTA QUE CORONE Y
 	 * SEA MI PROXIMA REINA ASESINA
 	 * 
-	 * -LA ACCION FINAL ES SACAR A PASEAR MI O MIS REYES PARA HACER MAS PUNTOS O
-	 * PARA CAZAR ALGUN ANEMIGO FALTANTE, SI ES QUE MIS ASESINOS NO PUDIERON
+	 * -EN CASO QUE NADA DE ESTO SEA POSIBLE CABALLOS Y ALFILES TIENEN LA ORDEN DE
+	 * AVANZAR PARA JUNTAR PUNTOS E IR EN BUSCA DE ENEMIGOS
 	 * 
 	 * -BASICAMENTE LA ESTRATEGIA ES DEFENDER COMO PILAR FUNDAMENTAL, SI NO EXISTE
-	 * AMENAZA MANDAR UNA UNICA PIEZA PARA ATACAR DESDE ATRAS PARA ADELANTE
-	 * 
-	 * TODO
+	 * AMENAZA MOVER EL REY, CUANDO ESTO NO SEA POSIBLE. COMENZAR A ATACAR
 	 * 
 	 * @param msj
 	 * @return
@@ -68,50 +71,50 @@ public class Intelligence {
 		String answer = null;
 
 		// KINGDANCER
-		answer = pawnActionToKingDancer(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		answer = bishopActionToKingDancer(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = pawnActionToKingDancer(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
+//		answer = bishopActionToKingDancer(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 
 		// DEFENSA de peones
-		answer = pawnDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// DEFENSA de torres
-		answer = rookDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = pawnDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// DEFENSA de caballos
-		answer = horseDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = horseDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// DEFENSA de alfiles
-		answer = bishopDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = bishopDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
+		// DEFENSA de torres
+//		answer = rookDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// DEFENSA con reinas
 		answer = queenDefense(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
 		// DEFENSA con reyes
-		answer = kingDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = kingDefense(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// MOVER reyes
-		answer = kingProceed(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = kingProceed(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// MOVER peones
 		answer = pawnResolver(msj, board, color);
 		if (answer != null) {
@@ -123,16 +126,16 @@ public class Intelligence {
 			return answer;
 		}
 		// torre ASESINA
-		answer = rookAction(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
+//		answer = rookAction(msj, board, color);
+//		if (answer != null) {
+//			return answer;
+//		}
 		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
-		// MOVER caballos TODO
+		// MOVER caballos
 		answer = horseProceed(msj, board, color);
 		if (answer != null) {
 			return answer;
@@ -407,6 +410,7 @@ public class Intelligence {
 	 */
 	public static String pawnAction(Message msj, String[][] board, String color) {
 
+		responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -423,7 +427,9 @@ public class Intelligence {
 
 	/**
 	 * Metodo de apertura del tablero para evitar estrategia implementada por el
-	 * jugador EnzoC
+	 * jugador EnzoC. La funcion busca hacer avanzar a los peones en grupo, para
+	 * evitar que si una reina los intenta asesinar, estaran en grupo y se podran
+	 * defender mutuamente
 	 * 
 	 * @param msj
 	 * @param board

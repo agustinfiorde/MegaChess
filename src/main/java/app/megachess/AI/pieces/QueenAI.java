@@ -16,11 +16,6 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 		return false;
 	}
 
-//	@Override
-//	public boolean canDefend() {
-//		return (evaluateBot() || evaluateTop() || evaluateLeft() || evaluateRight() || evaluateBotLeft()
-//				|| evaluateBotRight() || evaluateTopLeft() || evaluateTopRight());
-//	}
 
 	@Override
 	public boolean canDefend() {

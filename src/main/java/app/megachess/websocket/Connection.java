@@ -34,6 +34,10 @@ public class Connection {
 		url = root.concat(tokenFiordeX);
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
 	/**
 	 * selectOpponentToChallenge, recibe una lista de los oponentes conectados y los
 	 * va desafiando uno a uno de forma aleatoria. TODO
@@ -82,32 +86,25 @@ public class Connection {
 
 					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
-
 						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
-
 					}
 
 					// Turno
 					if (msj.contains("your_turn")) {
-						try {
-							ChessUtil.showBoard(message.getData().getBoard());
-//							TimeUnit.MILLISECONDS.sleep(10);
-							String res = Intelligence.evaluate(message);
-							clientEndPoint.sendMessage(res);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
+						ChessUtil.showBoard(message.getData().getBoard());
+						String res = Intelligence.evaluate(message);
+						clientEndPoint.sendMessage(res);
 					}
 
 					// Game over
 					if (msj.contains("gameover")) {
 						System.out.println(Util.gameover(message));
 					}
+					
 				}
 			});
 
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException ex) {
 			System.err.println("InterruptedException exception: " + ex.getMessage());
 		} catch (URISyntaxException ex) {

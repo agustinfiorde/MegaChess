@@ -30,21 +30,26 @@ public class HorseAI extends Piece {
 
 		for (int i = -2; i < 3; i++) {
 
-			if (fromRow + distantFront < 0 || fromRow + distantFront > 15 || fromCol + i < 0 || fromCol + i > 15) {
+			if ((fromRow + distantFront) < 0 && (fromRow + distantFront) > 15 && (fromCol + i) < 0
+					&& (fromCol + i) > 15) {
 				continue;
 			}
+
 			if ((continuousFront == 1 && i == -2) || (continuousFront == 1 && i == 2) || (distantFront == 2 && i == -2)
 					|| (distantFront == 2 && i == 2) || (continuousFront == -1 && i == -2)
 					|| (continuousFront == -1 && i == 2) || (distantFront == -2 && i == -2)
 					|| (distantFront == -2 && i == 2)) {
-				if (board[distantFront][i].equals(" ")) {
-					setTo(distantFront, i);
+
+				if (board[fromRow + distantFront][fromCol + i].equals(" ")) {
+					setTo(fromRow + distantFront, fromCol + i);
 					return true;
 				}
-				if (board[continuousFront][i].equals(" ")) {
-					setTo(continuousFront, i);
+
+				if (board[fromRow + continuousFront][fromCol + i].equals(" ")) {
+					setTo(fromRow + continuousFront, fromCol + i);
 					return true;
 				}
+
 			}
 		}
 		return false;

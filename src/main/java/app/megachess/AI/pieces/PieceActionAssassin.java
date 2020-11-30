@@ -8,8 +8,6 @@ public interface PieceActionAssassin {
 	 * murder, hace referencia a una funcion que se encarga de gestionar la mision
 	 * para ir a asesinar todas las piezas enemigas.
 	 * 
-	 * APLICABLE A REINAS, TORRES Y PROXIMAMENTE ALFILES TODO
-	 * 
 	 * @return
 	 */
 	boolean murder();

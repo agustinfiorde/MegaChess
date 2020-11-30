@@ -59,10 +59,22 @@ public class ChessUtilTests {
 	@Test
 	public void pawnsActives() {
 
-		String boardStringWithPawns = "rrhhbbqqkkbbhhrr" + "rrhhbbqqkkbbhhrr" + "pppppppppppppppp" + "pppppppppppppppp"
-				+ "                " + "                " + "                " + "                " + "                "
-				+ "                " + "                " + "                " + "PPPPPPPPPPPPPPPP" + "PPPPPPPPPPPPPPPP"
-				+ "RRHHBBQQKKBBHHRR" + "RRHHBBQQKKBBHHRR";
+		String boardStringWithPawns = "rrhhbbqqkkbbhhrr" + 
+									  "rrhhbbqqkkbbhhrr" + 
+									  "pppppppppppppppp" + 
+									  "pppppppppppppppp" + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "                " + 
+									  "PPPPPPPPPPPPPPPP" + 
+									  "PPPPPPPPPPPPPPPP" + 
+									  "RRHHBBQQKKBBHHRR" + 
+									  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardStringWithPawns);
 
 		// 32 Pawns
