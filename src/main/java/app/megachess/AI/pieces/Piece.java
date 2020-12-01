@@ -23,7 +23,7 @@ public abstract class Piece implements PieceAction {
 
 	protected String[][] board;
 
-	public Piece(String piece, int[] position, String[][] board, String color) {
+	public Piece(int[] position, String[][] board, String color) {
 
 		this.board = board;
 		this.color = color;

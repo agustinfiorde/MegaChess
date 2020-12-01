@@ -8,8 +8,8 @@ public class BishopAI extends Piece {
 	private PieceDirection frontRight;
 	private boolean dancerStrategy;
 
-	public BishopAI(String piece, int[] position, String[][] board, String color, boolean dancerStrategy) {
-		super(piece, position, board, color);
+	public BishopAI(int[] position, String[][] board, String color, boolean dancerStrategy) {
+		super(position, board, color);
 
 		this.dancerStrategy = dancerStrategy;
 		if (color.equals("white")) {

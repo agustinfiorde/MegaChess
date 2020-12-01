@@ -2,8 +2,8 @@ package app.megachess.AI.pieces;
 
 public class KingAI extends Piece {
 
-	public KingAI(String piece, int[] position, String[][] board, String color) {
-		super(piece, position, board, color);
+	public KingAI(int[] position, String[][] board, String color) {
+		super(position, board, color);
 	}
 
 	@Override

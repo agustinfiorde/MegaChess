@@ -5,8 +5,8 @@ public class HorseAI extends Piece {
 	private int continuousFront;
 	private int distantFront;
 
-	public HorseAI(String piece, int[] position, String[][] board, String color) {
-		super(piece, position, board, color);
+	public HorseAI(int[] position, String[][] board, String color) {
+		super(position, board, color);
 		if (color.equals("white")) {
 			this.distantFront = -2;
 			this.continuousFront = -1;

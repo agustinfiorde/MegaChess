@@ -4,8 +4,8 @@ public class PawnAI extends Piece {
 
 	private int frontInitial;
 
-	public PawnAI(String piece, int[] position, String[][] board, String color) {
-		super(piece, position, board, color);
+	public PawnAI(int[] position, String[][] board, String color) {
+		super(position, board, color);
 	}
 
 	/**

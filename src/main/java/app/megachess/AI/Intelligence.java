@@ -162,7 +162,7 @@ public class Intelligence {
 		}
 		QueenAI queen;
 		for (Response r : responses) {
-			queen = new QueenAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			queen = new QueenAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (queen.canDefend()) {
 				fromCol = queen.getFromCol();
 				toCol = queen.getToCol();
@@ -192,7 +192,7 @@ public class Intelligence {
 		}
 		HorseAI horse;
 		for (Response r : responses) {
-			horse = new HorseAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			horse = new HorseAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (horse.canDefend()) {
 				fromCol = horse.getFromCol();
 				toCol = horse.getToCol();
@@ -222,7 +222,7 @@ public class Intelligence {
 		}
 		RookAI rook;
 		for (Response r : responses) {
-			rook = new RookAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			rook = new RookAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (rook.canDefend()) {
 				fromCol = rook.getFromCol();
 				toCol = rook.getToCol();
@@ -252,7 +252,7 @@ public class Intelligence {
 		}
 		KingAI king;
 		for (Response r : responses) {
-			king = new KingAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			king = new KingAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (king.canDefend()) {
 				fromCol = king.getFromCol();
 				toCol = king.getToCol();
@@ -282,7 +282,7 @@ public class Intelligence {
 		}
 		BishopAI bishop;
 		for (Response r : responses) {
-			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
+			bishop = new BishopAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
 			if (bishop.canDefend()) {
 				fromCol = bishop.getFromCol();
 				toCol = bishop.getToCol();
@@ -308,7 +308,7 @@ public class Intelligence {
 		responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
-			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (pawn.canDefend()) {
 				fromCol = pawn.getFromCol();
 				toCol = pawn.getToCol();
@@ -341,7 +341,7 @@ public class Intelligence {
 			res = ChessUtil.botPossitionAssassin(board, "q");
 		}
 		if (res.isExist()) {
-			queen = new QueenAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
+			queen = new QueenAI(new int[] { res.getFromRow(), res.getFromCol() }, board, color);
 			if (queen.murder()) {
 				fromCol = queen.getFromCol();
 				toCol = queen.getToCol();
@@ -380,7 +380,7 @@ public class Intelligence {
 			res = ChessUtil.botPossitionAssassin(board, "r");
 		}
 		if (res.isExist()) {
-			rook = new RookAI(res.getPiece(), new int[] { res.getFromRow(), res.getFromCol() }, board, color);
+			rook = new RookAI(new int[] { res.getFromRow(), res.getFromCol() }, board, color);
 			if (rook.murder()) {
 				fromCol = rook.getFromCol();
 				toCol = rook.getToCol();
@@ -413,7 +413,7 @@ public class Intelligence {
 		responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
-			pawn = new PawnAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (pawn.canProceed()) {
 				fromCol = pawn.getFromCol();
 				toCol = pawn.getToCol();
@@ -539,7 +539,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
-			king = new KingAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			king = new KingAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (king.canProceed()) {
 				fromCol = king.getFromCol();
 				toCol = king.getToCol();
@@ -564,7 +564,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
-			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
+			bishop = new BishopAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
 			if (bishop.canProceed()) {
 				fromCol = bishop.getFromCol();
 				toCol = bishop.getToCol();
@@ -589,7 +589,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "h", color);
 		HorseAI horse;
 		for (Response r : responses) {
-			horse = new HorseAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			horse = new HorseAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
 			if (horse.canProceed()) {
 				fromCol = horse.getFromCol();
 				toCol = horse.getToCol();
@@ -657,7 +657,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
-			bishop = new BishopAI(r.getPiece(), new int[] { r.getFromRow(), r.getFromCol() }, board, color, true);
+			bishop = new BishopAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, true);
 			if (bishop.canProceed()) {
 				fromCol = bishop.getFromCol();
 				toCol = bishop.getToCol();

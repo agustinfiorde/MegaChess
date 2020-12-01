@@ -6,16 +6,19 @@ import app.megachess.utils.ChessUtil;
 
 public class QueenAI extends Piece implements PieceActionAssassin {
 
-	public QueenAI(String piece, int[] position, String board[][], String color) {
-		super(piece, position, board, color);
+	public QueenAI(int[] position, String board[][], String color) {
+		super(position, board, color);
 	}
 
 	@Override
 	public boolean canProceed() {
-		// TODO Auto-generated method stub
+		/*
+		 * No aplica a la reina, ya que la mision de la reina no es avanzar con el
+		 * objetivo de moverse para conseguir puntos, sino avanzar a cumplir su mission
+		 * de asesina o a cazar
+		 */
 		return false;
 	}
-
 
 	@Override
 	public boolean canDefend() {
@@ -50,7 +53,8 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 
 	@Override
 	public boolean assassinMissionThirdLine(int thirdLine, int botLine, PieceDirection toTop, PieceDirection toBot) {
-		if (!ChessUtil.rowIsClearOfEnemies(board, thirdLine, color) && ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == thirdLine) {
 
 				if (toRight()) {
@@ -87,7 +91,8 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 	@Override
 	public boolean assassinMissionSecondLine(int secondLine, int thirdLine, int botLine, PieceDirection toTop,
 			PieceDirection toBot) {
-		if (!ChessUtil.rowIsClearOfEnemies(board, secondLine, color) && ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)
+		if (!ChessUtil.rowIsClearOfEnemies(board, secondLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)
 				&& ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == secondLine) {
 				if (toRight()) {
@@ -123,8 +128,10 @@ public class QueenAI extends Piece implements PieceActionAssassin {
 	@Override
 	public boolean assassinMissionFirstLine(int frontLine, int secondLine, int thirdLine, int botLine,
 			PieceDirection toTop, PieceDirection toBot) {
-		if (!ChessUtil.rowIsClearOfEnemies(board, frontLine, color) && ChessUtil.rowIsClearOfEnemies(board, secondLine, color)
-				&& ChessUtil.rowIsClearOfEnemies(board, thirdLine, color) && ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, frontLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, secondLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)
+				&& ChessUtil.rowIsClearOfEnemies(board, botLine, color)) {
 			if (fromRow == frontLine) {
 				if (toRight()) {
 					return evaluateTrajectory(PieceDirection.RIGHT);
