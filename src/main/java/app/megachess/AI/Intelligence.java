@@ -71,52 +71,57 @@ public class Intelligence {
 		String answer = null;
 
 		// KINGDANCER
-//		answer = pawnActionToKingDancer(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
-//		answer = bishopActionToKingDancer(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = pawnActionToKingDancer(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		answer = bishopActionToKingDancer(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 
 		// DEFENSA de peones
-//		answer = pawnDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = pawnDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// DEFENSA de caballos
-//		answer = horseDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = horseDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// DEFENSA de alfiles
-//		answer = bishopDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = bishopDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// DEFENSA de torres
-//		answer = rookDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = rookDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// DEFENSA con reinas
 		answer = queenDefense(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
 		// DEFENSA con reyes
-//		answer = kingDefense(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = kingDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// MOVER reyes
-//		answer = kingProceed(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
+		answer = kingProceed(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// MOVER peones
 		answer = pawnResolver(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// torre ASESINA
+		answer = rookAction(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
@@ -125,11 +130,6 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-		// torre ASESINA
-//		answer = rookAction(msj, board, color);
-//		if (answer != null) {
-//			return answer;
-//		}
 		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {

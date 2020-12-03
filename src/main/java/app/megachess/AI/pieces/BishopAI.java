@@ -1,3 +1,4 @@
+
 package app.megachess.AI.pieces;
 
 import app.megachess.enums.PieceDirection;

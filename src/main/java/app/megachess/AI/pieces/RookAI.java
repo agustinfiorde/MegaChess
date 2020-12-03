@@ -37,6 +37,7 @@ public class RookAI extends Piece implements PieceActionAssassin {
 	}
 
 	@Override
+	//hacer que si no esta en mi columna vaya primero a la columna, sino mantener lo que esta
 	public boolean hunt() {
 		Response target = targetToHunt();
 		if (target != null) {
@@ -63,7 +64,13 @@ public class RookAI extends Piece implements PieceActionAssassin {
 		}
 
 		if (getToCol() != null && getToRow() != null) {
-			return true;
+			
+			if (evaluateQuadrant(toRow, toCol)) {
+				return true;
+			} else {
+				return false;
+			}
+			
 		} else {
 			return false;
 		}
@@ -95,15 +102,17 @@ public class RookAI extends Piece implements PieceActionAssassin {
 			if (fromRow == thirdLine) {
 
 				if (toRight()) {
-					evaluateTrajectory(PieceDirection.RIGHT);
+					return evaluateTrajectory(PieceDirection.RIGHT);
 				} else if (toLeft()) {
-					evaluateTrajectory(PieceDirection.LEFT);
+					return evaluateTrajectory(PieceDirection.LEFT);
 				} else if (ChessUtil.rowIsClearOfEnemies(board, thirdLine, color)) {
 					setTo(back, fromCol);
+					return false;
 				}
 
 			} else {
 				if (fromRow < thirdLine) {
+					
 					evaluateTrajectory(PieceDirection.TO_BOT);
 
 					if (toRow != null) {
@@ -112,6 +121,7 @@ public class RookAI extends Piece implements PieceActionAssassin {
 						}
 					}
 				} else {
+					
 					evaluateTrajectory(PieceDirection.TO_TOP);
 
 					if (toRow != null) {

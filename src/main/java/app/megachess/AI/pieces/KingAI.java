@@ -107,4 +107,96 @@ public class KingAI extends Piece {
 			return false;
 		}
 	}
+
+	/*
+	 * Override para evaluar trayectoria libre hacia arriba y la derecha del tablero
+	 * tomando como referencia al rey y sus movimientos
+	 */
+	@Override
+	protected boolean evaluateTrajectoryToTopRight() {
+
+		if (fromRow - 1 < 0) {
+			return false;
+		}
+
+		if (fromCol + 1 > 15) {
+			return false;
+		}
+
+		if (board[fromRow - 1][fromCol + 1].equals(" ")) {
+			setTo(fromRow - 1, fromCol + 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/*
+	 * Override para evaluar trayectoria libre hacia arriba y la izquierda del
+	 * tablero tomando como referencia al rey y sus movimientos
+	 */
+	@Override
+	protected boolean evaluateTrajectoryToTopLeft() {
+
+		if (fromRow - 1 < 0) {
+			return false;
+		}
+
+		if (fromCol - 1 < 0) {
+			return false;
+		}
+
+		if (board[fromRow - 1][fromCol - 1].equals(" ")) {
+			setTo(fromRow - 1, fromCol - 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/*
+	 * Override para evaluar trayectoria libre hacia abajo y la derecha del tablero
+	 * tomando como referencia al rey y sus movimientos
+	 */
+	@Override
+	protected boolean evaluateTrajectoryToBotRight() {
+
+		if (fromRow + 1 > 15) {
+			return false;
+		}
+
+		if (fromCol + 1 > 15) {
+			return false;
+		}
+
+		if (board[fromRow + 1][fromCol + 1].equals(" ")) {
+			setTo(fromRow + 1, fromCol + 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/*
+	 * Override para evaluar trayectoria libre hacia abajo y la izquierda del
+	 * tablero tomando como referencia al rey y sus movimientos
+	 */
+	@Override
+	protected boolean evaluateTrajectoryToBotLeft() {
+
+		if (fromRow + 1 > 15) {
+			return false;
+		}
+
+		if (fromCol - 1 < 0) {
+			return false;
+		}
+
+		if (board[fromRow + 1][fromCol - 1].equals(" ")) {
+			setTo(fromRow + 1, fromCol - 1);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
