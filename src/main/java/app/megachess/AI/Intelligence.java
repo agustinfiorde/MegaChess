@@ -81,6 +81,12 @@ public class Intelligence {
 			return answer;
 		}
 
+		// MOVER reyes
+		answer = kingProceed(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+
 		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {

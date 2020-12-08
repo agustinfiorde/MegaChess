@@ -69,11 +69,6 @@ public class Connection {
 						}
 					}
 
-					// Game over
-					if (msj.contains("gameover")) {
-						System.out.println(Util.gameover(message));
-					}
-
 				}
 			});
 
