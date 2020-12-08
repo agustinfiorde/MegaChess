@@ -9,11 +9,14 @@
 -En caso que nadie pueda defender busco reinas para que hagan su misión de avanzar una casilla para adelante, con el objetivo de esperar que otros peones coronen o que se arrinconen a la izquierda (**va a ser el sector designado para esconder las reinas y evitar que queden expuestas ante peones enemigos).
 </p>
 <p align="left"> 
--En caso que ninguna de mis piezas pueda comer y las reinas ya hayan cumplido su misión, procedo con la estrategia de hacer avanzar los peones de a grupos de 4 para que se protejan entre si hasta que lleguen a ser reinas. El avance de los grupos tiene un orden establecido para evitar exponer las piezas más importantes del fondo de mi tablero. Primero avanza uno de los grupos de peones de los caballos, luego el otro, luego un grupo de los alfiles, luego el otro, luego las torres, luego los de las reinas y finalmente el grupo de los reyes. Por lo general las partidas no duran tanto para que se llegue a esta instancia.
+-En caso que ninguna de mis piezas pueda comer y las reinas ya hayan cumplido su misión o no existan reinas en el medio del tablero, procedo con la estrategia de hacer avanzar los peones de a grupos de 4 para que se protejan entre si hasta que lleguen a ser reinas. El avance de los grupos tiene un orden establecido para evitar exponer las piezas más importantes del fondo de mi tablero. Primero avanza uno de los grupos de peones de los caballos, luego el otro, luego un grupo de los alfiles, luego el otro, luego las torres, luego los de las reinas y finalmente el grupo de los reyes. Por lo general las partidas no duran tanto para que se llegue a esta instancia.
 </p>
 <p align="left"> 
 -En caso que ya no haya más opciones, procedo a mover o los reyes o los alfiles o los caballos. Si estamos en este punto asumo que no hay más reinas ni torres ni peones
 </p>
+<a href="https://github.com/agustinfiorde/MegaChess/blob/master/src/main/java/app/megachess/AI/Intelligence.java" target="_blank"><p align="left"> 
+**Para mayor entendimiento de lo mencionado anteriormente, recomiendo ver la siguiente clase, donde esta documentado con mayor nivel de detalle.
+</p></a>
 
 <h3 align="center">Desarrollo Logrado</h3>
 <p align="left"> 
