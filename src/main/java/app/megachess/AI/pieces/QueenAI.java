@@ -43,38 +43,6 @@ public class QueenAI extends Piece {
 			}
 		}
 
-//		// ir primero para abajo
-//		if (color.equals("white")) {
-//			if (evaluateTrajectoryToBot()) {
-//				return true;
-//			}
-//		} else {
-//			if (evaluateTrajectoryToTop()) {
-//				return true;
-//			}
-//		}
-//
-//		// sino ir a la derecha
-//		if (evaluateTrajectoryToRight()) {
-//			return true;
-//		}
-//
-//		// sino ir a la izquierda
-//		if (evaluateTrajectoryToLeft()) {
-//			return true;
-//		}
-//
-//		// sino ir para arriba
-//		if (color.equals("white")) {
-//			if (evaluateTrajectoryToTop()) {
-//				return true;
-//			}
-//		} else {
-//			if (evaluateTrajectoryToBot()) {
-//				return true;
-//			}
-//		}
-
 		return false;
 	}
 

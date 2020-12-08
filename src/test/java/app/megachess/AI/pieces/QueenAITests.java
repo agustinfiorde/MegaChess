@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import app.megachess.enums.Event;
+import app.megachess.models.DataMessage;
+import app.megachess.models.Message;
 import app.megachess.utils.ChessUtil;
 
 public class QueenAITests {
@@ -13,6 +16,22 @@ public class QueenAITests {
 	public String[][] boardLongTrajectory;
 	public String[][] boardNextTo;
 	public String[][] boardWithBlocks;
+	
+	public Message messageGenerator(String boardString) {
+
+		Message msj = new Message();
+		msj.setEvent(Event.YOUR_TURN.toString());
+		DataMessage msjData = new DataMessage();
+		msjData.setBoard_id("2d348323-2e79-4961-ac36-1b000e8c42a5");
+		msjData.setTurn_token("2d348323-2e79-4961-ac36-1b000e8token");
+		msjData.setUsername("fiordeX");
+		msjData.setActual_turn("white");
+		msjData.setBoard(boardString);
+		msjData.setMove_left(199);
+		msj.setData(msjData);
+
+		return msj;
+	}
 	
 	public void setPieceInBoard(String piece) {
 		
@@ -121,33 +140,151 @@ public class QueenAITests {
 	}
 	
 	@Test
-	public void assassinMissionLastLine() {
-				
-	}
-	
-	@Test
-	public void assassinMissionThirdLine() {
+	public void hide() {
+
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+							  "rrhhbbqqkkbbhhrr" + 
+							  "pppppppppppppppp" + 
+							  "pppppppppppppppp" + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "Q               " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP";
 		
-	}
-	
-	@Test
-	public void assassinMissionSecondLine() {
+		String board[][] =ChessUtil.getBoard(boardString);
+
+		QueenAI queen = generateQueen(new int[] {8,0}, board, "white");
+		// al estar a la izquierda, no puede ir mas a la izquierda
+		assertFalse(queen.hide());
 		
-	}
-	
-	@Test
-	public void assassinMissionFirstLine() {
 		
-	}
-	
-	@Test
-	public void murder() {
+
+		boardString = "rrhhbbqqkkbbhhrr" + 
+					  "rrhhbbqqkkbbhhrr" + 
+					  "pppppppppppppppp" + 
+					  "pppppppppppppppp" + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "QQ              " + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP";
 		
+		board =ChessUtil.getBoard(boardString);
+
+		queen = generateQueen(new int[] {8,0}, board, "white");
+		// al estar a la izquierda, no puede ir mas a la izquierda
+		assertFalse(queen.hide());
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "QQ             Q" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+	
+		board =ChessUtil.getBoard(boardString);
+	
+		queen = generateQueen(new int[] {8,15}, board, "white");
+		// al estar a la derecha puede ir a la izquierda
+		assertTrue(queen.hide());
 	}
 	
 	@Test
-	public void hunt() {
-	
+	public void canProceed() {
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "pp              " + 
+				  "Q               " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+
+		String board[][] =ChessUtil.getBoard(boardString);
+		
+		QueenAI queen = generateQueen(new int[] {8,0}, board, "white");
+		// al estar bloqueado, no puede avanzar
+		assertFalse(queen.canProceed());
+		
+		
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "ppp             " + 
+				  "QQ              " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+		
+		board =ChessUtil.getBoard(boardString);
+		
+		queen = generateQueen(new int[] {8,0}, board, "white");
+		// al estar desbloqueado puede avanzar
+		assertFalse(queen.canProceed());
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+			  "rrhhbbqqkkbbhhrr" + 
+			  "pppppppppppppppp" + 
+			  "pppppppppppppppp" + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "               Q" + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP";
+		
+		board =ChessUtil.getBoard(boardString);
+		
+		queen = generateQueen(new int[] {8,15}, board, "white");
+		// al estar a la derecha puede ir a la izquierda
+		assertTrue(queen.canProceed());
 	}
-	
 }

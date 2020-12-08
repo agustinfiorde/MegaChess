@@ -120,4 +120,153 @@ public class RookAITests {
 		
 	}
 	
+	@Test
+	public void hide() {
+
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+							  "rrhhbbqqkkbbhhrr" + 
+							  "pppppppppppppppp" + 
+							  "pppppppppppppppp" + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "R               " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP" + 
+							  "PPPPPPPPPPPPPPPP";
+		
+		String board[][] =ChessUtil.getBoard(boardString);
+
+		RookAI rook = generateRook(new int[] {8,0}, board, "white");
+		// al estar a la izquierda, no puede ir mas a la izquierda
+		assertFalse(rook.hide());
+		
+		
+
+		boardString = "rrhhbbqqkkbbhhrr" + 
+					  "rrhhbbqqkkbbhhrr" + 
+					  "pppppppppppppppp" + 
+					  "pppppppppppppppp" + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "QR              " + 
+					  "                " + 
+					  "                " + 
+					  "                " + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP" + 
+					  "PPPPPPPPPPPPPPPP";
+		
+		board =ChessUtil.getBoard(boardString);
+
+		rook = generateRook(new int[] {8,0}, board, "white");
+		// al estar a la izquierda, no puede ir mas a la izquierda
+		assertFalse(rook.hide());
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "QQ             R" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+	
+		board =ChessUtil.getBoard(boardString);
+	
+		rook = generateRook(new int[] {8,15}, board, "white");
+		// al estar a la derecha puede ir a la izquierda
+		assertTrue(rook.hide());
+	}
+	
+	@Test
+	public void canProceed() {
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "p               " + 
+				  "R               " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+
+		String board[][] =ChessUtil.getBoard(boardString);
+		
+		RookAI rook = generateRook(new int[] {8,0}, board, "white");
+		// al estar bloqueado, no puede avanzar
+		assertFalse(rook.canProceed());
+		
+		
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "pp              " + 
+				  "QR              " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP";
+		
+		board =ChessUtil.getBoard(boardString);
+		
+		rook = generateRook(new int[] {8,0}, board, "white");
+		// al estar desbloqueado puede avanzar
+		assertFalse(rook.canProceed());
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+			  "rrhhbbqqkkbbhhrr" + 
+			  "pppppppppppppppp" + 
+			  "pppppppppppppppp" + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "               R" + 
+			  "                " + 
+			  "                " + 
+			  "                " + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP" + 
+			  "PPPPPPPPPPPPPPPP";
+		
+		board =ChessUtil.getBoard(boardString);
+		
+		rook = generateRook(new int[] {8,15}, board, "white");
+		// al estar desbloqueado deberia devolver true
+		assertTrue(rook.canProceed());
+	}
+	
 }

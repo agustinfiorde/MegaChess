@@ -10,8 +10,8 @@ public class RookAI extends Piece {
 	}
 
 	public boolean hide() {
-		if (fromRow > 3 && fromRow < 12 && fromCol != 0) {
-			return evaluateTrajectoryToRight();
+		if (fromRow > 4 && fromRow < 11 && fromCol != 0) {
+			return evaluateTrajectoryToLeft();
 		}
 		return false;
 	}
@@ -35,65 +35,14 @@ public class RookAI extends Piece {
 	@Override
 	public boolean canProceed() {
 
-		int row = color.equals("white") ? 7 : 8;
+		int row = color.equals("white") ? 8 : 7;
 
-		if (fromRow != row) {
-
-			if (color.equals("white")) {
-				
-				evaluateTop();
-
-				if (toRow != null) {
-					if (toRow < row) {
-						setTo(row, fromCol);
-						return true;
-					}
-				}
-
-			} else {
-				evaluateBot();
-				
-				if (toRow != null) {
-					if (toRow < row) {
-						setTo(row, fromCol);
-						return true;
-					}
-				}
-
+		if (fromRow == row) {
+			if (ChessUtil.isEmpty(board, front, fromCol)) {
+				setTo(front, fromCol);
+				return true;
 			}
 		}
-
-//		// ir primero para abajo
-//		if (color.equals("white")) {
-//			if (evaluateTrajectoryToBot()) {
-//				return true;
-//			}
-//		} else {
-//			if (evaluateTrajectoryToTop()) {
-//				return true;
-//			}
-//		}
-//
-//		// sino ir a la derecha
-//		if (evaluateTrajectoryToRight()) {
-//			return true;
-//		}
-//
-//		// sino ir a la izquierda
-//		if (evaluateTrajectoryToLeft()) {
-//			return true;
-//		}
-//
-//		// sino ir para arriba
-//		if (color.equals("white")) {
-//			if (evaluateTrajectoryToTop()) {
-//				return true;
-//			}
-//		} else {
-//			if (evaluateTrajectoryToBot()) {
-//				return true;
-//			}
-//		}
 
 		return false;
 	}
