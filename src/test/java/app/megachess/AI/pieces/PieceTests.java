@@ -1,8 +1,6 @@
 package app.megachess.AI.pieces;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -527,26 +525,6 @@ public class PieceTests {
 		//es un casillero con un aliado, devuelve false
 		assertFalse(queen.evaluateQuadrant(8,8));
 	}
-	
-	@Test
-	public void targetToHunt() {
-		setPieceInBoard("Q");
-		
-		QueenAI queen = generateQueen(new int[] {7,7}, boardEmpty, "white");
-		//Como no existen enemigos devuelve null
-		assertEquals(null, queen.targetToHunt());
-		
-		queen = generateQueen(new int[] {7,7}, boardLongTrajectory, "white");
-		//como hay almenos un enemigo devuelve un Response **alejado de la posicion
-		assertNotEquals(null, queen.targetToHunt());
-		
-		queen = generateQueen(new int[] {7,7}, boardNextTo, "white");
-		//como hay almenos un enemigo devuelve un Response **proximo a la posicion
-		assertNotEquals(null, queen.targetToHunt());
-		
-		queen = generateQueen(new int[] {7,7}, boardWithBlocks, "white");
-		//como no existen enemigos pero si aliados devuelve null
-		assertEquals(null, queen.targetToHunt());
-	}
+
 	
 }

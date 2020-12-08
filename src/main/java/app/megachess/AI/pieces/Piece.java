@@ -1,7 +1,6 @@
 package app.megachess.AI.pieces;
 
 import app.megachess.enums.PieceDirection;
-import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
 import lombok.Data;
 
@@ -476,25 +475,4 @@ public abstract class Piece implements PieceAction {
 		return ChessUtil.isMyEnemy(board[row][col], color) ? true : false;
 	}
 
-	/**
-	 * targetToHunt se encarga de buscar una pieza que no este a la vista de ningun
-	 * defensor o atacante, con el objetivo de que alguna de mis piezas se aproxime
-	 * para comerla
-	 * 
-	 * @return
-	 */
-	protected Response targetToHunt() {
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (ChessUtil.isMyEnemy(board[i][j], color)) {
-					Response res = new Response();
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					return res;
-				}
-			}
-		}
-		return null;
-	}
 }

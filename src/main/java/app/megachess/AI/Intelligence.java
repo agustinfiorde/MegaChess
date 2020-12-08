@@ -16,7 +16,7 @@ import app.megachess.utils.Util;
 
 public class Intelligence {
 
-	private static List<Response> responses;
+//	private static List<Response> responses;
 	private static int fromRow = 0;
 	private static int fromCol = 0;
 	private static int toRow = 0;
@@ -26,39 +26,7 @@ public class Intelligence {
 	}
 
 	/**
-	 * evaluate, recibe el Message, lo descompone en objetos y variables utiles para
-	 * procesar
-	 * 
-	 * LISTA DE PASOS DE MI IA:
-	 * 
-	 * -si estamos ante el primer movimiento:
-	 * 
-	 * El objetivo para empezar es adelantar mis peones de la linea 9, con el fin de
-	 * liberar espacio en el fondo.
-	 * 
-	 * Mi plan de accion es implementar la estrategia de "Rey Bailarin", esta
-	 * consiste en mover el rey, ya que al moverlo me da 100 puntos. Las prioridades
-	 * estarasn explicadas a continuacion
-	 * 
-	 * -en los siguientes turnos mi orden de accion es el siguiente:
-	 * 
-	 * -DEFENDER CON TODAS LAS PIEZAS, ES DECIR EVALUAN SI TIENE AMENAZAS CERCA, EN
-	 * CASO DE SER REAL, COMEN PRIMERO ANTES DE SER COMIDOS. LOS PEONES SON LA
-	 * PRIMER LINEA DE DEFENZA
-	 * 
-	 * -MOVER EL REY SI ES QUE EN EL PASO ANTERIOR NO SE EVALUO AMENAZA
-	 * 
-	 * -VER SI TENGO DISPONIBLE UNA REINA ASESINA O UNA TORRE ASESINA. TOMAR LA QUE
-	 * PUEDA USAR Y LLEVARLA AL CUADRANTE ENEMIGO Y MANDARLA A MATAR PIEZAS
-	 * 
-	 * -SI NO HAY REINA ASESINA NI TORRE ASESINA, MOVER UN PEON HASTA QUE CORONE Y
-	 * SEA MI PROXIMA REINA ASESINA
-	 * 
-	 * -EN CASO QUE NADA DE ESTO SEA POSIBLE CABALLOS Y ALFILES TIENEN LA ORDEN DE
-	 * AVANZAR PARA JUNTAR PUNTOS E IR EN BUSCA DE ENEMIGOS
-	 * 
-	 * -BASICAMENTE LA ESTRATEGIA ES DEFENDER COMO PILAR FUNDAMENTAL, SI NO EXISTE
-	 * AMENAZA MOVER EL REY, CUANDO ESTO NO SEA POSIBLE. COMENZAR A ATACAR
+	 * TODO
 	 * 
 	 * @param msj
 	 * @return
@@ -69,16 +37,6 @@ public class Intelligence {
 		String[][] board = ChessUtil.getBoard(msjData.getBoard());
 		String color = msjData.getActual_turn();
 		String answer = null;
-
-		// KINGDANCER
-		answer = pawnActionToKingDancer(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		answer = bishopActionToKingDancer(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
 
 		// DEFENSA de peones
 		answer = pawnDefense(msj, board, color);
@@ -110,26 +68,19 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-		// MOVER reyes
-		answer = kingProceed(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// MOVER peones
-		answer = pawnResolver(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// torre ASESINA
-		answer = rookAction(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// reina ASESINA
+
+		// ACCION reinas
 		answer = queenAction(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
+
+		// MOVER peones en grupo
+		answer = pawnResolver(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+
 		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {
@@ -155,11 +106,9 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String queenDefense(Message msj, String[][] board, String color) {
-		if (color.equals("white")) {
-			responses = ChessUtil.getDefenderPiecesBot(board, "Q");
-		} else {
-			responses = ChessUtil.getDefenderPiecesTop(board, "q");
-		}
+
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "q", color);
+
 		QueenAI queen;
 		for (Response r : responses) {
 			queen = new QueenAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -185,11 +134,9 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String horseDefense(Message msj, String[][] board, String color) {
-		if (color.equals("white")) {
-			responses = ChessUtil.getDefenderPiecesBot(board, "H");
-		} else {
-			responses = ChessUtil.getDefenderPiecesTop(board, "h");
-		}
+
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "h", color);
+
 		HorseAI horse;
 		for (Response r : responses) {
 			horse = new HorseAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -215,11 +162,9 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String rookDefense(Message msj, String[][] board, String color) {
-		if (color.equals("white")) {
-			responses = ChessUtil.getDefenderPiecesBot(board, "R");
-		} else {
-			responses = ChessUtil.getDefenderPiecesTop(board, "r");
-		}
+
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "r", color);
+
 		RookAI rook;
 		for (Response r : responses) {
 			rook = new RookAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -245,11 +190,8 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String kingDefense(Message msj, String[][] board, String color) {
-		if (color.equals("white")) {
-			responses = ChessUtil.getDefenderPiecesBot(board, "K");
-		} else {
-			responses = ChessUtil.getDefenderPiecesTop(board, "k");
-		}
+
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
 			king = new KingAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -275,11 +217,8 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String bishopDefense(Message msj, String[][] board, String color) {
-		if (color.equals("white")) {
-			responses = ChessUtil.getDefenderPiecesBot(board, "B");
-		} else {
-			responses = ChessUtil.getDefenderPiecesTop(board, "b");
-		}
+
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
 		BishopAI bishop;
 		for (Response r : responses) {
 			bishop = new BishopAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
@@ -305,7 +244,7 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String pawnDefense(Message msj, String[][] board, String color) {
-		responses = ChessUtil.pawnsActives(board, color);
+		List<Response> responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -323,8 +262,7 @@ public class Intelligence {
 	/**
 	 * queenAction se encarga de recibir informacion real del juego y buscar la
 	 * reina posicionada mas proxima al tablero enemigo, si esta pieza no esta
-	 * bloqueda, debera cumplir su mision de asesinar a las piezas oponentes desde
-	 * adentro
+	 * bloqueda, debera cumplir su mision
 	 * 
 	 * @param msj
 	 * @param board
@@ -332,28 +270,24 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String queenAction(Message msj, String[][] board, String color) {
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "q", color);
 		QueenAI queen;
-		Response res;
-		res = null;
-		if (color.equals("white")) {
-			res = ChessUtil.topPossitionAssassin(board, "Q");
-		} else {
-			res = ChessUtil.botPossitionAssassin(board, "q");
-		}
-		if (res.isExist()) {
-			queen = new QueenAI(new int[] { res.getFromRow(), res.getFromCol() }, board, color);
-			if (queen.murder()) {
+		for (Response r : responses) {
+			queen = new QueenAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			if (queen.canProceed()) {
 				fromCol = queen.getFromCol();
 				toCol = queen.getToCol();
 				fromRow = queen.getFromRow();
 				toRow = queen.getToRow();
+
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
-			if (queen.hunt()) {
+			if (queen.hide()) {
 				fromCol = queen.getFromCol();
 				toCol = queen.getToCol();
 				fromRow = queen.getFromRow();
 				toRow = queen.getToRow();
+
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
 		}
@@ -361,56 +295,15 @@ public class Intelligence {
 	}
 
 	/**
-	 * rookAction se encarga de recibir informacion real del juego y buscar la torre
-	 * posicionada mas proxima al tablero enemigo, si esta pieza no esta bloqueda,
-	 * debera cumplir su mision de asesinar a las piezas oponentes desde adentro
+	 * pawnAction controla la accion a realizar por algun peon segun la situacion
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
 	 * @return
 	 */
-	public static String rookAction(Message msj, String[][] board, String color) {
-		RookAI rook;
-		Response res;
-		res = null;
-		if (color.equals("white")) {
-			res = ChessUtil.topPossitionAssassin(board, "R");
-		} else {
-			res = ChessUtil.botPossitionAssassin(board, "r");
-		}
-		if (res.isExist()) {
-			rook = new RookAI(new int[] { res.getFromRow(), res.getFromCol() }, board, color);
-			if (rook.murder()) {
-				fromCol = rook.getFromCol();
-				toCol = rook.getToCol();
-				fromRow = rook.getFromRow();
-				toRow = rook.getToRow();
-				return Util.move(msj, fromRow, fromCol, toRow, toCol);
-			}
-			if (rook.hunt()) {
-				fromCol = rook.getFromCol();
-				toCol = rook.getToCol();
-				fromRow = rook.getFromRow();
-				toRow = rook.getToRow();
-				return Util.move(msj, fromRow, fromCol, toRow, toCol);
-			}
-		}
-		return null;
-	}
+	public static String pawnAction(Message msj, String[][] board, String color, List<Response> responses) {
 
-	/**
-	 * pawnAction determina que el peon mas adelantado debera cumplir su mision de
-	 * llegar a coronar, asi se transforma en reina asesina
-	 * 
-	 * @param msj
-	 * @param board
-	 * @param color
-	 * @return
-	 */
-	public static String pawnAction(Message msj, String[][] board, String color) {
-
-		responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
 			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -426,10 +319,38 @@ public class Intelligence {
 	}
 
 	/**
-	 * Metodo de apertura del tablero para evitar estrategia implementada por el
-	 * jugador EnzoC. La funcion busca hacer avanzar a los peones en grupo, para
-	 * evitar que si una reina los intenta asesinar, estaran en grupo y se podran
-	 * defender mutuamente
+	 * progressBySector, hace avanzar lo peones de a grupos
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static String progressBySector(Message msj, String[][] board, int fromCol, int toCol, String color) {
+
+		List<Response> responses;
+
+		if (color.equals("white")) {
+			responses = ChessUtil.findPawnByBotSector(board, fromCol, toCol);
+		} else {
+			responses = ChessUtil.findPawnByTopSector(board, fromCol, toCol);
+		}
+
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color, responses);
+			if (answer != null) {
+				return answer;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * pawnResolver, evalua segun la situacion del tablero que hacer con el avance
+	 * de los grupos de peones
 	 * 
 	 * @param msj
 	 * @param board
@@ -438,89 +359,72 @@ public class Intelligence {
 	 */
 	public static String pawnResolver(Message msj, String[][] board, String color) {
 
-		// sector 1
-		if (color.equals("white")) {
-			fromCol = 15;
-			toCol = 14;
-			fromRow = 13;
-			toRow = 9;
-			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
-		} else {
-			fromCol = 14;
-			toCol = 15;
-			fromRow = 2;
-			toRow = 6;
-			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
-		}
+		String answer;
+		int fromCol;
+		int toCol;
 
-		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color);
-			if (answer != null) {
-				return answer;
-			}
+		// sector 1
+		fromCol = 3;
+		toCol = 2;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
 		// sector 2
-		if (color.equals("white")) {
-			fromCol = 1;
-			toCol = 0;
-			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
-		} else {
-			fromCol = 0;
-			toCol = 1;
-			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
-		}
-
-		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color);
-			if (answer != null) {
-				return answer;
-			}
+		fromCol = 13;
+		toCol = 12;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
 		// sector 3
-		if (color.equals("white")) {
-			fromCol = 7;
-			toCol = 5;
-			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
-		} else {
-			fromCol = 5;
-			toCol = 7;
-			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
-		}
-
-		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color);
-			if (answer != null) {
-				return answer;
-			}
+		fromCol = 11;
+		toCol = 10;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
 		// sector 4
-		if (color.equals("white")) {
-			fromCol = 10;
-			toCol = 8;
-			responses = ChessUtil.findPawnByBotSector(board, fromRow, fromCol, toRow, toCol);
-		} else {
-			fromCol = 8;
-			toCol = 10;
-			responses = ChessUtil.findPawnByTopSector(board, fromRow, fromCol, toRow, toCol);
+		fromCol = 5;
+		toCol = 4;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
-		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color);
-			if (answer != null) {
-				return answer;
-			}
+		// sector 5
+		fromCol = 1;
+		toCol = 0;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
-		responses = ChessUtil.pawnsActives(board, color);
+		// sector 6
+		fromCol = 15;
+		toCol = 14;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
+		}
 
-		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color);
-			if (answer != null) {
-				return answer;
-			}
+		// sector 7
+		fromCol = 7;
+		toCol = 6;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
+		}
+
+		// sector 8
+		fromCol = 9;
+		toCol = 8;
+		answer = progressBySector(msj, board, fromCol, toCol, color);
+		if (answer != null) {
+			return answer;
 		}
 
 		return null;
@@ -536,7 +440,7 @@ public class Intelligence {
 	 * @return
 	 */
 	public static String kingProceed(Message msj, String[][] board, String color) {
-		List<Response> responses = ChessUtil.getPiecesByColor(board, "k", color);
+		List<Response> responses = ChessUtil.getKingsByColor(board, "k", color);
 		KingAI king;
 		for (Response r : responses) {
 			king = new KingAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
@@ -596,77 +500,6 @@ public class Intelligence {
 				fromRow = horse.getFromRow();
 				toRow = horse.getToRow();
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * pawnActionToKingDancer, son los movimientos necesarios que tiene que realizar
-	 * los peones para abrir el tablero a implementar la estrategia de KingDancer
-	 * 
-	 * @param msj
-	 * @param board
-	 * @param color
-	 * @return
-	 */
-	public static String pawnActionToKingDancer(Message msj, String[][] board, String color) {
-
-		fromCol = 9;
-		toCol = 9;
-		int targetFirstLine;
-		int fromFirstLine;
-		int targetSecondLine;
-		int fromSecondLine;
-		String piece;
-
-		if (color.equals("white")) {
-			targetFirstLine = 11;
-			fromFirstLine = 12;
-			targetSecondLine = 12;
-			fromSecondLine = 13;
-			piece = "P";
-		} else {
-			targetFirstLine = 4;
-			fromFirstLine = 3;
-			targetSecondLine = 3;
-			fromSecondLine = 2;
-			piece = "p";
-		}
-
-		if (board[targetFirstLine][fromCol].equals(" ") && board[fromFirstLine][fromCol].equals(piece)) {
-			return Util.move(msj, fromFirstLine, fromCol, targetFirstLine, fromCol);
-		}
-		if (board[targetSecondLine][fromCol].equals(" ") && board[fromSecondLine][fromCol].equals(piece)) {
-			return Util.move(msj, fromSecondLine, fromCol, targetSecondLine, fromCol);
-		}
-		return null;
-	}
-
-	/**
-	 * bishopActionToKingDancer, es un movimiento que se hace unicamente para
-	 * liberar el espacio necesario para que el Rey implemente la estrategia de
-	 * Dancer.
-	 * 
-	 * @param msj
-	 * @param board
-	 * @param color
-	 * @return
-	 */
-	public static String bishopActionToKingDancer(Message msj, String[][] board, String color) {
-		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
-		BishopAI bishop;
-		for (Response r : responses) {
-			bishop = new BishopAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, true);
-			if (bishop.canProceed()) {
-				fromCol = bishop.getFromCol();
-				toCol = bishop.getToCol();
-				fromRow = bishop.getFromRow();
-				toRow = bishop.getToRow();
-
-				if (toCol != 10) {
-					return Util.move(msj, fromRow, fromCol, toRow, toCol);
-				}
 			}
 		}
 		return null;

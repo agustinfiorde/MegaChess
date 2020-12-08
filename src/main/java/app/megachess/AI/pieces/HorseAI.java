@@ -1,5 +1,7 @@
 package app.megachess.AI.pieces;
 
+import app.megachess.utils.ChessUtil;
+
 public class HorseAI extends Piece {
 
 	private int continuousFront;
@@ -76,7 +78,7 @@ public class HorseAI extends Piece {
 				}
 				if ((i == 1 && j == -2) || (i == 2 && j == -1) || (i == 1 && j == 2) || (i == 2 && j == 1)
 						|| (i == -1 && j == -2) || (i == -2 && j == -1) || (i == -1 && j == 2) || (i == -2 && j == 1)) {
-					if (evaluateQuadrant(y, x)) {
+					if (evaluateQuadrant(y, x) && !ChessUtil.isPawn(board, y, x, color)) {
 						setTo(y, x);
 						return true;
 					}

@@ -307,13 +307,13 @@ public class ChessUtil {
 		return null;
 	}
 
-	public static List<Response> findPawnByBotSector(String[][] board, int fromRow, int fromCol, int toRow, int toCol) {
+	public static List<Response> findPawnByBotSector(String[][] board, int fromCol, int toCol) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
 
-		for (int i = fromRow; i >= toRow; i--) {
+		for (int i = 15; i >= 8; i--) {
 			for (int j = fromCol; j >= toCol; j--) {
-				if (board[i][j].equals("P")) {
+				if ((board[i][j].toLowerCase()).equals("p")) {
 					res = new Response();
 					res.setExist(true);
 					res.setFromRow(i);
@@ -325,13 +325,13 @@ public class ChessUtil {
 		return responses;
 	}
 
-	public static List<Response> findPawnByTopSector(String[][] board, int fromRow, int fromCol, int toRow, int toCol) {
+	public static List<Response> findPawnByTopSector(String[][] board, int fromCol, int toCol) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
 
-		for (int i = fromRow; i <= toRow; i++) {
-			for (int j = fromCol; j <= toCol; j++) {
-				if (board[i][j].equals("p")) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = fromCol; j >= toCol; j--) {
+				if ((board[i][j].toLowerCase()).equals("p")) {
 					res = new Response();
 					res.setExist(true);
 					res.setFromRow(i);
@@ -360,6 +360,77 @@ public class ChessUtil {
 		System.out.println("                                    ");
 		System.out.println("++++++++++++++++++++++++++++++++++++");
 		System.out.println("                                    ");
+	}
+
+	/**
+	 * Evalua si la pieza es un peon
+	 * 
+	 * @param board
+	 * @param toRow
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static boolean isPawn(String[][] board, int toRow, int toCol, String color) {
+
+		String piece = color.equals("white") ? "p" : "P";
+
+		return board[toRow][toCol].equals(piece) ? true : false;
+
+	}
+
+	/**
+	 * getKingsByColor, obtiene los reyes del tablero en base al color
+	 * 
+	 * @param board
+	 * @param piece
+	 * @param color
+	 * @return
+	 */
+	public static List<Response> getKingsByColor(String[][] board, String piece, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		piece = color.equals("white") ? piece.toUpperCase() : piece.toLowerCase();
+
+		if (color.equals("white")) {
+			for (int i = 0; i < 16; i++) {
+				for (int j = 0; j < 16; j++) {
+					if (board[i][j].equals(piece)) {
+						res = new Response();
+						res.setExist(true);
+						res.setFromRow(i);
+						res.setFromCol(j);
+						responses.add(res);
+					}
+				}
+			}
+			return responses;
+		} else {
+			for (int i = 15; i >= 0; i--) {
+				for (int j = 15; j >= 0; j--) {
+					if (board[i][j].equals(piece)) {
+						res = new Response();
+						res.setExist(true);
+						res.setFromRow(i);
+						res.setFromCol(j);
+						responses.add(res);
+					}
+				}
+			}
+			return responses;
+		}
+	}
+
+	/**
+	 * isEmpty, evalua si una casilla esta vacia
+	 * 
+	 * @param board
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	public static boolean isEmpty(String[][] board, int row, int col) {
+		return board[row][col].equals(" ") ? true : false;
 	}
 
 }

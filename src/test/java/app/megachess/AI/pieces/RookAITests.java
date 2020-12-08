@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import app.megachess.enums.PieceDirection;
 import app.megachess.utils.ChessUtil;
 
 public class RookAITests {
@@ -121,104 +120,4 @@ public class RookAITests {
 		
 	}
 	
-	@Test
-	public void assassinMissionLastLine() {
-		
-		String boardString= "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "       R        " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr" + 
-						    "rrrrrrrrrrrrrrrr";
-	
-		String[][] board = ChessUtil.getBoard(boardString);
-		
-		setPieceInBoard("R");
-		
-		RookAI rook = generateRook(new int[] {7,7}, board, "white");
-		assertTrue(rook.assassinMissionLastLine(0, PieceDirection.TO_TOP));
-
-	}
-	
-	@Test
-	public void assassinMissionThirdLine() {
-
-	}
-	
-	@Test
-	public void assassinMissionSecondLine() {
-		
-	}
-	
-	@Test
-	public void assassinMissionFirstLine() {
-
-	}
-	
-	@Test
-	public void murder() {
-		
-	}
-	
-	@Test
-	public void hunt() {
-				
-		String boardString= "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "       R        " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "                " + 
-						    "       P        " + 
-						    "                " + 
-						    "                " + 
-						    "       r        ";
-	
-		String[][] board = ChessUtil.getBoard(boardString);
-		
-		RookAI rook = generateRook(new int[] {7,7}, board, "white");
-		//como hay un peon obstruyendo devuelve false
-//		assertFalse(rook.hunt());
-		
-		boardString= "                " + 
-				    "                " + 
-				    "       R        " + 
-				    "       q        " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "       r        " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "                " + 
-				    "                ";
-
-		board = ChessUtil.getBoard(boardString);
-
-		rook = generateRook(new int[] {7,7}, board, "white");
-		//como no hay obstruccion devuelve true
-//		assertTrue(rook.hunt());
-		
-
-	}
 }

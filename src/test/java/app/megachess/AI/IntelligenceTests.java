@@ -3,11 +3,14 @@ package app.megachess.AI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import app.megachess.enums.Event;
 import app.megachess.models.DataMessage;
 import app.megachess.models.Message;
+import app.megachess.models.Response;
 import app.megachess.utils.ChessUtil;
 
 public class IntelligenceTests {
@@ -369,55 +372,7 @@ public class IntelligenceTests {
 		// Ante una posibilidad de comer deberia retornar un JSON
 		assertNotEquals(null, Intelligence.pawnDefense(msj, board, color));
 	}
-	
-	@Test
-	public void rookAction() {
-		String boardString = "rrhhbbqqkkbbhhrr" + 
-						  "rrhhbbq kkbbhhrr" + 
-						  "ppppppp pppppppp" + 
-						  "ppppppp pppppppp" + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "QQQQQQQQ QQQQQQQ" + 
-						  "QQQQQQQQQQQQQQQQ" + 
-						  "       QRQ      " + 
-						  "QQQQQQQQQQQQQQQQ" + 
-						  "QQQQQQQQQQQQQQQQ";
-		Message msj = messageGenerator(boardString);
-		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
-		String color = msj.getData().getActual_turn();
 		
-		// Ante ninguna ninguna posibilidad para comer deberia retornar null
-		assertEquals(null, Intelligence.rookAction(msj, board, color));
-		
-		boardString = "rrhhbbqqkkbbhhrr" + 
-				  "rrhhbbqqkkbbhhrr" + 
-				  "pppppppppppppppp" + 
-				  "pppppppppppppppp" + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "QQQQQQQQ QQQQQQQ" + 
-				  "QQQQQQQQ QQQQQQQ" + 
-				  "q       R      q" + 
-				  "QQQQQQQQQQQQQQQQ" + 
-				  "QQQQQQQQqQQQQQQQ";
-		msj.getData().setBoard(boardString);
-		board = ChessUtil.getBoard(msj.getData().getBoard());
-		
-		// Ante una una posibilidad de comer deberia retornar un JSON
-		assertNotEquals(null, Intelligence.rookAction(msj, board, color));
-	}
-	
 	@Test
 	public void pawnAction() {
 		String boardString = "rrhhbbqqkkbbhhrr" + 
@@ -439,9 +394,12 @@ public class IntelligenceTests {
 		Message msj = messageGenerator(boardString);
 		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
 		String color = msj.getData().getActual_turn();
+		List<Response> responses = ChessUtil.findPawnByBotSector(board, 15, 0);
+		
 		
 		// Ante un bloqueo deberia retornar null
-		assertEquals(null, Intelligence.pawnAction(msj, board, color));
+		
+		assertEquals(null, Intelligence.pawnAction(msj, board, color, responses));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
 				  "rrhhbbqqkkbbhhrr" + 
@@ -454,16 +412,64 @@ public class IntelligenceTests {
 				  "                " + 
 				  "                " + 
 				  "                " + 
-				  "QQQQQQQQQPQQQQQQ" + 
+				  "                " + 
+				  "QQQQQQPQQQQQQQQQ" + 
 				  "QQQQQQQQQQQQQQQQ" + 
-				  "QQQQQQQQQPQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ";
+		msj.getData().setBoard(boardString);
+		board = ChessUtil.getBoard(msj.getData().getBoard());
+		
+		//Ante ningun bloqueo deberia retornar un JSON
+		assertNotEquals(null, Intelligence.pawnAction(msj, board, color, responses));
+	}
+	
+	@Test
+	public void progressBySector() {
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbq kkbbhhrr" + 
+				  "ppppppp pppppppp" + 
+				  "ppppppp pppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "qqqqqqqqqqqqqqqq" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ";
+		Message msj = messageGenerator(boardString);
+		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
+		String color = msj.getData().getActual_turn();
+		
+		// Ante un bloqueo deberia retornar null
+		assertEquals(null, Intelligence.progressBySector(msj, board, 15, 0, color));
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
 				  "QQQQQQQQQQQQQQQQ" + 
 				  "QQQQQQQQQQQQQQQQ";
 		msj.getData().setBoard(boardString);
 		board = ChessUtil.getBoard(msj.getData().getBoard());
 		
 		// Ante ningun bloqueo deberia retornar un JSON
-		assertNotEquals(null, Intelligence.pawnAction(msj, board, color));
+		assertNotEquals(null, Intelligence.progressBySector(msj, board, 15, 0, color));
 	}
 	
 	@Test
@@ -659,98 +665,51 @@ public class IntelligenceTests {
 	}
 	
 	@Test
-	public void pawnActionToKingDancer() {
+	public void queenAction() {
 		String boardString = "rrhhbbqqkkbbhhrr" + 
-						  "rrhhbbq kkbbhhrr" + 
-						  "ppppppp pppppppp" + 
-						  "ppppppp pppppppp" + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "         Q      " + 
-						  "PPPPPPPPPPPPPPPP" + 
-						  "PPPPPPPPPPPPPPPP" + 
-						  "QQQQQQQQQQQQQQQQ" + 
-						  "QQQQQQQQQQQQQQQQ";
+				  "rrhhbbq kkbbhhrr" + 
+				  "ppppppp pppppppp" + 
+				  "ppppppp pppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "Q               " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                ";
 		Message msj = messageGenerator(boardString);
 		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
 		String color = msj.getData().getActual_turn();
 		
-		// Ante un bloqueo deberia retornar null
-		assertEquals(null, Intelligence.pawnActionToKingDancer(msj, board, color));
+		// Ante libertad de avance deberia retornar algo distinto a null
+		assertNotEquals(null, Intelligence.queenAction(msj, board, color));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
 				  "rrhhbbqqkkbbhhrr" + 
 				  "pppppppppppppppp" + 
 				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "Q               " + 
 				  "                " + 
 				  "                " + 
 				  "                " + 
 				  "                " + 
 				  "                " + 
 				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "PPPPPPPPPPPPPPPP" + 
-				  "PPPPPPPPPPPPPPPP" + 
-				  "QQQQQQQQQQQQQQQQ" + 
-				  "QQQQQQQQQQQQQQQQ";
+				  "                ";
 		msj.getData().setBoard(boardString);
 		board = ChessUtil.getBoard(msj.getData().getBoard());
 		
 		// Ante ningun bloqueo deberia retornar un JSON
-		assertNotEquals(null, Intelligence.pawnActionToKingDancer(msj, board, color));
+		assertEquals(null, Intelligence.queenAction(msj, board, color));
 	}
 	
-	@Test
-	public void bishopActionToKingDancer() {
-		String boardString = "rrhhbbqqkkbbhhrr" + 
-						  "rrhhbbq kkbbhhrr" + 
-						  "ppppppp pppppppp" + 
-						  "ppppppp pppppppp" + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "                " + 
-						  "         P      " + 
-						  "PPPPPPPPPPPPPPPP" + 
-						  "PPPPPPPPPPPPPPPP" + 
-						  "QQQQQQQQQQBBQQQQ" + 
-						  "QQQQQQQQQQBBQQQQ";
-		Message msj = messageGenerator(boardString);
-		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
-		String color = msj.getData().getActual_turn();
-		
-		// Ante un bloqueo deberia retornar null
-		assertEquals(null, Intelligence.bishopActionToKingDancer(msj, board, color));
-		
-		boardString = "rrhhbbqqkkbbhhrr" + 
-				  "rrhhbbqqkkbbhhrr" + 
-				  "pppppppppppppppp" + 
-				  "pppppppppppppppp" + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "                " + 
-				  "         P      " + 
-				  "PPPPPPPPPPPPPPPP" + 
-				  "PPPPPPPPP PPPPPP" + 
-				  "QQQQQQQQQQBBQQQQ" + 
-				  "QQQQQQQQQQBBQQQQ";
-		msj.getData().setBoard(boardString);
-		board = ChessUtil.getBoard(msj.getData().getBoard());
-		
-		// Ante ningun bloqueo deberia retornar un JSON
-		assertNotEquals(null, Intelligence.bishopActionToKingDancer(msj, board, color));
-	}
 }

@@ -20,6 +20,28 @@ public class KingAI extends Piece {
 	@Override
 	public boolean canProceed() {
 
+		//ir primero para abajo
+		if (color.equals("white")) {
+			if (evaluateTrajectoryToBot()) {
+				return true;
+			}
+		} else {
+			if (evaluateTrajectoryToTop()) {
+				return true;
+			}
+		}
+		
+		//sino ir a la derecha
+		if (evaluateTrajectoryToRight()) {
+			return true;
+		}
+		
+		//sino ir a la izquierda
+		if (evaluateTrajectoryToLeft()) {
+			return true;
+		}
+				
+		//sino ir para arriba
 		if (color.equals("white")) {
 			if (evaluateTrajectoryToTop()) {
 				return true;
@@ -29,12 +51,7 @@ public class KingAI extends Piece {
 				return true;
 			}
 		}
-		if (evaluateTrajectoryToRight()) {
-			return true;
-		}
-		if (evaluateTrajectoryToLeft()) {
-			return true;
-		}
+		
 		return false;
 	}
 

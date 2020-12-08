@@ -2,6 +2,7 @@
 package app.megachess.AI.pieces;
 
 import app.megachess.enums.PieceDirection;
+import app.megachess.utils.ChessUtil;
 
 public class BishopAI extends Piece {
 
@@ -31,7 +32,7 @@ public class BishopAI extends Piece {
 
 		for (PieceDirection target : posibilities) {
 			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol)) {
+				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawn(board, toRow, toCol, color) ) {
 					return true;
 				}
 			}
