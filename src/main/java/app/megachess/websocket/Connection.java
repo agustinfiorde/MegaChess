@@ -38,7 +38,7 @@ public class Connection {
 	}
 
 	/*
-	 * start gestiona los mensajes recibidos por parte del socket, para determinar
+	 * start, gestiona los mensajes recibidos por parte del socket, para determinar
 	 * el accionar especifico en base a cada mensaje
 	 */
 	public void start() {
@@ -51,7 +51,7 @@ public class Connection {
 
 					Message message = Util.JSONToObject(msj);
 
-					// Solicitud de desafio && msj.contains("fiorde")
+					// Solicitud de desafio
 					if (msj.contains("ask_challenge")) {
 						clientEndPoint.sendMessage(Util.acceptChallenge(message.getData().getBoard_id()));
 					}
@@ -69,6 +69,10 @@ public class Connection {
 						}
 					}
 
+					// Game over
+					if (msj.contains("gameover")) {
+						System.out.println(Util.gameover(message));
+					}
 				}
 			});
 

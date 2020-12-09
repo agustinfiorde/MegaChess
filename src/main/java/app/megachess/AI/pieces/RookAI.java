@@ -9,6 +9,11 @@ public class RookAI extends Piece {
 		super(position, board, color);
 	}
 
+	/**
+	 * Este metodo sirve para arrinconar la pieza a la izquierda del tablero
+	 * 
+	 * @return
+	 */
 	public boolean hide() {
 		if (fromRow > 4 && fromRow < 11 && fromCol != 0) {
 			return evaluateTrajectoryToLeft();
@@ -24,7 +29,7 @@ public class RookAI extends Piece {
 
 		for (PieceDirection target : posibilities) {
 			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawn(board, toRow, toCol, color)) {
+				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
 					return true;
 				}
 			}
@@ -34,16 +39,30 @@ public class RookAI extends Piece {
 
 	@Override
 	public boolean canProceed() {
-
 		int row = color.equals("white") ? 8 : 7;
-
+		
 		if (fromRow == row) {
-			if (ChessUtil.isEmpty(board, front, fromCol)) {
-				setTo(front, fromCol);
-				return true;
+			return false;
+		}
+		if (fromRow < row) {
+			if (evaluateTrajectoryToBot()) {
+				if (toRow >= row) {
+					setTo(row, fromCol);
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} else {
+			if (evaluateTrajectoryToTop()) {
+				if (toRow <= row) {
+					setTo(row, fromCol);
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
-
 		return false;
 	}
 

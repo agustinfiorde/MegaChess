@@ -272,8 +272,8 @@ public class QueenAITests {
 			  "                " + 
 			  "                " + 
 			  "                " + 
-			  "               Q" + 
 			  "                " + 
+			  "               Q" + 
 			  "                " + 
 			  "                " + 
 			  "PPPPPPPPPPPPPPPP" + 
@@ -283,8 +283,8 @@ public class QueenAITests {
 		
 		board =ChessUtil.getBoard(boardString);
 		
-		queen = generateQueen(new int[] {8,15}, board, "white");
-		// al estar a la derecha puede ir a la izquierda
+		queen = generateQueen(new int[] {9,15}, board, "white");
+		// al poder avanzar devolvera true
 		assertTrue(queen.canProceed());
 	}
 }

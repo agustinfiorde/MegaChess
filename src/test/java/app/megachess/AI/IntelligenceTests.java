@@ -394,12 +394,12 @@ public class IntelligenceTests {
 		Message msj = messageGenerator(boardString);
 		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
 		String color = msj.getData().getActual_turn();
-		List<Response> responses = ChessUtil.findPawnByBotSector(board, 15, 0);
+		List<Response> responses = ChessUtil.findWhitePawnsGroupProgress(board, 15, 0, color);
 		
 		
 		// Ante un bloqueo deberia retornar null
 		
-		assertEquals(null, Intelligence.pawnAction(msj, board, color, responses));
+		assertEquals(null, Intelligence.pawnAction(msj, board, color, responses,true));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
 				  "rrhhbbqqkkbbhhrr" + 
@@ -421,11 +421,11 @@ public class IntelligenceTests {
 		board = ChessUtil.getBoard(msj.getData().getBoard());
 		
 		//Ante ningun bloqueo deberia retornar un JSON
-		assertNotEquals(null, Intelligence.pawnAction(msj, board, color, responses));
+		assertNotEquals(null, Intelligence.pawnAction(msj, board, color, responses, false));
 	}
 	
 	@Test
-	public void progressBySector() {
+	public void progressBySectorInGroup() {
 		String boardString = "rrhhbbqqkkbbhhrr" + 
 				  "rrhhbbq kkbbhhrr" + 
 				  "ppppppp pppppppp" + 
@@ -447,7 +447,7 @@ public class IntelligenceTests {
 		String color = msj.getData().getActual_turn();
 		
 		// Ante un bloqueo deberia retornar null
-		assertEquals(null, Intelligence.progressBySector(msj, board, 15, 0, color));
+		assertEquals(null, Intelligence.progressBySectorInGroup(msj, board, 15, 0, color, false));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
 				  "rrhhbbqqkkbbhhrr" + 
@@ -469,7 +469,7 @@ public class IntelligenceTests {
 		board = ChessUtil.getBoard(msj.getData().getBoard());
 		
 		// Ante ningun bloqueo deberia retornar un JSON
-		assertNotEquals(null, Intelligence.progressBySector(msj, board, 15, 0, color));
+		assertNotEquals(null, Intelligence.progressBySectorInGroup(msj, board, 15, 0, color, false));
 	}
 	
 	@Test
@@ -674,8 +674,8 @@ public class IntelligenceTests {
 				  "                " + 
 				  "                " + 
 				  "                " + 
-				  "Q               " + 
 				  "                " + 
+				  "Q               " + 
 				  "                " + 
 				  "                " + 
 				  "                " + 
@@ -708,8 +708,130 @@ public class IntelligenceTests {
 		msj.getData().setBoard(boardString);
 		board = ChessUtil.getBoard(msj.getData().getBoard());
 		
-		// Ante ningun bloqueo deberia retornar un JSON
+		// Ante un bloqueo deberia retornar null
 		assertEquals(null, Intelligence.queenAction(msj, board, color));
 	}
 	
+	@Test
+	public void progressBySectorDirectly() {
+		
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbq kkbbhhrr" + 
+				  "ppppppp pppppppp" + 
+				  "ppppppp pppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "qqqqqqqqqqqqqqqq" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ";
+		Message msj = messageGenerator(boardString);
+		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
+		String color = msj.getData().getActual_turn();
+		
+		// Ante un bloqueo deberia retornar null
+		assertEquals(null, Intelligence.progressBySectorDirectly(msj, board, 0, 15, color, false));
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ" + 
+				  "QQQQQQQQQQQQQQQQ";
+		msj.getData().setBoard(boardString);
+		board = ChessUtil.getBoard(msj.getData().getBoard());
+		
+		// Ante ningun bloqueo deberia retornar un JSON
+		assertNotEquals(null, Intelligence.progressBySectorDirectly(msj, board, 0, 15, color, false));
+		
+	}
+
+	@Test 
+	public void rookAction() {
+		
+		String boardString = "rrhhbbqqkkbbhhrr" + 
+							  "rrhhbbq kkbbhhrr" + 
+							  "ppppppp pppppppp" + 
+							  "ppppppp pppppppp" + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "R               " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                " + 
+							  "                ";
+		Message msj = messageGenerator(boardString);
+		String[][] board = ChessUtil.getBoard(msj.getData().getBoard());
+		String color = msj.getData().getActual_turn();
+		
+		// Ante libertad de avance deberia retornar algo distinto a null
+		assertNotEquals(null, Intelligence.rookAction(msj, board, color));
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbq kkbbhhrr" + 
+				  "ppppppp pppppppp" + 
+				  "ppppppp pppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "       R        " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                ";
+		msj = messageGenerator(boardString);
+		board = ChessUtil.getBoard(msj.getData().getBoard());
+		color = msj.getData().getActual_turn();
+		
+		// Ante la posibilidad de arrinconarse deberia retornar algo distinto a null
+		assertNotEquals(null, Intelligence.rookAction(msj, board, color));
+		
+		boardString = "rrhhbbqqkkbbhhrr" + 
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "R               " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                ";
+		msj.getData().setBoard(boardString);
+		board = ChessUtil.getBoard(msj.getData().getBoard());
+		
+		// Ante un bloqueo deberia retornar null
+		assertEquals(null, Intelligence.rookAction(msj, board, color));
+		
+	}
 }

@@ -32,7 +32,7 @@ public class BishopAI extends Piece {
 
 		for (PieceDirection target : posibilities) {
 			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawn(board, toRow, toCol, color) ) {
+				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color) ) {
 					return true;
 				}
 			}

@@ -16,7 +16,6 @@ import app.megachess.utils.Util;
 
 public class Intelligence {
 
-//	private static List<Response> responses;
 	private static int fromRow = 0;
 	private static int fromCol = 0;
 	private static int toRow = 0;
@@ -26,7 +25,26 @@ public class Intelligence {
 	}
 
 	/**
-	 * TODO
+	 * -Primero que nada evaluó si alguna de mis piezas puede comer alguna pieza del
+	 * enemigo que no sea un peón o caballos (**ya que si como un peón o caballo
+	 * expongo la pieza que fue a comerlo y no se justifica en cuanto a puntajes).
+	 *
+	 * -En caso que nadie pueda defender busco reinas para que hagan su misión de
+	 * avanzar a la casilla que se le ordeno, con el objetivo de ser soportes o que
+	 * se arrinconen a la izquierda (**va a ser el sector designado para esconder
+	 * las reinas y evitar que queden expuestas ante peones enemigos).
+	 *
+	 * -En caso que ninguna de mis piezas pueda comer y las reinas ya hayan cumplido
+	 * su misión, procedo con la estrategia de hacer avanzar los peones de a grupos
+	 * de 4 para que se protejan entre si hasta que lleguen a ser reinas. El avance
+	 * de los grupos tiene un orden establecido para evitar exponer las piezas más
+	 * importantes del fondo de mi tablero. Se empieza por algun extremo de las
+	 * torres, luego sector de caballos, luego alfiles y luego se avanza por el
+	 * sector del otro lado con la misma logica.
+	 *
+	 * -En caso que ya no haya más opciones, procedo a mover o los reyes o los
+	 * alfiles o los caballos. Si estamos en este punto asumo que no hay más reinas
+	 * ni torres ni peones
 	 * 
 	 * @param msj
 	 * @return
@@ -74,19 +92,22 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-
-		// MOVER peones en grupo
-		answer = pawnResolver(msj, board, color);
+		// ACCION torres
+		answer = rookAction(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
 
+		// MOVER peones
+		answer = pawnResolver(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
 		// MOVER reyes
 		answer = kingProceed(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
-
 		// MOVER alfiles
 		answer = bishopProceed(msj, board, color);
 		if (answer != null) {
@@ -253,7 +274,7 @@ public class Intelligence {
 		List<Response> responses = ChessUtil.pawnsActives(board, color);
 		PawnAI pawn;
 		for (Response r : responses) {
-			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, false);
 			if (pawn.canDefend()) {
 				fromCol = pawn.getFromCol();
 				toCol = pawn.getToCol();
@@ -301,6 +322,40 @@ public class Intelligence {
 	}
 
 	/**
+	 * queenAction se encarga de recibir informacion real del juego y buscar la
+	 * reina posicionada mas proxima al tablero enemigo, si esta pieza no esta
+	 * bloqueda, debera cumplir su mision
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static String rookAction(Message msj, String[][] board, String color) {
+		List<Response> responses = ChessUtil.getPiecesByColor(board, "r", color);
+		RookAI rook;
+		for (Response r : responses) {
+			rook = new RookAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			if (rook.canProceed()) {
+				fromCol = rook.getFromCol();
+				toCol = rook.getToCol();
+				fromRow = rook.getFromRow();
+				toRow = rook.getToRow();
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
+
+			if (rook.hide()) {
+				fromCol = rook.getFromCol();
+				toCol = rook.getToCol();
+				fromRow = rook.getFromRow();
+				toRow = rook.getToRow();
+				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * pawnAction controla la accion a realizar por algun peon segun la situacion
 	 * 
 	 * @param msj
@@ -308,11 +363,12 @@ public class Intelligence {
 	 * @param color
 	 * @return
 	 */
-	public static String pawnAction(Message msj, String[][] board, String color, List<Response> responses) {
+	public static String pawnAction(Message msj, String[][] board, String color, List<Response> responses,
+			boolean initialProceed) {
 
 		PawnAI pawn;
 		for (Response r : responses) {
-			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color);
+			pawn = new PawnAI(new int[] { r.getFromRow(), r.getFromCol() }, board, color, initialProceed);
 			if (pawn.canProceed()) {
 				fromCol = pawn.getFromCol();
 				toCol = pawn.getToCol();
@@ -325,7 +381,8 @@ public class Intelligence {
 	}
 
 	/**
-	 * progressBySector, hace avanzar lo peones de a grupos
+	 * progressBySector, hace avanzar lo peones de a grupos para evitar que se los
+	 * coman
 	 * 
 	 * @param msj
 	 * @param board
@@ -334,23 +391,50 @@ public class Intelligence {
 	 * @param color
 	 * @return
 	 */
-	public static String progressBySector(Message msj, String[][] board, int fromCol, int toCol, String color) {
-
+	public static String progressBySectorInGroup(Message msj, String[][] board, int fromCol, int toCol, String color,
+			boolean initialProceed) {
 		List<Response> responses;
-
 		if (color.equals("white")) {
-			responses = ChessUtil.findPawnByBotSector(board, fromCol, toCol);
+			responses = ChessUtil.findWhitePawnsGroupProgress(board, fromCol, toCol, color);
 		} else {
-			responses = ChessUtil.findPawnByTopSector(board, fromCol, toCol);
+			responses = ChessUtil.findBlackPawnsGroupProgress(board, fromCol, toCol, color);
 		}
-
 		if (!responses.isEmpty()) {
-			String answer = pawnAction(msj, board, color, responses);
+			String answer = pawnAction(msj, board, color, responses, initialProceed);
 			if (answer != null) {
 				return answer;
 			}
 		}
+		return null;
+	}
 
+	/**
+	 * progressBySectorDirectly, hace avanzar a los peones segun el orden especifico
+	 * en el cual se le mandan a la funcion. El objetivo es hacerlos avanzar de
+	 * forma directa
+	 * 
+	 * @param msj
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @param initialProceed
+	 * @return
+	 */
+	public static String progressBySectorDirectly(Message msj, String[][] board, int fromCol, int toCol, String color,
+			boolean initialProceed) {
+		List<Response> responses;
+		if (color.equals("white")) {
+			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
+		} else {
+			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
+		}
+		if (!responses.isEmpty()) {
+			String answer = pawnAction(msj, board, color, responses, initialProceed);
+			if (answer != null) {
+				return answer;
+			}
+		}
 		return null;
 	}
 
@@ -369,66 +453,63 @@ public class Intelligence {
 		int fromCol;
 		int toCol;
 
-		// sector 1
+		/*
+		 * initialProceed, condiciona si los peones avanzan a pasos cortos o largos, eso
+		 * depende si tienen soportes del equipo en el medio
+		 */
+		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 5
+				? true
+				: false;
+
+		// sector de Torres izquierda
+		fromCol = 0;
+		toCol = 1;
+		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
+		if (answer != null) {
+			return answer;
+		}
+
+		// sector Caballos izquierda
 		fromCol = 3;
 		toCol = 2;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
 		}
-
-		// sector 2
-		fromCol = 13;
-		toCol = 12;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
-		if (answer != null) {
-			return answer;
-		}
-
-		// sector 3
-		fromCol = 11;
-		toCol = 10;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
-		if (answer != null) {
-			return answer;
-		}
-
-		// sector 4
+		// sector Alfiles izquierda
 		fromCol = 5;
 		toCol = 4;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
 		}
 
-		// sector 5
-		fromCol = 1;
-		toCol = 0;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
+		// sector de Torres derecha
+		fromCol = 14;
+		toCol = 15;
+		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
 		if (answer != null) {
 			return answer;
 		}
 
-		// sector 6
+		// sector Caballos derecha
+		fromCol = 13;
+		toCol = 12;
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
+		if (answer != null) {
+			return answer;
+		}
+		// sector Alfiles derecha
 		fromCol = 15;
 		toCol = 14;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
 		}
-
-		// sector 7
+		// sector Reinas derecha
 		fromCol = 7;
 		toCol = 6;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
-		if (answer != null) {
-			return answer;
-		}
-
-		// sector 8
-		fromCol = 9;
-		toCol = 8;
-		answer = progressBySector(msj, board, fromCol, toCol, color);
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
 		}

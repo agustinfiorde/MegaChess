@@ -94,7 +94,7 @@ public class PawnAITests {
 	}
 
 	public PawnAI generatePawn(int[] position, String[][] board, String color) {
-		return new PawnAI(position, board, color);
+		return new PawnAI(position, board, color, false);
 	}
 	
 	@Test

@@ -253,8 +253,8 @@ public class RookAITests {
 			  "                " + 
 			  "                " + 
 			  "                " + 
-			  "               R" + 
 			  "                " + 
+			  "               R" + 
 			  "                " + 
 			  "                " + 
 			  "PPPPPPPPPPPPPPPP" + 
@@ -264,7 +264,7 @@ public class RookAITests {
 		
 		board =ChessUtil.getBoard(boardString);
 		
-		rook = generateRook(new int[] {8,15}, board, "white");
+		rook = generateRook(new int[] {9,15}, board, "white");
 		// al estar desbloqueado deberia devolver true
 		assertTrue(rook.canProceed());
 	}

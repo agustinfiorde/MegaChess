@@ -34,24 +34,6 @@ public class ChessUtil {
 	}
 
 	/**
-	 * rowIsClear, evalua si una fila especificada por argumento, esta libre de
-	 * enemigos
-	 * 
-	 * @param board
-	 * @param row
-	 * @param color
-	 * @return
-	 */
-	public static boolean rowIsClearOfEnemies(String[][] board, int row, String color) {
-		for (int i = 0; i < 16; i++) {
-			if (isMyEnemy(board[row][i], color)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * pawnsActives, genera una lista con todos los peones vivos de mi equipo.
 	 * 
 	 * Posee logica diferenciada, ya que en los negros empieza desde abajo hacia
@@ -104,27 +86,6 @@ public class ChessUtil {
 	}
 
 	/**
-	 * whitePawnFirstMove, evalua el movimiento del primero peon del equipo blanco.
-	 * 
-	 * @param board
-	 * @return
-	 */
-	public static Response whitePawnFirstMove(String[][] board) {
-		Response res = new Response();
-		for (int i = 0; i < 16; i++) {
-			if (board[10][i].equals("P")) {
-				res.setExist(true);
-				res.setFromRow(11);
-				res.setFromCol(i);
-				res.setPiece("P");
-				return res;
-			}
-		}
-		res.setExist(false);
-		return res;
-	}
-
-	/**
 	 * getPiecesByColor, busca todas las piezas segun su color y la pieza puntual
 	 * que quiero buscar
 	 * 
@@ -137,110 +98,6 @@ public class ChessUtil {
 		List<Response> responses = new ArrayList<>();
 		Response res;
 		piece = color.equals("white") ? piece.toUpperCase() : piece.toLowerCase();
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res = new Response();
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					responses.add(res);
-				}
-			}
-		}
-		return responses;
-	}
-
-	/**
-	 * topPossitionAssassin, empieza buscando desde arriba hacia abajo el asesino de
-	 * mi equipo,
-	 * 
-	 * ESTA FUNCION ES RECOMENDADA PARA EL JUGADOR BLANCO
-	 * 
-	 * @param board
-	 * @param piece
-	 * @return
-	 */
-	public static Response topPossitionAssassin(String[][] board, String piece) {
-		Response res = new Response();
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					return res;
-				}
-			}
-		}
-		res.setExist(false);
-		return res;
-	}
-
-	/**
-	 * botPossitionAssassin, empieza buscando desde abajo hacia arriba el asesino de
-	 * mi equipo,
-	 * 
-	 * ESTA FUNCION ES RECOMENDADA PARA EL JUGADOR NEGRO
-	 * 
-	 * @param board
-	 * @param piece
-	 * @return
-	 */
-	public static Response botPossitionAssassin(String[][] board, String piece) {
-		Response res = new Response();
-		for (int i = 15; i >= 0; i--) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					return res;
-				}
-			}
-		}
-		res.setExist(false);
-		return res;
-	}
-
-	/**
-	 * getDefenderPiecesBot, busca las piezas asignadas como potenciales defensores.
-	 * 
-	 * FUNCION RECOMENDADA PARA EL BLANCO
-	 * 
-	 * @param board
-	 * @param piece
-	 * @return
-	 */
-	public static List<Response> getDefenderPiecesBot(String[][] board, String piece) {
-		List<Response> responses = new ArrayList<>();
-		Response res;
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				if (board[i][j].equals(piece)) {
-					res = new Response();
-					res.setExist(true);
-					res.setFromRow(i);
-					res.setFromCol(j);
-					responses.add(res);
-				}
-			}
-		}
-		return responses;
-	}
-
-	/**
-	 * getDefenderPiecesTop, busca las piezas asignadas como potenciales defensores.
-	 * 
-	 * FUNCION RECOMENDADA PARA EL NEGRO
-	 * 
-	 * @param board
-	 * @param piece
-	 * @return
-	 */
-	public static List<Response> getDefenderPiecesTop(String[][] board, String piece) {
-		List<Response> responses = new ArrayList<>();
-		Response res;
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				if (board[i][j].equals(piece)) {
@@ -307,13 +164,24 @@ public class ChessUtil {
 		return null;
 	}
 
-	public static List<Response> findPawnByBotSector(String[][] board, int fromCol, int toCol) {
+	/**
+	 * Sirve para hacer avanzar los peones en grupo, la lectura es especifica para
+	 * ese avance
+	 * 
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static List<Response> findWhitePawnsGroupProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
+		String piece = color.equals("white") ? "P" : "p";
 
-		for (int i = 15; i >= 8; i--) {
+		for (int i = 15; i >= 0; i--) {
 			for (int j = fromCol; j >= toCol; j--) {
-				if ((board[i][j].toLowerCase()).equals("p")) {
+				if (board[i][j].equals(piece)) {
 					res = new Response();
 					res.setExist(true);
 					res.setFromRow(i);
@@ -325,13 +193,82 @@ public class ChessUtil {
 		return responses;
 	}
 
-	public static List<Response> findPawnByTopSector(String[][] board, int fromCol, int toCol) {
+	/**
+	 * Sirve para hacer avanzar los peones en grupo, la lectura es especifica para
+	 * ese avance
+	 * 
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static List<Response> findBlackPawnsGroupProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
 		Response res;
+		String piece = color.equals("white") ? "P" : "p";
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 16; i++) {
 			for (int j = fromCol; j >= toCol; j--) {
-				if ((board[i][j].toLowerCase()).equals("p")) {
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
+	}
+
+	/**
+	 * findBlackPawnsDirectProgress, busca los peones segun sector, para acomodarlos
+	 * en un orden de avance
+	 * 
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static List<Response> findBlackPawnsDirectProgress(String[][] board, int fromCol, int toCol, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		String piece = color.equals("white") ? "P" : "p";
+
+		for (int i = 15; i >= 0; i--) {
+			for (int j = fromCol; j <= toCol; j++) {
+				if (board[i][j].equals(piece)) {
+					res = new Response();
+					res.setExist(true);
+					res.setFromRow(i);
+					res.setFromCol(j);
+					responses.add(res);
+				}
+			}
+		}
+		return responses;
+	}
+
+	/**
+	 * findWhitePawnsDirectProgress, busca los peones segun sector, para acomodarlos
+	 * en un orden de avance
+	 * 
+	 * @param board
+	 * @param fromCol
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static List<Response> findWhitePawnsDirectProgress(String[][] board, int fromCol, int toCol, String color) {
+		List<Response> responses = new ArrayList<>();
+		Response res;
+		String piece = color.equals("white") ? "P" : "p";
+
+		for (int i = 0; i <= 15; i++) {
+			for (int j = fromCol; j <= toCol; j++) {
+				if (board[i][j].equals(piece)) {
 					res = new Response();
 					res.setExist(true);
 					res.setFromRow(i);
@@ -371,12 +308,23 @@ public class ChessUtil {
 	 * @param color
 	 * @return
 	 */
-	public static boolean isPawn(String[][] board, int toRow, int toCol, String color) {
-
+	public static boolean isPawnEnemy(String[][] board, int toRow, int toCol, String color) {
 		String piece = color.equals("white") ? "p" : "P";
-
 		return board[toRow][toCol].equals(piece) ? true : false;
+	}
 
+	/**
+	 * Evalua si la pieza es un caballo
+	 * 
+	 * @param board
+	 * @param toRow
+	 * @param toCol
+	 * @param color
+	 * @return
+	 */
+	public static boolean isHorseEnemy(String[][] board, int toRow, int toCol, String color) {
+		String piece = color.equals("white") ? "h" : "H";
+		return board[toRow][toCol].equals(piece) ? true : false;
 	}
 
 	/**
@@ -431,6 +379,46 @@ public class ChessUtil {
 	 */
 	public static boolean isEmpty(String[][] board, int row, int col) {
 		return board[row][col].equals(" ") ? true : false;
+	}
+
+	/**
+	 * Cuenta las reinas en el medio
+	 * 
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static int countQueenInMid(String[][] board, String color) {
+		String piece = color.equals("white") ? "Q" : "q";
+		int number = 0;
+		for (int i = 5; i < 10; i++) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
+					number++;
+				}
+			}
+		}
+		return number;
+	}
+
+	/**
+	 * Cuenta las torres en el medio
+	 * 
+	 * @param board
+	 * @param color
+	 * @return
+	 */
+	public static int countRookInMid(String[][] board, String color) {
+		String piece = color.equals("white") ? "R" : "r";
+		int number = 0;
+		for (int i = 5; i < 10; i++) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
+					number++;
+				}
+			}
+		}
+		return number;
 	}
 
 }

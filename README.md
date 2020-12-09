@@ -3,13 +3,13 @@
 
 <h3 align="center">Estrategia Planteada</h3>
 <p align="left"> 
--Primero que nada evaluó si alguna de mis piezas puede comer alguna pieza del enemigo que no sea un peón (**ya que si como un peón expongo la pieza que fue a comerlo y no se justifica en cuanto a puntajes).
+-Primero que nada evaluó si alguna de mis piezas puede comer alguna pieza del enemigo que no sea un peón o caballo (**ya que si como un peón o caballo expongo la pieza que fue a comerlo y no se justifica en cuanto a puntajes).
 </p>
 <p align="left"> 
--En caso que nadie pueda defender busco reinas para que hagan su misión de avanzar una casilla para adelante, con el objetivo de esperar que otros peones coronen o que se arrinconen a la izquierda (**va a ser el sector designado para esconder las reinas y evitar que queden expuestas ante peones enemigos).
+-En caso que nadie pueda defender busco reinas para que hagan su misión de avanzar al medio, con el objetivo de ser soporte de las demas piezas o que se arrinconen a la izquierda (**va a ser el sector designado para esconder las reinas y evitar que queden expuestas ante peones enemigos).
 </p>
 <p align="left"> 
--En caso que ninguna de mis piezas pueda comer y las reinas ya hayan cumplido su misión o no existan reinas en el medio del tablero, procedo con la estrategia de hacer avanzar los peones de a grupos de 4 para que se protejan entre si hasta que lleguen a ser reinas. El avance de los grupos tiene un orden establecido para evitar exponer las piezas más importantes del fondo de mi tablero. Primero avanza uno de los grupos de peones de los caballos, luego el otro, luego un grupo de los alfiles, luego el otro, luego las torres, luego los de las reinas y finalmente el grupo de los reyes. Por lo general las partidas no duran tanto para que se llegue a esta instancia.
+-En caso que ninguna de mis piezas pueda comer y las reinas ya hayan cumplido su misión o no existan reinas en el medio del tablero, procedo con la estrategia de hacer avanzar los peones de a grupos de 4 para que se protejan entre si hasta que lleguen a ser reinas. El avance de los grupos tiene un orden establecido para evitar exponer las piezas más importantes del fondo de mi tablero. Primero avanzan 4 peones que esten frente a las torres, luego los de los caballos, luego lo de los alfiles, luego el lado opuesto del tablero y finalmente saco los peones de frente a las reinas.
 </p>
 <p align="left"> 
 -En caso que ya no haya más opciones, procedo a mover o los reyes o los alfiles o los caballos. Si estamos en este punto asumo que no hay más reinas ni torres ni peones

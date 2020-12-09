@@ -78,7 +78,7 @@ public class HorseAI extends Piece {
 				}
 				if ((i == 1 && j == -2) || (i == 2 && j == -1) || (i == 1 && j == 2) || (i == 2 && j == 1)
 						|| (i == -1 && j == -2) || (i == -2 && j == -1) || (i == -1 && j == 2) || (i == -2 && j == 1)) {
-					if (evaluateQuadrant(y, x) && !ChessUtil.isPawn(board, y, x, color)) {
+					if (evaluateQuadrant(y, x) && !ChessUtil.isPawnEnemy(board, y, x, color)) {
 						setTo(y, x);
 						return true;
 					}
