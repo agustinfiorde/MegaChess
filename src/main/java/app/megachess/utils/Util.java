@@ -16,10 +16,11 @@ import app.megachess.models.Message;
 public class Util {
 
 	/**
-	 * objectToJSON, toma un Objeto para convertirlo en un String con formato JSON
+	 * objectToJSON, toma un Objeto Message para convertirlo en un String con
+	 * formato JSON
 	 * 
 	 * @param obj
-	 * @return
+	 * @return JSON
 	 */
 	public static String objectToJSON(Message obj) {
 		Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -28,9 +29,10 @@ public class Util {
 
 	/**
 	 * JSONToObject toma un String con formato JSON para convertirlo en un Objeto
+	 * Message
 	 * 
 	 * @param json
-	 * @return
+	 * @return Objeto Message
 	 */
 	public static Message JSONToObject(String json) {
 		Gson GSON = new GsonBuilder().serializeNulls().create();
@@ -41,7 +43,7 @@ public class Util {
 	 * getConnectedUsers, arma un JSON para solicitar los usuarios conectados, para
 	 * mas informacion ver la documentacion del WebSocket
 	 * 
-	 * @return
+	 * @return JSON
 	 */
 	public static String getConnectedUsers() {
 		Message msj = new Message();
@@ -57,7 +59,7 @@ public class Util {
 	 * WebSocket
 	 * 
 	 * @param oponent
-	 * @return
+	 * @return JSON
 	 */
 	public static String challenge(String oponent) {
 		Message msj = new Message();
@@ -75,7 +77,7 @@ public class Util {
 	 * la documentacion del WebSocket
 	 * 
 	 * @param board_id
-	 * @return
+	 * @return JSON
 	 */
 	public static String acceptChallenge(String board_id) {
 		Message msj = new Message();
@@ -87,13 +89,11 @@ public class Util {
 	}
 
 	/**
-	 * gameover, arma un JSON para mostrar por consola que la partida ya termino.
-	 * **** este metodo daria pie a persistir los datos si en un futuro se desea
-	 * conectar la app con una base de datos, para mas informacion ver la
-	 * documentacion del WebSocket
+	 * gameover, arma un JSON para mostrar por consola que la partida ya termino,
+	 * para mas informacion ver la documentacion del WebSocket
 	 * 
 	 * @param req
-	 * @return
+	 * @return JSON
 	 */
 	public static String gameover(Message req) {
 
@@ -112,7 +112,7 @@ public class Util {
 	 * @param fromCol
 	 * @param toRow
 	 * @param toCol
-	 * @return
+	 * @return JSON
 	 */
 	public static String move(Message req, int fromRow, int fromCol, int toRow, int toCol) {
 		Message msj = new Message();

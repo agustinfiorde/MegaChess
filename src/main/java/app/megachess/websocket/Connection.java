@@ -2,7 +2,6 @@ package app.megachess.websocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 import app.megachess.AI.Intelligence;
 import app.megachess.models.Message;
@@ -26,7 +25,7 @@ public class Connection {
 		start();
 	}
 
-	/**
+	/*
 	 * Genera la URL en base a los atributos de la clase
 	 */
 	private void setURL() {
@@ -44,7 +43,6 @@ public class Connection {
 	public void start() {
 
 		try {
-
 			clientEndPoint = new WebSocketClient(new URI(url));
 			clientEndPoint.addMessageHandler(new WebSocketClient.MessageHandler() {
 				public void handleMessage(String msj) {
@@ -60,13 +58,9 @@ public class Connection {
 					if (msj.contains("your_turn")) {
 
 						ChessUtil.showBoard(message.getData().getBoard());
-						try {
-							TimeUnit.MILLISECONDS.sleep(150);
-							String res = Intelligence.evaluate(message);
-							clientEndPoint.sendMessage(res);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						String res = Intelligence.evaluate(message);
+						clientEndPoint.sendMessage(res);
+
 					}
 
 					// Game over

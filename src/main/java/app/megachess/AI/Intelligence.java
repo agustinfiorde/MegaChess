@@ -47,7 +47,7 @@ public class Intelligence {
 	 * ni torres ni peones
 	 * 
 	 * @param msj
-	 * @return
+	 * @return JSON o ""
 	 */
 	public static String evaluate(Message msj) {
 
@@ -124,13 +124,12 @@ public class Intelligence {
 
 	/**
 	 * queenDefense se encarga de recibir la informacion real del juego y procesar
-	 * un mensaje de respuesta si alguna reina tiene que defender, es decir si esta
-	 * en peligro
+	 * un mensaje de respuesta si alguna reina puede defender.
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String queenDefense(Message msj, String[][] board, String color) {
 
@@ -152,13 +151,12 @@ public class Intelligence {
 
 	/**
 	 * horseDefense se encarga de recibir la informacion real del juego y procesar
-	 * un mensaje de respuesta si algun caballo tiene que defender, es decir si esta
-	 * en peligro
+	 * un mensaje de respuesta si algun caballo puede defender
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String horseDefense(Message msj, String[][] board, String color) {
 
@@ -180,13 +178,12 @@ public class Intelligence {
 
 	/**
 	 * rookDefense se encarga de recibir la informacion real del juego y procesar un
-	 * mensaje de respuesta si alguna torre tiene que defender, es decir si esta en
-	 * peligro
+	 * mensaje de respuesta si alguna torre puede defender.
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String rookDefense(Message msj, String[][] board, String color) {
 
@@ -208,13 +205,12 @@ public class Intelligence {
 
 	/**
 	 * kingDefense se encarga de recibir la informacion real del juego y procesar un
-	 * mensaje de respuesta si algun rey tiene que defender, es decir si esta en
-	 * peligro
+	 * mensaje de respuesta si algun rey puede defender
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String kingDefense(Message msj, String[][] board, String color) {
 
@@ -235,13 +231,12 @@ public class Intelligence {
 
 	/**
 	 * bishopDefense se encarga de recibir la informacion real del juego y procesar
-	 * un mensaje de respuesta si algun alfil tiene que defender, es decir si esta
-	 * en peligro
+	 * un mensaje de respuesta si algun alfil puede defender
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String bishopDefense(Message msj, String[][] board, String color) {
 
@@ -262,13 +257,12 @@ public class Intelligence {
 
 	/**
 	 * pawnDefense se encarga de recibir la informacion real del juego y procesar un
-	 * mensaje de respuesta si algun peon tiene que defender, es decir si esta en
-	 * peligro y puede comer
+	 * mensaje de respuesta si algun peon puede defender
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String pawnDefense(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.pawnsActives(board, color);
@@ -289,12 +283,13 @@ public class Intelligence {
 	/**
 	 * queenAction se encarga de recibir informacion real del juego y buscar la
 	 * reina posicionada mas proxima al tablero enemigo, si esta pieza no esta
-	 * bloqueda, debera cumplir su mision
+	 * bloqueda debera cumplir alguna de sus dos misiones (ir al medio o esconderse
+	 * en la izquierda).
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String queenAction(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "q", color);
@@ -322,14 +317,14 @@ public class Intelligence {
 	}
 
 	/**
-	 * queenAction se encarga de recibir informacion real del juego y buscar la
-	 * reina posicionada mas proxima al tablero enemigo, si esta pieza no esta
-	 * bloqueda, debera cumplir su mision
+	 * rookAction se encarga de recibir informacion real del juego y buscar la torre
+	 * libre, si esta pieza no esta bloqueda debera cumplir alguna de sus dos
+	 * misiones (ir al medio o esconderse en la izquierda).
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String rookAction(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "r", color);
@@ -361,7 +356,7 @@ public class Intelligence {
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String pawnAction(Message msj, String[][] board, String color, List<Response> responses,
 			boolean initialProceed) {
@@ -381,15 +376,15 @@ public class Intelligence {
 	}
 
 	/**
-	 * progressBySector, hace avanzar lo peones de a grupos para evitar que se los
-	 * coman
+	 * progressBySector, hace avanzar lo peones como grupo para evitar que se puedan
+	 * defender unos a los otros
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param fromCol
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String progressBySectorInGroup(Message msj, String[][] board, int fromCol, int toCol, String color,
 			boolean initialProceed) {
@@ -419,15 +414,17 @@ public class Intelligence {
 	 * @param toCol
 	 * @param color
 	 * @param initialProceed
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String progressBySectorDirectly(Message msj, String[][] board, int fromCol, int toCol, String color,
 			boolean initialProceed) {
 		List<Response> responses;
 		if (color.equals("white")) {
-			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
-		} else {
+//			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
 			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
+		} else {
+//			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
+			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
 		}
 		if (!responses.isEmpty()) {
 			String answer = pawnAction(msj, board, color, responses, initialProceed);
@@ -439,13 +436,13 @@ public class Intelligence {
 	}
 
 	/**
-	 * pawnResolver, evalua segun la situacion del tablero que hacer con el avance
-	 * de los grupos de peones
+	 * pawnResolver, evalua segun la situacion del tablero para determinar que
+	 * desicion tomar para el avance de los peones
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String pawnResolver(Message msj, String[][] board, String color) {
 
@@ -457,11 +454,11 @@ public class Intelligence {
 		 * initialProceed, condiciona si los peones avanzan a pasos cortos o largos, eso
 		 * depende si tienen soportes del equipo en el medio
 		 */
-		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 5
+		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 3
 				? true
 				: false;
-
-		// sector de Torres izquierda
+		
+		// sector de Torres izquierda col 0
 		fromCol = 0;
 		toCol = 1;
 		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
@@ -469,6 +466,14 @@ public class Intelligence {
 			return answer;
 		}
 
+		// sector de Torres derecha col 15
+		fromCol = 14;
+		toCol = 15;
+		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
+		if (answer != null) {
+			return answer;
+		}
+		
 		// sector Caballos izquierda
 		fromCol = 3;
 		toCol = 2;
@@ -476,18 +481,11 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
+
 		// sector Alfiles izquierda
 		fromCol = 5;
 		toCol = 4;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
-		if (answer != null) {
-			return answer;
-		}
-
-		// sector de Torres derecha
-		fromCol = 14;
-		toCol = 15;
-		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
 		if (answer != null) {
 			return answer;
 		}
@@ -499,6 +497,7 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
+
 		// sector Alfiles derecha
 		fromCol = 15;
 		toCol = 14;
@@ -506,7 +505,8 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-		// sector Reinas derecha
+		
+		// sector Reinas
 		fromCol = 7;
 		toCol = 6;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
@@ -518,13 +518,13 @@ public class Intelligence {
 	}
 
 	/**
-	 * kingProceed, llama al rey disponible para empezar a moverlo en el mapa. de
-	 * esta manera podra hacer puntos. Complemento de la estrategia KingDancer
+	 * kingProceed, llama al rey disponible para empezar a moverlo en el mapa. De
+	 * esta manera podra hacer puntos.
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String kingProceed(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.getKingsByColor(board, "k", color);
@@ -543,13 +543,14 @@ public class Intelligence {
 	}
 
 	/**
-	 * bishopProceed, llama al alfil disponible para empezar a hacerlo avanzar, de
-	 * esta manera podra cazar o hacer puntos por el simple hecho de moverse
+	 * bishopProceed, llama al alfil disponible para empezar a hacerlo avanzar. De
+	 * esta manera podra avanzar para ver si come o hacer puntos por el simple hecho
+	 * de moverse
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return JSON o null
 	 */
 	public static String bishopProceed(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "b", color);
@@ -569,12 +570,13 @@ public class Intelligence {
 
 	/**
 	 * horseProceed, llama al caballo disponible para empezar a hacerlo avanzar, de
-	 * esta manera podra cazar o hacer puntos por el simple hecho de moverse
+	 * esta manera podra buscar piezas para comer o hacer puntos por el simple hecho
+	 * de moverse
 	 * 
 	 * @param msj
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return respuesta en JSON o null
 	 */
 	public static String horseProceed(Message msj, String[][] board, String color) {
 		List<Response> responses = ChessUtil.getPiecesByColor(board, "h", color);

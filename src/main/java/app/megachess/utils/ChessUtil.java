@@ -14,10 +14,27 @@ import app.megachess.models.Response;
 public class ChessUtil {
 
 	/**
+	 * evalua si la fila esta libre de enemigos
+	 * 
+	 * @param board
+	 * @param row
+	 * @param color
+	 * @return true or false
+	 */
+	public static boolean rowIsClearOfEnemies(String[][] board, int row, String color) {
+		for (int i = 0; i < 16; i++) {
+			if (isMyEnemy(board[row][i], color)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * isWhite, evalua si determinada pieza es blanca
 	 * 
 	 * @param character
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isWhite(String character) {
 		return Character.isUpperCase(character.charAt(0));
@@ -27,7 +44,7 @@ public class ChessUtil {
 	 * isBlack, evalua si determinada pieza es negra
 	 * 
 	 * @param character
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isBlack(String character) {
 		return Character.isLowerCase(character.charAt(0));
@@ -41,7 +58,7 @@ public class ChessUtil {
 	 * 
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> pawnsActives(String[][] board, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -92,7 +109,7 @@ public class ChessUtil {
 	 * @param board
 	 * @param piece
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> getPiecesByColor(String[][] board, String piece, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -118,7 +135,7 @@ public class ChessUtil {
 	 * 
 	 * @param piece
 	 * @param myColor
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isMyTeam(String piece, String myColor) {
 		if (myColor.equals("white")) {
@@ -134,7 +151,7 @@ public class ChessUtil {
 	 * 
 	 * @param piece
 	 * @param myColor
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isMyEnemy(String piece, String myColor) {
 		if (myColor.equals("white")) {
@@ -148,7 +165,7 @@ public class ChessUtil {
 	 * getBoard, arma en base a un String una matriz del tablero
 	 * 
 	 * @param arg
-	 * @return
+	 * @return tablero en forma de matriz
 	 */
 	public static String[][] getBoard(String arg) {
 		if (arg.length() == 256) {
@@ -165,14 +182,14 @@ public class ChessUtil {
 	}
 
 	/**
-	 * Sirve para hacer avanzar los peones en grupo, la lectura es especifica para
-	 * ese avance
+	 * Sirve para buscar los peones, lectura para hacerlos avanzar en grupo, la
+	 * lectura es especifica para ese avance
 	 * 
 	 * @param board
 	 * @param fromCol
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> findWhitePawnsGroupProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -194,14 +211,14 @@ public class ChessUtil {
 	}
 
 	/**
-	 * Sirve para hacer avanzar los peones en grupo, la lectura es especifica para
-	 * ese avance
+	 * Sirve para buscar los peones, lectura para hacerlos avanzar en grupo, la
+	 * lectura es especifica para ese avance
 	 * 
 	 * @param board
 	 * @param fromCol
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> findBlackPawnsGroupProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -230,7 +247,7 @@ public class ChessUtil {
 	 * @param fromCol
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> findBlackPawnsDirectProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -259,7 +276,7 @@ public class ChessUtil {
 	 * @param fromCol
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> findWhitePawnsDirectProgress(String[][] board, int fromCol, int toCol, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -281,8 +298,7 @@ public class ChessUtil {
 	}
 
 	/**
-	 * showBoard, Sirve para visualizar en una terminal el tablero en forma de
-	 * matriz
+	 * showBoard, Sirve para visualizar en terminal el tablero en forma de matriz
 	 * 
 	 * @param rowBoard
 	 */
@@ -306,7 +322,7 @@ public class ChessUtil {
 	 * @param toRow
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isPawnEnemy(String[][] board, int toRow, int toCol, String color) {
 		String piece = color.equals("white") ? "p" : "P";
@@ -320,7 +336,7 @@ public class ChessUtil {
 	 * @param toRow
 	 * @param toCol
 	 * @param color
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isHorseEnemy(String[][] board, int toRow, int toCol, String color) {
 		String piece = color.equals("white") ? "h" : "H";
@@ -333,7 +349,7 @@ public class ChessUtil {
 	 * @param board
 	 * @param piece
 	 * @param color
-	 * @return
+	 * @return Lista de Response, ver modelo Response
 	 */
 	public static List<Response> getKingsByColor(String[][] board, String piece, String color) {
 		List<Response> responses = new ArrayList<>();
@@ -375,7 +391,7 @@ public class ChessUtil {
 	 * @param board
 	 * @param row
 	 * @param col
-	 * @return
+	 * @return true or false
 	 */
 	public static boolean isEmpty(String[][] board, int row, int col) {
 		return board[row][col].equals(" ") ? true : false;
@@ -386,7 +402,7 @@ public class ChessUtil {
 	 * 
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return cantidad de reinas
 	 */
 	public static int countQueenInMid(String[][] board, String color) {
 		String piece = color.equals("white") ? "Q" : "q";
@@ -406,7 +422,7 @@ public class ChessUtil {
 	 * 
 	 * @param board
 	 * @param color
-	 * @return
+	 * @return cantidad de torres
 	 */
 	public static int countRookInMid(String[][] board, String color) {
 		String piece = color.equals("white") ? "R" : "r";
