@@ -59,7 +59,7 @@ public class Connection {
 					if (msj.contains("your_turn")) {
 
 						try {
-							TimeUnit.MILLISECONDS.sleep(300);
+							TimeUnit.MILLISECONDS.sleep(400);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

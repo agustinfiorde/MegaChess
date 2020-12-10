@@ -328,6 +328,20 @@ public class ChessUtil {
 		String piece = color.equals("white") ? "p" : "P";
 		return board[toRow][toCol].equals(piece) ? true : false;
 	}
+	
+	/**
+	 * Evalua si la pieza es una reina enemiga
+	 * 
+	 * @param board
+	 * @param toRow
+	 * @param toCol
+	 * @param color
+	 * @return true or false
+	 */
+	public static boolean isQueenEnemy(String[][] board, int toRow, int toCol, String color) {
+		String piece = color.equals("white") ? "q" : "Q";
+		return board[toRow][toCol].equals(piece) ? true : false;
+	}
 
 	/**
 	 * Evalua si la pieza es un caballo
@@ -406,6 +420,19 @@ public class ChessUtil {
 	 */
 	public static int countQueenInMid(String[][] board, String color) {
 		String piece = color.equals("white") ? "Q" : "q";
+		int number = 0;
+		for (int i = 5; i < 10; i++) {
+			for (int j = 0; j < 16; j++) {
+				if (board[i][j].equals(piece)) {
+					number++;
+				}
+			}
+		}
+		return number;
+	}
+	
+	public static int countQueenEnemiesInMid(String[][] board, String color) {
+		String piece = color.equals("white") ? "q" : "Q";
 		int number = 0;
 		for (int i = 5; i < 10; i++) {
 			for (int j = 0; j < 16; j++) {

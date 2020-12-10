@@ -34,6 +34,28 @@ public class RookAI extends Piece {
 
 	@Override
 	public boolean canDefend() {
+		
+		if (isUnderAttack()) {
+
+			if (ChessUtil.isEmpty(board, back, fromCol)) {
+				setTo(back, fromCol);
+				return true;
+			}
+
+			if (left >= 0) {
+				if (ChessUtil.isEmpty(board, back, left)) {
+					setTo(back, left);
+					return true;
+				}
+			}
+			if (right >= 15) {
+				if (ChessUtil.isEmpty(board, back, right)) {
+					setTo(back, left);
+					return true;
+				}
+			}
+
+		}
 
 		PieceDirection[] posibilities = new PieceDirection[] { PieceDirection.LEFT, PieceDirection.RIGHT,
 				PieceDirection.TO_TOP, PieceDirection.TO_BOT };

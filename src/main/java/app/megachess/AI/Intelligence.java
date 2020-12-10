@@ -56,8 +56,19 @@ public class Intelligence {
 		String color = msjData.getActual_turn();
 		String answer = null;
 
+
 		// DEFENSA de peones
 		answer = pawnDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA con reyes
+		answer = kingDefense(msj, board, color);
+		if (answer != null) {
+			return answer;
+		}
+		// DEFENSA de reinas
+		answer = queenDefense(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
@@ -73,16 +84,6 @@ public class Intelligence {
 		}
 		// DEFENSA de torres
 		answer = rookDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// DEFENSA con reinas
-		answer = queenDefense(msj, board, color);
-		if (answer != null) {
-			return answer;
-		}
-		// DEFENSA con reyes
-		answer = kingDefense(msj, board, color);
 		if (answer != null) {
 			return answer;
 		}
@@ -452,12 +453,11 @@ public class Intelligence {
 
 		/*
 		 * initialProceed, condiciona si los peones avanzan a pasos cortos o largos, eso
-		 * depende si tienen soportes del equipo en el medio
+		 * depende si tienen soportes del equipo en el medio y si hay enemigos asechando
 		 */
-		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 3
-				? true
-				: false;
-		
+		boolean initialProceed = ((ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color) > 3)
+				&& (ChessUtil.countQueenEnemiesInMid(board, color) == 0)) ? true : false;
+
 		// sector de Torres izquierda col 0
 		fromCol = 0;
 		toCol = 1;
@@ -473,10 +473,10 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-		
-		// sector Caballos izquierda
-		fromCol = 3;
-		toCol = 2;
+
+		// sector Reinas
+		fromCol = 7;
+		toCol = 6;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
@@ -485,6 +485,22 @@ public class Intelligence {
 		// sector Alfiles izquierda
 		fromCol = 5;
 		toCol = 4;
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
+		if (answer != null) {
+			return answer;
+		}
+
+		// sector Alfiles derecha
+		fromCol = 15;
+		toCol = 14;
+		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
+		if (answer != null) {
+			return answer;
+		}
+
+		// sector Caballos izquierda
+		fromCol = 3;
+		toCol = 2;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
@@ -501,14 +517,6 @@ public class Intelligence {
 		// sector Alfiles derecha
 		fromCol = 15;
 		toCol = 14;
-		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
-		if (answer != null) {
-			return answer;
-		}
-		
-		// sector Reinas
-		fromCol = 7;
-		toCol = 6;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;

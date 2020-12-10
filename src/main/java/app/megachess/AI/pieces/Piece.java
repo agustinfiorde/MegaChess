@@ -498,16 +498,19 @@ public abstract class Piece implements PieceAction {
 	 * @return
 	 */
 	public boolean isUnderAttack() {
-		
-		if (left >= 0 && right <= 15 && front >= 0 && front <= 15) {
-			if (ChessUtil.isPawnEnemy(board, front, left, color)) {
-				return true;
-			}
 
+		if (right >= 0 && right <= 15 && front >= 0 && front <= 15) {
 			if (ChessUtil.isPawnEnemy(board, front, right, color)) {
 				return true;
 			}
 		}
+
+		if (left >= 0 && left <= 15 && front >= 0 && front <= 15) {
+			if (ChessUtil.isPawnEnemy(board, front, left, color)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 

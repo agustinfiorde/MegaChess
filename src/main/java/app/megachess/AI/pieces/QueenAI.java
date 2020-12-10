@@ -37,7 +37,7 @@ public class QueenAI extends Piece {
 
 		int row = color.equals("white") ? 7 : 8;
 
-		if (!ChessUtil.rowIsClearOfEnemies(board, row, color) && fromRow != row) {
+		if (!ChessUtil.rowIsClearOfEnemies(board, row, color) && fromRow != row ) {
 			row = color.equals("white") ? 8 : 7;
 		}
 
@@ -69,17 +69,38 @@ public class QueenAI extends Piece {
 	@Override
 	public boolean canDefend() {
 
-//		if (isUnderAttack()) {
-//			return evaluateTrajectoryToLeft();
-//		}
-		//&& !ChessUtil.isHorseEnemy(board, toRow, toCol, color)
+		if (isUnderAttack()) {
 
-		for (PieceDirection target : PieceDirection.values()) {
-			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)
-						) {
+			if (ChessUtil.isEmpty(board, back, fromCol)) {
+				setTo(back, fromCol);
+				return true;
+			}
+
+			if (left >= 0) {
+				if (ChessUtil.isEmpty(board, back, left)) {
+					setTo(back, left);
 					return true;
 				}
+			}
+			if (right >= 15) {
+				if (ChessUtil.isEmpty(board, back, right)) {
+					setTo(back, left);
+					return true;
+				}
+			}
+
+		}
+		
+		for (PieceDirection target : PieceDirection.values()) {
+			if (evaluateTrajectory(target)) {
+				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
+					return true;
+				}
+
+				if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color) ) {
+					return true;
+				}
+
 			}
 		}
 		return false;
