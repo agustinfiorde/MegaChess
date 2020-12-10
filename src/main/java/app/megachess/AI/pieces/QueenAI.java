@@ -69,14 +69,15 @@ public class QueenAI extends Piece {
 	@Override
 	public boolean canDefend() {
 
-		if (isUnderAttack()) {
-			return evaluateTrajectoryToLeft();
-		}
+//		if (isUnderAttack()) {
+//			return evaluateTrajectoryToLeft();
+//		}
+		//&& !ChessUtil.isHorseEnemy(board, toRow, toCol, color)
 
 		for (PieceDirection target : PieceDirection.values()) {
 			if (evaluateTrajectory(target)) {
 				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)
-						&& !ChessUtil.isHorseEnemy(board, toRow, toCol, color)) {
+						) {
 					return true;
 				}
 			}

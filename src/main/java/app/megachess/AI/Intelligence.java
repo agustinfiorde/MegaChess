@@ -304,14 +304,14 @@ public class Intelligence {
 
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
-			if (queen.hide()) {
-				fromCol = queen.getFromCol();
-				toCol = queen.getToCol();
-				fromRow = queen.getFromRow();
-				toRow = queen.getToRow();
-
-				return Util.move(msj, fromRow, fromCol, toRow, toCol);
-			}
+//			if (queen.hide()) {
+//				fromCol = queen.getFromCol();
+//				toCol = queen.getToCol();
+//				fromRow = queen.getFromRow();
+//				toRow = queen.getToRow();
+//
+//				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+//			}
 		}
 		return null;
 	}
@@ -339,13 +339,13 @@ public class Intelligence {
 				return Util.move(msj, fromRow, fromCol, toRow, toCol);
 			}
 
-			if (rook.hide()) {
-				fromCol = rook.getFromCol();
-				toCol = rook.getToCol();
-				fromRow = rook.getFromRow();
-				toRow = rook.getToRow();
-				return Util.move(msj, fromRow, fromCol, toRow, toCol);
-			}
+//			if (rook.hide()) {
+//				fromCol = rook.getFromCol();
+//				toCol = rook.getToCol();
+//				fromRow = rook.getFromRow();
+//				toRow = rook.getToRow();
+//				return Util.move(msj, fromRow, fromCol, toRow, toCol);
+//			}
 		}
 		return null;
 	}

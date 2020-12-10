@@ -2,6 +2,7 @@ package app.megachess.websocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 import app.megachess.AI.Intelligence;
 import app.megachess.models.Message;
@@ -57,6 +58,11 @@ public class Connection {
 					// Turno
 					if (msj.contains("your_turn")) {
 
+						try {
+							TimeUnit.MILLISECONDS.sleep(300);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						ChessUtil.showBoard(message.getData().getBoard());
 						String res = Intelligence.evaluate(message);
 						clientEndPoint.sendMessage(res);
