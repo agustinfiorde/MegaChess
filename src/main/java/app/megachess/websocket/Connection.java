@@ -59,12 +59,12 @@ public class Connection {
 					// Turno
 					if (msj.contains("your_turn")) {
 
-						try {
-							TimeUnit.MILLISECONDS.sleep(400);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						ChessUtil.showBoard(message.getData().getBoard());
+//						try {
+//							TimeUnit.MILLISECONDS.sleep(400);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
+//						ChessUtil.showBoard(message.getData().getBoard());
 						String res = Intelligence.evaluate(message);
 						clientEndPoint.sendMessage(res);
 

@@ -5,8 +5,13 @@ import app.megachess.utils.ChessUtil;
 
 public class RookAI extends Piece {
 
+	private PieceDirection goBack;
+	
 	public RookAI(int[] position, String board[][], String color) {
 		super(position, board, color);
+		
+		this.goBack = color.equals("white") ? PieceDirection.TO_BOT : PieceDirection.TO_TOP;
+		
 	}
 
 	/**
@@ -35,26 +40,14 @@ public class RookAI extends Piece {
 	@Override
 	public boolean canDefend() {
 		
-		if (isUnderAttack()) {
-
-			if (ChessUtil.isEmpty(board, back, fromCol)) {
-				setTo(back, fromCol);
+		if (isUnderAttack(fromRow, fromCol)) {
+			if (hide()) {
 				return true;
 			}
-
-			if (left >= 0) {
-				if (ChessUtil.isEmpty(board, back, left)) {
-					setTo(back, left);
-					return true;
-				}
+			
+			if (evaluateTrajectory(goBack)) {
+				return true;
 			}
-			if (right >= 15) {
-				if (ChessUtil.isEmpty(board, back, right)) {
-					setTo(back, left);
-					return true;
-				}
-			}
-
 		}
 
 		PieceDirection[] posibilities = new PieceDirection[] { PieceDirection.LEFT, PieceDirection.RIGHT,
@@ -62,11 +55,25 @@ public class RookAI extends Piece {
 
 		for (PieceDirection target : posibilities) {
 			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol)) {
-					return true;
+
+				if (evaluateTrajectory(target)) {
+					if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {					
+						if (!isUnderAttack(toRow, toCol)) {
+							return true;
+						}
+					}
+
+					if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color) ) {
+						if (!isUnderAttack(toRow, toCol)) {
+							return true;
+						}
+					}
+
 				}
+				
 			}
 		}
+		
 		return false;
 	}
 
@@ -85,8 +92,13 @@ public class RookAI extends Piece {
 		if (fromRow < row) {
 			if (evaluateTrajectoryToBot()) {
 				if (toRow >= row) {
+					
 					setTo(row, fromCol);
-					return true;
+					
+					if (!isUnderAttack(row, fromCol)) {
+						return true;
+					} 
+					
 				} else {
 					return false;
 				}
@@ -94,8 +106,13 @@ public class RookAI extends Piece {
 		} else {
 			if (evaluateTrajectoryToTop()) {
 				if (toRow <= row) {
+					
 					setTo(row, fromCol);
-					return true;
+					
+					if (!isUnderAttack(row, fromCol)) {
+						return true;
+					} 
+					
 				} else {
 					return false;
 				}

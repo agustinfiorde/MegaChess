@@ -5,8 +5,13 @@ import app.megachess.utils.ChessUtil;
 
 public class QueenAI extends Piece {
 
+	private PieceDirection goBack;
+
 	public QueenAI(int[] position, String board[][], String color) {
 		super(position, board, color);
+
+		this.goBack = color.equals("white") ? PieceDirection.TO_BOT : PieceDirection.TO_TOP;
+
 	}
 
 	/**
@@ -35,74 +40,115 @@ public class QueenAI extends Piece {
 	@Override
 	public boolean canProceed() {
 
-		int row = color.equals("white") ? 6 : 9;
+		int row = color.equals("white") ? 5 : 10;
 
-		if (!ChessUtil.rowIsClearOfEnemies(board, row, color) && fromRow != row ) {
-			row = color.equals("white") ? 9 : 6;
+		if (!ChessUtil.rowIsClearOfEnemies(board, row, color)) {
+			row = color.equals("white") ? 6 : 9;
 		}
 
 		if (fromRow == row) {
+			if (isUnderAttack(fromRow, fromCol)) {
+				if (evaluateTrajectory(goBack)) {
+					return true;
+				}
+			}
 			return false;
 		}
+
 		if (fromRow < row) {
 			if (evaluateTrajectoryToBot()) {
+
 				if (toRow >= row) {
 					setTo(row, fromCol);
-					return true;
+
+					if (isUnderAttack(row, fromCol)) {
+						if (evaluateTrajectory(goBack)) {
+							return true;
+						}
+					}
+
 				} else {
-					return false;
+					if (isUnderAttack(row, fromCol)) {
+						if (evaluateTrajectory(goBack)) {
+							return true;
+						}
+					}
 				}
 			}
 		} else {
 			if (evaluateTrajectoryToTop()) {
+
 				if (toRow <= row) {
 					setTo(row, fromCol);
-					return true;
+
+					if (isUnderAttack(row, fromCol)) {
+						if (evaluateTrajectory(goBack)) {
+							return true;
+						}
+					}
 				} else {
-					return false;
+					if (isUnderAttack(row, fromCol)) {
+						if (evaluateTrajectory(goBack)) {
+							return true;
+						}
+					}
 				}
 			}
 		}
-		return false;
+
+		if (toCol == null || toRow == null) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
 	public boolean canDefend() {
 
-		if (isUnderAttack()) {
+//		//ir a comer otra reina
+//		if (isUnderAttack(fromRow, fromCol)) {
+//			if (hide()) {
+//				return true;
+//			}
+//			
+//			if (evaluateTrajectory(goBack)) {
+//				return true;
+//			}
+//		}
 
-			if (ChessUtil.isEmpty(board, back, fromCol)) {
-				setTo(back, fromCol);
-				return true;
-			}
-
-			if (left >= 0) {
-				if (ChessUtil.isEmpty(board, back, left)) {
-					setTo(back, left);
-					return true;
-				}
-			}
-			if (right >= 15) {
-				if (ChessUtil.isEmpty(board, back, right)) {
-					setTo(back, left);
-					return true;
-				}
-			}
-
-		}
-		
 		for (PieceDirection target : PieceDirection.values()) {
 			if (evaluateTrajectory(target)) {
+
 				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
-					return true;
+
+					if (!isUnderAttack(toRow, toCol)) {
+						return true;
+					}
+					if (ChessUtil.isQueenEnemy(board, toRow, toCol, color)) {
+						return true;
+					}
 				}
 
-				if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color) ) {
-					return true;
+				if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
+					if (!isUnderAttack(toRow, toCol)) {
+						return true;
+					}
 				}
-
 			}
 		}
+		
+		//ir a comer otra reina
+		if (isUnderAttack(fromRow, fromCol)) {
+			if (hide()) {
+				return true;
+			}
+			
+			if (evaluateTrajectory(goBack)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
