@@ -62,7 +62,7 @@ public class RookAI extends Piece {
 
 		for (PieceDirection target : posibilities) {
 			if (evaluateTrajectory(target)) {
-				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
+				if (evaluateQuadrant(toRow, toCol)) {
 					return true;
 				}
 			}
@@ -73,10 +73,10 @@ public class RookAI extends Piece {
 	@Override
 	public boolean canProceed() {
 
-		int row = color.equals("white") ? 7 : 8;
+		int row = color.equals("white") ? 6 : 9;
 
 		if (!ChessUtil.rowIsClearOfEnemies(board, row, color) && fromRow != row) {
-			row = color.equals("white") ? 8 : 7;
+			row = color.equals("white") ? 9 : 6;
 		}
 
 		if (fromRow == row) {

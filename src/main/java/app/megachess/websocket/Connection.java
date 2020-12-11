@@ -14,6 +14,7 @@ public class Connection {
 	private WebSocketClient clientEndPoint;
 	private final String root = "ws://megachess.herokuapp.com/service?authtoken=";
 	private final String tokenFiordeX = "b3eefc9b-e1b2-4a07-bcc3-50b1d1ebfc84";
+	private final String tokenAdamOk ="96bfdba7-8603-4b1d-9bd2-38c90e347f2c";
 
 	private String url;
 
@@ -30,7 +31,7 @@ public class Connection {
 	 * Genera la URL en base a los atributos de la clase
 	 */
 	private void setURL() {
-		url = root.concat(tokenFiordeX);
+		url = root.concat(tokenAdamOk);
 	}
 
 	public String getUrl() {
