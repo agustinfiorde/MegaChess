@@ -421,10 +421,8 @@ public class Intelligence {
 			boolean initialProceed) {
 		List<Response> responses;
 		if (color.equals("white")) {
-//			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
 			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
 		} else {
-//			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
 			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
 		}
 		if (!responses.isEmpty()) {

@@ -121,13 +121,12 @@ public class QueenAI extends Piece {
 			if (evaluateTrajectory(target)) {
 
 				if (evaluateQuadrant(toRow, toCol) && !ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
-
 					if (!isUnderAttack(toRow, toCol)) {
 						return true;
 					}
-					if (ChessUtil.isQueenEnemy(board, toRow, toCol, color)) {
-						return true;
-					}
+//					if (ChessUtil.isQueenEnemy(board, toRow, toCol, color)) {
+//						return true;
+//					}
 				}
 
 				if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {
