@@ -491,7 +491,7 @@ public abstract class Piece implements PieceAction {
 		if (isUnderAttackByAPawn(front, right)) {
 			return true;
 		}
-		
+
 		// adelante izquierda peon
 		if (isUnderAttackByAPawn(front, left)) {
 			return true;
@@ -540,6 +540,13 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
+	/**
+	 * evalua si la pieza esta bajo ataque por un peon
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public boolean isUnderAttackByAPawn(int row, int col) {
 		if (col >= 0 && col <= 15 && row >= 0 && row <= 15) {
 			if (ChessUtil.isPawnEnemy(board, row, col, color)) {
@@ -549,6 +556,14 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
+	/**
+	 * evalua si la pieza esta bajo ataque por un reina ** solo evalua proximidades,
+	 * NO EVALUA A LARGA DISTANCIA **TODO
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public boolean isUnderAttackByAQueen(int row, int col) {
 		if (col >= 0 && col <= 15 && row >= 0 && row <= 15) {
 			if (ChessUtil.isPawnEnemy(board, row, col, color)) {

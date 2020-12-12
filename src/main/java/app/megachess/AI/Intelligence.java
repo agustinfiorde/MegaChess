@@ -383,7 +383,7 @@ public class Intelligence {
 
 	/**
 	 * progressBySector, hace avanzar lo peones de a grupos para evitar que se los
-	 * coman
+	 * coman ya que se van a defender
 	 * 
 	 * @param msj
 	 * @param board
@@ -459,7 +459,7 @@ public class Intelligence {
 
 		/*
 		 * initialProceed, condiciona si los peones avanzan a pasos cortos o largos, eso
-		 * depende si tienen soportes del equipo en el medio y si hay enemigos asechando
+		 * depende si tienen soportes del equipo en el medio y si no hay enemigos asechando
 		 */
 
 		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 5

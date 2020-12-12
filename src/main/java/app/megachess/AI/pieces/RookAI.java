@@ -85,9 +85,7 @@ public class RookAI extends Piece {
 						return true;
 					} 
 					
-				} else {
-					return false;
-				}
+				} 
 			}
 		} else {
 			if (evaluateTrajectoryToTop()) {
@@ -99,9 +97,7 @@ public class RookAI extends Piece {
 						return true;
 					} 
 					
-				} else {
-					return false;
-				}
+				} 
 			}
 		}
 		return false;

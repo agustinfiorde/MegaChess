@@ -415,6 +415,13 @@ public class ChessUtil {
 		return number;
 	}
 	
+	/**
+	 * Cuenta las reinas enemigas en el medio del tablero
+	 * 
+	 * @param board
+	 * @param color
+	 * @return
+	 */
 	public static int countQueenEnemiesInMid(String[][] board, String color) {
 		String piece = color.equals("white") ? "q" : "Q";
 		int number = 0;
