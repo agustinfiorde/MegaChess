@@ -60,22 +60,10 @@ public class ChessUtilTests {
 		assertNotEquals(0, ChessUtil.pawnsActives(board, "white").size());
 		assertNotEquals(0, ChessUtil.pawnsActives(board, "black").size());
 
-		String boardStringWithoutPawns = "rrhhbbqqkkbbhhrr" + 
-										"rrhhbbqqkkbbhhrr" + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"                " + 
-										"RRHHBBQQKKBBHHRR" + 
-										"RRHHBBQQKKBBHHRR";
+		String boardStringWithoutPawns = "rrhhbbqqkkbbhhrr" + "rrhhbbqqkkbbhhrr" + "                "
+				+ "                " + "                " + "                " + "                " + "                "
+				+ "                " + "                " + "                " + "                " + "                "
+				+ "                " + "RRHHBBQQKKBBHHRR" + "RRHHBBQQKKBBHHRR";
 		board = ChessUtil.getBoard(boardStringWithoutPawns);
 
 		// 0 Pawns
@@ -88,22 +76,10 @@ public class ChessUtilTests {
 	@Test
 	public void getPiecesByColor() {
 
-		String boardString = "rrhhbbqqkkbbhhrr" + 
-								"rrhhbbqqkkbbhhrr" + 
-								"pppppppppppppppp" + 
-								"pppppppppppppppp" + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"                " + 
-								"PPPPPPPPPPPPPPPP" + 
-								"PPPPPPPPPPPPPPPP" + 
-								"RRHHBBQQKKBBHHRR" + 
-								"RRHHBBQQKKBBHHRR";
+		String boardString = "rrhhbbqqkkbbhhrr" + "rrhhbbqqkkbbhhrr" + "pppppppppppppppp" + "pppppppppppppppp"
+				+ "                " + "                " + "                " + "                " + "                "
+				+ "                " + "                " + "                " + "PPPPPPPPPPPPPPPP" + "PPPPPPPPPPPPPPPP"
+				+ "RRHHBBQQKKBBHHRR" + "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 
 		assertEquals(4, ChessUtil.getPiecesByColor(board, "K", "white").size());
@@ -154,21 +130,21 @@ public class ChessUtilTests {
 	public void findWhitePawnsGroupProgress() {
 		
 		String boardString =  "rrhhbbqq  bbhhrr" + 
-							  "rrhhbbqq  bbhhrr" + 
-							  "pppppppp        " + 
-							  "pppppppp        " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPP        " + 
-							  "PPPPPPPP        " + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqq  bbhhrr" + 
+				  "pppppppp        " + 
+				  "pppppppp        " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPP        " + 
+				  "PPPPPPPP        " + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(0,ChessUtil.findWhitePawnsGroupProgress(board, 15, 8, "white").size());
@@ -179,21 +155,21 @@ public class ChessUtilTests {
 	public void findBlackPawnsGroupProgress() {
 		
 		String boardString =  "rrhhbbqq  bbhhrr" + 
-							  "rrhhbbqq  bbhhrr" + 
-							  "pppppppp        " + 
-							  "pppppppp        " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPP        " + 
-							  "PPPPPPPP        " + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqq  bbhhrr" + 
+				  "pppppppp        " + 
+				  "pppppppp        " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPP        " + 
+				  "PPPPPPPP        " + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(0,ChessUtil.findBlackPawnsGroupProgress(board, 15, 8, "white").size());
@@ -205,21 +181,21 @@ public class ChessUtilTests {
 	public void findBlackPawnsDirectProgress() {
 		
 		String boardString =  "rrhhbbqq  bbhhrr" + 
-							  "rrhhbbqq  bbhhrr" + 
-							  "pppppppp        " + 
-							  "pppppppp        " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPP        " + 
-							  "PPPPPPPP        " + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqq  bbhhrr" + 
+				  "pppppppp        " + 
+				  "pppppppp        " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPP        " + 
+				  "PPPPPPPP        " + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(0,ChessUtil.findBlackPawnsDirectProgress(board, 8, 15, "white").size());
@@ -231,21 +207,21 @@ public class ChessUtilTests {
 	public void findWhitePawnsDirectProgress() {
 		
 		String boardString =  "rrhhbbqq  bbhhrr" + 
-							  "rrhhbbqq  bbhhrr" + 
-							  "pppppppp        " + 
-							  "pppppppp        " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPP        " + 
-							  "PPPPPPPP        " + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqq  bbhhrr" + 
+				  "pppppppp        " + 
+				  "pppppppp        " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPP        " + 
+				  "PPPPPPPP        " + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(0,ChessUtil.findWhitePawnsDirectProgress(board, 8, 15, "white").size());
@@ -257,21 +233,21 @@ public class ChessUtilTests {
 	public void isPawnEnemy() {
 		
 		String boardString = "rrhhbbqqkkbbhhrr" + 
-							  "rrhhbbqqkkbbhhrr" + 
-							  "pppppppppppppppp" + 
-							  "pppppppppppppppp" + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertFalse(ChessUtil.isPawnEnemy(board, 13, 13, "white"));
@@ -284,21 +260,21 @@ public class ChessUtilTests {
 	public void isHorseEnemy() {
 		
 		String boardString = "rrhhbbqqkkbbhhrr" + 
-							  "rrhhbbqqkkbbhhrr" + 
-							  "pppppppppppppppp" + 
-							  "pppppppppppppppp" + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 		
 		assertFalse(ChessUtil.isHorseEnemy(board, 15, 13, "white"));
@@ -360,41 +336,41 @@ public class ChessUtilTests {
 	public void countQueenInMid() {
 		
 		String boardString = "rrhhbbqqkkbbhhrr" + 
-							  "rrhhbbqqkkbbhhrr" + 
-							  "pppppppppppppppp" + 
-							  "pppppppppppppppp" + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 
 		assertEquals(0,ChessUtil.countQueenInMid(board, "white"));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
-					  "rrhhbbqqkkbbhhrr" + 
-					  "pppppppppppppppp" + 
-					  "pppppppppppppppp" + 
-					  "                " + 
-					  "                " + 
-					  "                " + 
-					  "          Q     " + 
-					  "           Q    " + 
-					  "            Q   " + 
-					  "                " + 
-					  "                " + 
-					  "PPPPPPPPPPPPPPPP" + 
-					  "PPPPPPPPPPPPPPPP" + 
-					  "RRHHBBQQKKBBHHRR" + 
-					  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "          Q     " + 
+				  "           Q    " + 
+				  "            Q   " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(3,ChessUtil.countQueenInMid(board, "white"));
@@ -405,41 +381,41 @@ public class ChessUtilTests {
 	public void countRookInMid() {
 		
 		String boardString = "rrhhbbqqkkbbhhrr" + 
-							  "rrhhbbqqkkbbhhrr" + 
-							  "pppppppppppppppp" + 
-							  "pppppppppppppppp" + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "                " + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "PPPPPPPPPPPPPPPP" + 
-							  "RRHHBBQQKKBBHHRR" + 
-							  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		String[][] board = ChessUtil.getBoard(boardString);
 
 		assertEquals(0,ChessUtil.countRookInMid(board, "white"));
 		
 		boardString = "rrhhbbqqkkbbhhrr" + 
-					  "rrhhbbqqkkbbhhrr" + 
-					  "pppppppppppppppp" + 
-					  "pppppppppppppppp" + 
-					  "                " + 
-					  "                " + 
-					  "                " + 
-					  "          R     " + 
-					  "           R    " + 
-					  "                " + 
-					  "                " + 
-					  "                " + 
-					  "PPPPPPPPPPPPPPPP" + 
-					  "PPPPPPPPPPPPPPPP" + 
-					  "RRHHBBQQKKBBHHRR" + 
-					  "RRHHBBQQKKBBHHRR";
+				  "rrhhbbqqkkbbhhrr" + 
+				  "pppppppppppppppp" + 
+				  "pppppppppppppppp" + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "          R     " + 
+				  "           R    " + 
+				  "                " + 
+				  "                " + 
+				  "                " + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "PPPPPPPPPPPPPPPP" + 
+				  "RRHHBBQQKKBBHHRR" + 
+				  "RRHHBBQQKKBBHHRR";
 		board = ChessUtil.getBoard(boardString);
 		
 		assertEquals(2,ChessUtil.countRookInMid(board, "white"));

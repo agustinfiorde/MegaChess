@@ -58,10 +58,10 @@ public class HorseAI extends Piece {
 	}
 
 	/**
-	 * evaluateLikeHorse, evalua las casillas validas para un caballo y ve si existe
+	 * evaluateLikeHorse, evalua las casillas habiles para un caballo y ve si existe
 	 * la posibilidad de comer a una pieza enemiga
 	 *
-	 * @return true or false
+	 * @return
 	 */
 	private boolean evaluateLikeHorse() {
 		int x;

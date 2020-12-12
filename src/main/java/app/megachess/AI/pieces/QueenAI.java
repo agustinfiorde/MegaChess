@@ -15,36 +15,29 @@ public class QueenAI extends Piece {
 	}
 
 	/**
-	 * Este metodo sirve para ver si una pieza se puede arrinconar a la izquierda
-	 * del tablero
+	 * Este metodo sirve para arrinconar la pieza a la izquierda del tablero
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	public boolean hide() {
 		if (fromRow > 4 && fromRow < 11 && fromCol != 0) {
-
-			evaluateTrajectoryToLeft();
-
-			if (toCol != null) {
-				if (evaluateQuadrant(front, toCol) || evaluateQuadrant(front, toCol + 1)) {
-					return false;
-				} else {
-					return true;
-				}
-			}
-
+			return evaluateTrajectoryToLeft();
 		}
 		return false;
 	}
 
 	@Override
 	public boolean canProceed() {
+<<<<<<< HEAD
 
 		int row = color.equals("white") ? 5 : 10;
 
 		if (!ChessUtil.rowIsClearOfEnemies(board, row, color)) {
 			row = color.equals("white") ? 6 : 9;
 		}
+=======
+		int row = color.equals("white") ? 8 : 7;
+>>>>>>> parent of 4bb70d6... End Game
 
 		if (fromRow == row) {
 			if (isUnderAttack(fromRow, fromCol)) {
@@ -105,6 +98,7 @@ public class QueenAI extends Piece {
 
 	@Override
 	public boolean canDefend() {
+<<<<<<< HEAD
 
 //		//ir a comer otra reina
 //		if (isUnderAttack(fromRow, fromCol)) {
@@ -117,6 +111,8 @@ public class QueenAI extends Piece {
 //			}
 //		}
 
+=======
+>>>>>>> parent of 4bb70d6... End Game
 		for (PieceDirection target : PieceDirection.values()) {
 			if (evaluateTrajectory(target)) {
 

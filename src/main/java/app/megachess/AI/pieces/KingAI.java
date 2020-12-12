@@ -15,7 +15,7 @@ public class KingAI extends Piece {
 	/**
 	 * cuando se llame canProceed la priodidad es ir hacia adelante, pero en el caso
 	 * que este bloqueado ira para la derecha o la izquierda, esta implementacion
-	 * aplica para la parte final del juego cuando no queden mas opciones.
+	 * aplica para la parte final del juego o el the kingDancer
 	 */
 	@Override
 	public boolean canProceed() {
@@ -73,7 +73,7 @@ public class KingAI extends Piece {
 	}
 
 	/*
-	 * Override para evaluar trayectoria libre para la izquierda del rey
+	 * Override para evaluar trayectoria libre para la izquiera del rey
 	 */
 	@Override
 	public boolean evaluateTrajectoryToLeft() {

@@ -12,7 +12,7 @@ public class BishopAI extends Piece {
 
 	public BishopAI(int[] position, String[][] board, String color, boolean dancerStrategy) {
 		super(position, board, color);
-		
+
 		this.dancerStrategy = dancerStrategy;
 		if (color.equals("white")) {
 			this.frontLeft = PieceDirection.TO_TOP_LEFT;
@@ -21,6 +21,7 @@ public class BishopAI extends Piece {
 			this.frontLeft = PieceDirection.TO_BOT_LEFT;
 			this.frontRight = PieceDirection.TO_BOT_RIGHT;
 		}
+
 	}
 
 	@Override

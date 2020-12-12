@@ -65,7 +65,7 @@ public abstract class Piece implements PieceAction {
 	 * busca de un enemigo. Si encuentra enemigo devuelve, true. Es util para saber
 	 * si termino de recorrer un lado y debe irse por el otro
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean toLeft() {
 		for (int i = fromCol; i >= 0; i--) {
@@ -81,7 +81,7 @@ public abstract class Piece implements PieceAction {
 	 * busca de un enemigo. Si encuentra enemigo devuelve, true. Es util para saber
 	 * si termino de recorrer un lado y debe irse por el otro
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean toRight() {
 		for (int i = fromCol; i < 16; i++) {
@@ -94,10 +94,9 @@ public abstract class Piece implements PieceAction {
 
 	/**
 	 * evaluateTrajectory es un administrador para ver que sub metodo necesita
-	 * llamar segun el parametro.
+	 * llamar segun el parametro
 	 * 
 	 * @param target
-	 * @return el resultado del submetodo llamado true or false
 	 */
 	protected boolean evaluateTrajectory(PieceDirection target) {
 		switch (target.toString()) {
@@ -123,12 +122,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToTop, evalua la trayectoria hacia arriba y si existe
-	 * posibilidad de hacerla, busca hasta donde hay libertad de avance y la setea o
-	 * hasta donde haya libertad de avance y un enemigo para setear esa posicion del
-	 * enemigo.
+	 * Evalua la trayectoria hacia la parte superior del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToTop() {
 		for (int i = (fromRow - 1); i >= 0; i--) {
@@ -146,12 +144,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToBot, evalua la trayectoria hacia abajo y si existe
-	 * posibilidad de hacerla, busca hasta donde hay libertad de avance y la setea o
-	 * hasta donde haya libertad de avance y un enemigo para setear esa posicion del
-	 * enemigo.
+	 * Evalua la trayectoria hacia la parte inferior del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToBot() {
 		for (int i = (fromRow + 1); i < 16; i++) {
@@ -168,12 +165,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToLeft, evalua la trayectoria hacia la izquierda y si
-	 * existe posibilidad de hacerla, busca hasta donde hay libertad de avance y la
-	 * setea o hasta donde haya libertad de avance y un enemigo para setear esa
-	 * posicion del enemigo.
+	 * Evalua la trayectoria hacia la parte izquierda del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToLeft() {
 		for (int i = (fromCol - 1); i >= 0; i--) {
@@ -190,12 +186,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToRight, evalua la trayectoria hacia la derecha y si existe
-	 * posibilidad de hacerla, busca hasta donde hay libertad de avance y la setea o
-	 * hasta donde haya libertad de avance y un enemigo para setear esa posicion del
-	 * enemigo.
+	 * Evalua la trayectoria hacia la parte derecha del tablero. Si encuentra un
+	 * enemigo o la libertad de movimiento, procede a setear la posicion previamente
+	 * evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToRight() {
 
@@ -213,12 +208,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToTopLeft, evalua la trayectoria hacia arriba a la
-	 * izquierda y si existe posibilidad de hacerla, busca hasta donde hay libertad
-	 * de avance y la setea o hasta donde haya libertad de avance y un enemigo para
-	 * setear esa posicion del enemigo.
+	 * Evalua la trayectoria hacia la parte superior-izquierda del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToTopLeft() {
 
@@ -242,12 +236,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToTopRight, evalua la trayectoria hacia arriba a la derecha
-	 * y si existe posibilidad de hacerla, busca hasta donde hay libertad de avance
-	 * y la setea o hasta donde haya libertad de avance y un enemigo para setear esa
-	 * posicion del enemigo.
+	 * Evalua la trayectoria hacia la parte superior-derecha del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToTopRight() {
 
@@ -271,12 +264,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToBotLeft, evalua la trayectoria hacia abajo a la izquierda
-	 * y si existe posibilidad de hacerla, busca hasta donde hay libertad de avance
-	 * y la setea o hasta donde haya libertad de avance y un enemigo para setear esa
-	 * posicion del enemigo.
+	 * Evalua la trayectoria hacia la parte inferior-izquierda del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToBotLeft() {
 
@@ -301,12 +293,11 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evaluateTrajectoryToBotRight, evalua la trayectoria hacia abajo a la derecha
-	 * y si existe posibilidad de hacerla, busca hasta donde hay libertad de avance
-	 * y la setea o hasta donde haya libertad de avance y un enemigo para setear esa
-	 * posicion del enemigo.
+	 * Evalua la trayectoria hacia la parte inferior-derecha del tablero. Si
+	 * encuentra un enemigo o la libertad de movimiento, procede a setear la
+	 * posicion previamente evaluada
 	 * 
-	 * @return true or false
+	 * @param target
 	 */
 	protected boolean evaluateTrajectoryToBotRight() {
 
@@ -330,10 +321,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante superior proximo a la pieza y si existe una pieza enemiga
-	 * para poder comer.
+	 * evalua el cuadrante superior proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateTop() {
 		if (front > 15 || front < 0 || back > 15 || back < 0) {
@@ -349,10 +339,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante inferior proximo a la pieza y si existe una pieza enemiga
-	 * para poder comer.
+	 * evalua el cuadrante inferior proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateBot() {
 		if (front > 15 || front < 0 || back > 15 || back < 0) {
@@ -368,10 +357,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante izquierdo proximo a la pieza y si existe una pieza
-	 * enemiga para poder comer.
+	 * evalua el cuadrante izquierdo proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateLeft() {
 		if (left < 0) {
@@ -387,10 +375,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante derecho proximo a la pieza y si existe una pieza enemiga
-	 * para poder comer.
+	 * evalua el cuadrante derecho proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateRight() {
 		if (right > 15) {
@@ -406,10 +393,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante superior-izquierdo proximo a la pieza y si existe una
-	 * pieza enemiga para poder comer.
+	 * evalua el cuadrante superior-izquierdo proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateTopLeft() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
@@ -425,10 +411,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante inferior-izquierdo proximo a la pieza y si existe una
-	 * pieza enemiga para poder comer.
+	 * evalua el cuadrante inferior-izquierdo proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateBotLeft() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || left < 0) {
@@ -444,10 +429,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante superior-derecho proximo a la pieza y si existe una pieza
-	 * enemiga para poder comer.
+	 * evalua el cuadrante superior-derecho proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateTopRight() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
@@ -463,10 +447,9 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua el cuadrante inferior-izquierdo proximo a la pieza y si existe una
-	 * pieza enemiga para poder comer.
+	 * evalua el cuadrante inferior-izquierdo proximo a la pieza
 	 * 
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateBotRight() {
 		if (front > 15 || front < 0 || back > 15 || back < 0 || right > 15) {
@@ -482,16 +465,17 @@ public abstract class Piece implements PieceAction {
 	}
 
 	/**
-	 * evalua un cuadrante especifico en el tablero para ver si hay o no un enemigo
+	 * evalua un cuadrante especifico en el tablero en busca de enemigo
 	 * 
 	 * @param row
 	 * @param col
-	 * @return true or false
+	 * @return
 	 */
 	protected boolean evaluateQuadrant(int row, int col) {
 		return ChessUtil.isMyEnemy(board[row][col], color) ? true : false;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * evalua si la pieza esta bajo ataque
 	 * 
@@ -575,4 +559,6 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
+=======
+>>>>>>> parent of 4bb70d6... End Game
 }

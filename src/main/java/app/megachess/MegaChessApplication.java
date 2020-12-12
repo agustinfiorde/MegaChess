@@ -10,7 +10,9 @@ import app.megachess.websocket.Connection;
 @EnableAutoConfiguration
 public class MegaChessApplication {
 
-	/*
+	/**
+	 * main es el primer metodo llamado a la hora de correr mi App's Java
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
