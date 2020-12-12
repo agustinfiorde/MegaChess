@@ -475,7 +475,6 @@ public abstract class Piece implements PieceAction {
 		return ChessUtil.isMyEnemy(board[row][col], color) ? true : false;
 	}
 
-<<<<<<< HEAD
 	/**
 	 * evalua si la pieza esta bajo ataque
 	 * 
@@ -559,6 +558,4 @@ public abstract class Piece implements PieceAction {
 		return false;
 	}
 
-=======
->>>>>>> parent of 4bb70d6... End Game
 }

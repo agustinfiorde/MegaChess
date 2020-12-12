@@ -426,15 +426,13 @@ public class Intelligence {
 			boolean initialProceed) {
 		List<Response> responses;
 		if (color.equals("white")) {
-<<<<<<< HEAD
+
 			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
 		} else {
-=======
->>>>>>> parent of 4bb70d6... End Game
+
 			responses = ChessUtil.findBlackPawnsDirectProgress(board, fromCol, toCol, color);
-		} else {
-			responses = ChessUtil.findWhitePawnsDirectProgress(board, fromCol, toCol, color);
-		}
+		} 
+		
 		if (!responses.isEmpty()) {
 			String answer = pawnAction(msj, board, color, responses, initialProceed);
 			if (answer != null) {
@@ -463,18 +461,12 @@ public class Intelligence {
 		 * initialProceed, condiciona si los peones avanzan a pasos cortos o largos, eso
 		 * depende si tienen soportes del equipo en el medio y si hay enemigos asechando
 		 */
-<<<<<<< HEAD
-		boolean initialProceed = ((ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color) > 3)
-				&& (ChessUtil.countQueenEnemiesInMid(board, color) == 0)) ? true : false;
 
-		// sector de Torres izquierda col 0
-=======
 		boolean initialProceed = (ChessUtil.countQueenInMid(board, color) + ChessUtil.countQueenInMid(board, color)) > 5
 				? true
 				: false;
 
 		// sector de Torres izquierda
->>>>>>> parent of 4bb70d6... End Game
 		fromCol = 0;
 		toCol = 1;
 		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
@@ -482,7 +474,6 @@ public class Intelligence {
 			return answer;
 		}
 
-<<<<<<< HEAD
 		// sector de Torres derecha col 15
 		fromCol = 14;
 		toCol = 15;
@@ -494,11 +485,6 @@ public class Intelligence {
 		// sector Reinas
 		fromCol = 7;
 		toCol = 6;
-=======
-		// sector Caballos izquierda
-		fromCol = 3;
-		toCol = 2;
->>>>>>> parent of 4bb70d6... End Game
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
 		if (answer != null) {
 			return answer;
@@ -511,7 +497,6 @@ public class Intelligence {
 			return answer;
 		}
 
-<<<<<<< HEAD
 		// sector Alfiles derecha
 		fromCol = 15;
 		toCol = 14;
@@ -524,12 +509,6 @@ public class Intelligence {
 		fromCol = 3;
 		toCol = 2;
 		answer = progressBySectorInGroup(msj, board, fromCol, toCol, color, initialProceed);
-=======
-		// sector de Torres derecha
-		fromCol = 14;
-		toCol = 15;
-		answer = progressBySectorDirectly(msj, board, fromCol, toCol, color, true);
->>>>>>> parent of 4bb70d6... End Game
 		if (answer != null) {
 			return answer;
 		}
@@ -548,8 +527,7 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
-<<<<<<< HEAD
-=======
+
 		// sector Reinas derecha
 		fromCol = 7;
 		toCol = 6;
@@ -557,7 +535,7 @@ public class Intelligence {
 		if (answer != null) {
 			return answer;
 		}
->>>>>>> parent of 4bb70d6... End Game
+
 
 		return null;
 	}

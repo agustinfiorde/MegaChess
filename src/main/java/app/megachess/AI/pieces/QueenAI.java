@@ -28,16 +28,9 @@ public class QueenAI extends Piece {
 
 	@Override
 	public boolean canProceed() {
-<<<<<<< HEAD
 
-		int row = color.equals("white") ? 5 : 10;
-
-		if (!ChessUtil.rowIsClearOfEnemies(board, row, color)) {
-			row = color.equals("white") ? 6 : 9;
-		}
-=======
 		int row = color.equals("white") ? 8 : 7;
->>>>>>> parent of 4bb70d6... End Game
+
 
 		if (fromRow == row) {
 			if (isUnderAttack(fromRow, fromCol)) {
@@ -98,21 +91,7 @@ public class QueenAI extends Piece {
 
 	@Override
 	public boolean canDefend() {
-<<<<<<< HEAD
 
-//		//ir a comer otra reina
-//		if (isUnderAttack(fromRow, fromCol)) {
-//			if (hide()) {
-//				return true;
-//			}
-//			
-//			if (evaluateTrajectory(goBack)) {
-//				return true;
-//			}
-//		}
-
-=======
->>>>>>> parent of 4bb70d6... End Game
 		for (PieceDirection target : PieceDirection.values()) {
 			if (evaluateTrajectory(target)) {
 
@@ -120,9 +99,7 @@ public class QueenAI extends Piece {
 					if (!isUnderAttack(toRow, toCol)) {
 						return true;
 					}
-//					if (ChessUtil.isQueenEnemy(board, toRow, toCol, color)) {
-//						return true;
-//					}
+
 				}
 
 				if (toRow > 5 && toRow < 10 && ChessUtil.isPawnEnemy(board, toRow, toCol, color)) {

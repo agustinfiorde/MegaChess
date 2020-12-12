@@ -68,18 +68,10 @@ public class RookAI extends Piece {
 
 	@Override
 	public boolean canProceed() {
-<<<<<<< HEAD
 
-		int row = color.equals("white") ? 6 : 9;
-
-		if (!ChessUtil.rowIsClearOfEnemies(board, row, color) && fromRow != row) {
-			row = color.equals("white") ? 9 : 6;
-		}
-
-=======
 		int row = color.equals("white") ? 8 : 7;
 		
->>>>>>> parent of 4bb70d6... End Game
+
 		if (fromRow == row) {
 			return false;
 		}
